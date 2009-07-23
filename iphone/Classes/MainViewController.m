@@ -135,8 +135,7 @@ NSString* port;
 }
 - (void)flowCover:(FlowCoverView *)view draggedTo:(int)image
 {
-	NSLog(@"draggedTo Index %d",image);
-	[self call:@"forward"];
+	[self call:[NSString stringWithFormat:@"go?to=%d", image]];
 }
 
 - (void)dealloc {
