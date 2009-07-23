@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Timing
+Bundle-SymbolicName: org.jdesktop.animation.timing
+Bundle-Version: 1.0.0
+Bundle-ClassPath: TimingFramework-1.0.jar
+Export-Package: org.jdesktop.animation.timing,
+ org.jdesktop.animation.timing.interpolation,
+ org.jdesktop.animation.timing.triggers
