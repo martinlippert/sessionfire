@@ -1,0 +1,6 @@
+# mac
+.DS_Store
+# eclipse
+.metadata
+# xcode
+build/*
