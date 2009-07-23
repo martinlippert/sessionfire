@@ -38,6 +38,7 @@
 	 */
 //	NSString* url= [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/images", ip.text, port.text];
 	NSURL *url = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/images", ip.text, port.text] ];
+	NSLog(@"%@", url);
 	self.image = [ [ UIImage alloc ] initWithData: [ NSData dataWithContentsOfURL: url ] ];
 
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection succeeded" 
