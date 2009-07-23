@@ -14,6 +14,7 @@
 
 NSString* ip;
 NSString* port;
+NSInteger numberofkeyframes;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -31,6 +32,7 @@ NSString* port;
 
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
+	numberofkeyframes = controller.numberofkeyframes;
 	ip = controller.ip.text;
 	[ip retain];
 	port = controller.port.text;
@@ -62,14 +64,15 @@ NSString* port;
 	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
 }
 
-- (void)callForImage:(NSString *)whichImage {    
-	NSURL *url2 = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", ip, port, whichImage] ];
+- (UIImage*) callForImage:(int)whichImage {    
+	NSURL *url2 = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/keyframe?at=0%d", ip, port, whichImage] ];
 	NSData* data = [ NSData dataWithContentsOfURL: url2 ];
-	//NSLog(@"%d", [data length] );
+	NSLog(@"callForImage %d", whichImage );
 	if([data length] > 0) {
 		//[self.imageView2.image release];
-	//	self.imageView2.image = [ [ UIImage alloc ] initWithData: data ];
+		return [ [ UIImage alloc ] initWithData: data ];
 	}
+	return nil;
 	//[data autorelease];
 }
 
@@ -101,38 +104,19 @@ NSString* port;
 
 - (int)flowCoverNumberImages:(FlowCoverView *)view
 {
-	return 9;
+	return numberofkeyframes;
 }
 
 - (UIImage *)flowCover:(FlowCoverView *)view cover:(int)image
 {
-	switch (image) {
-		case 0:
-		default:
-			return [UIImage imageNamed:@"folie1.png"];
-		case 1:
-			return [UIImage imageNamed:@"folie2.png"];
-		case 2:
-			return [UIImage imageNamed:@"folie3.png"];
-		case 3:
-			return [UIImage imageNamed:@"folie4.png"];
-		case 4:
-			return [UIImage imageNamed:@"folie5.png"];
-		case 5:
-			return [UIImage imageNamed:@"folie6.png"];
-		case 6:
-			return [UIImage imageNamed:@"folie7.png"];
-		case 7:
-			return [UIImage imageNamed:@"folie8.png"];
-		case 8:
-			return [UIImage imageNamed:@"folie9.png"];
-	}
+	return [self callForImage:image];
 }
 
 - (void)flowCover:(FlowCoverView *)view didSelect:(int)image
 {
 	NSLog(@"Selected Index %d",image);
 }
+
 - (void)flowCover:(FlowCoverView *)view draggedTo:(int)image
 {
 	[self call:[NSString stringWithFormat:@"go?to=%d", image]];

@@ -11,7 +11,7 @@
 
 @implementation FlipsideViewController
 
-@synthesize delegate, ip, port, image;
+@synthesize delegate, ip, port, image, numberofkeyframes;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -37,9 +37,18 @@
 	 [alert release];
 	 */
 //	NSString* url= [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/images", ip.text, port.text];
+	NSURL *url1 = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/numberofkeyframes", ip.text, port.text] ];
+	NSData* data =  [ NSData dataWithContentsOfURL: url1 ];
+    NSString *numberofkeyframesS = [[NSString alloc] initWithData: data  encoding: NSASCIIStringEncoding];
+	numberofkeyframes = [numberofkeyframesS integerValue];
+	
+
+/*
+	
 	NSURL *url = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/images", ip.text, port.text] ];
 	NSLog(@"%@", url);
 	self.image = [ [ UIImage alloc ] initWithData: [ NSData dataWithContentsOfURL: url ] ];
+ */
 
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection succeeded" 
 													message:nil
