@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -41,9 +42,16 @@ public class Display implements GLEventListener {
 
 	private int height;
 
+	private FutureTask<byte[]> futureTask;
+
 	public Display(Presentation presentation, CameraSetting cameraSetting) {
 		this.presentation = presentation;
 		this.cameraSetting = cameraSetting;
+
+		camera = new Camera();
+		
+        Font font = new Font("SansSerif", Font.BOLD, 24);
+        textRenderer = new TextRenderer(font, true, false);
 	}
 	
 	public CameraSetting getCameraSetting() {
@@ -61,9 +69,7 @@ public class Display implements GLEventListener {
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		camera.setLocation(cameraSetting.getLocation());
-		camera.setTarget(cameraSetting.getTarget());
-		camera.setUp(cameraSetting.getUp());
+		camera.setCameraSetting(cameraSetting);
 		camera.setup(gl, glu);
 		
 		List<Shape> shapes = presentation.getShapes();
@@ -89,6 +95,11 @@ public class Display implements GLEventListener {
 				e1.printStackTrace();
 			}
         }
+        
+        if (futureTask != null) {
+        	futureTask.run();
+        	futureTask = null;
+        }
 	}
 	
 	@Override
@@ -98,10 +109,9 @@ public class Display implements GLEventListener {
 		gl.glEnable(GL_DEPTH_TEST);
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-		camera = new Camera();
-		
-        Font font = new Font("SansSerif", Font.BOLD, 24);
-        textRenderer = new TextRenderer(font, true, false);
+		int width = drawable.getWidth();
+		int height = drawable.getHeight();
+		reshape(drawable, 0, 0, width, height);
 	}
 	
 	@Override
@@ -127,6 +137,10 @@ public class Display implements GLEventListener {
 
 	@Override
 	public void dispose(GLAutoDrawable arg0) {
+	}
+
+	public void executeInDisplay(FutureTask<byte[]> futureTask) {
+		this.futureTask = futureTask;
 	}
 
 }

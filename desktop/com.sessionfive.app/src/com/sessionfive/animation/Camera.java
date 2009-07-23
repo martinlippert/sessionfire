@@ -21,28 +21,10 @@ public class Camera {
                       up.getX(), up.getY(), up.getZ());
     }
     
-    public Point getLocation() {
-        return location;
-    }
-    
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-    
-    public Point getTarget() {
-        return target;
-    }
-    
-    public void setTarget(Point target) {
-        this.target = target;
-    }
-    
-    public Point getUp() {
-		return up;
-	}
-
-    public void setUp(Point up) {
-		this.up = up;
+	public void setCameraSetting(CameraSetting cameraSetting) {
+		location = cameraSetting.getLocation();
+		target = cameraSetting.getTarget();
+		up = cameraSetting.getUp();
 	}
     
 }

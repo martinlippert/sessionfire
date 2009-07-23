@@ -27,17 +27,9 @@ public class ZoomOutZoomInAnimation implements Animation {
 		float shapeX = endShape.getX();
 
 		CameraSetting cameraMid = new CameraSetting(shapeX - 70f, -3.1f, 100f,
-				shapeX - 10f, -3.1f, 0, startSetting.getUpX(), startSetting.getUpY(), startSetting.getUpZ());
-		
-		float rotationAngle = -endShape.getRotation();
-		double rotationRadian = Math.toRadians(rotationAngle);
-		
-		double upX = Math.sin(rotationRadian);
-		double upY = Math.cos(rotationRadian);
-		double upZ = 0f;
-		
-		CameraSetting cameraEnd = new CameraSetting(shapeX + 22.5f, -3.1f, 45f,
-				shapeX + 22.5f, -3.1f, 0, (float)upX, (float)upY, (float)upZ);
+				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
+
+		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
 
 		KeyValues<CameraSetting> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
@@ -64,18 +56,9 @@ public class ZoomOutZoomInAnimation implements Animation {
 
 		float shapeX = endShape.getX();
 		CameraSetting cameraMid = new CameraSetting(shapeX - 70f, -3.1f, 100f,
-				shapeX - 10f, -3.1f, 0, startSetting.getUpX(), startSetting.getUpY(), startSetting.getUpZ());
+				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
-		shapeX = startShape.getX();
-		float rotationAngle = -startShape.getRotation();
-		double rotationRadian = Math.toRadians(rotationAngle);
-		
-		double upX = Math.sin(rotationRadian);
-		double upY = Math.cos(rotationRadian);
-		double upZ = 0f;
-
-		CameraSetting cameraEnd = new CameraSetting(shapeX + 22.5f, -3.1f, 45f,
-				shapeX + 22.5f, -3.1f, 0, (float)upX, (float)upY, (float)upZ);
+		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(startShape);
 
 		KeyValues<CameraSetting> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
@@ -91,6 +74,12 @@ public class ZoomOutZoomInAnimation implements Animation {
 		animator.setDeceleration(0.4f);
 
 		return animator;
+	}
+
+	@Override
+	public void directlyGoTo(Display display) {
+		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
+		display.setCameraSetting(cameraEnd);
 	}
 
 }

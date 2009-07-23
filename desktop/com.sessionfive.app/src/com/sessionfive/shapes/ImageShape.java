@@ -25,20 +25,24 @@ public class ImageShape extends AbstractShape {
 
 	private Texture t;
 	private final File file;
+	private final float width;
+	private float imageRatio;
 
-	public ImageShape(File file, float x, float y, float z, float rotation) {
+	public ImageShape(File file, float x, float y, float z, float rotation, float width) {
 		super(x, y, z, rotation);
 		this.file = file;
+		this.width = width;
 	}
 
 	@Override
 	public float getWidth() {
-		return 0;
+		return width;
 	}
 
 	@Override
 	public float getHeight() {
-		return 0;
+		initializeTexture(file);
+		return getWidth() * imageRatio;
 	}
 
 	@Override
@@ -68,8 +72,8 @@ public class ImageShape extends AbstractShape {
 		float x = getX();
 		float y = getY();
 		float z = getZ();
-		float w = 45f;
-		float h = w * 0.75f;
+		float w = getWidth();
+		float h = getHeight();
 
         gl.glPushMatrix();
 		gl.glTranslatef(x + (w/2),
@@ -122,12 +126,17 @@ public class ImageShape extends AbstractShape {
 				t = TextureIO.newTexture(file, false);
 				t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth(); 
 			} catch (GLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public File getFile() {
+		return this.file;
 	}
 
 }
