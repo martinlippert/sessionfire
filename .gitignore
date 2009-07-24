@@ -3,7 +3,7 @@
 
 # eclipse
 .metadata
-bin/*
+*bin/*
 
 # xcode
-build/*
+*build/*
