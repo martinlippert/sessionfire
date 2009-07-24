@@ -13,13 +13,11 @@
 	id <FlipsideViewControllerDelegate> delegate;
 	IBOutlet UITextField* ip;
 	IBOutlet UITextField* port;
-	UIImage* image;
 	NSInteger numberofkeyframes;
 }
 
 @property (nonatomic, retain) UITextField* ip;
 @property (nonatomic, retain) UITextField* port;
-@property (nonatomic, retain) UIImage* image;
 @property (nonatomic) NSInteger numberofkeyframes;
 
 

@@ -19,10 +19,9 @@
 		289233A70DB2D0840083E9F9 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A50DB2D0840083E9F9 /* MainView.m */; };
 		289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A90DB2D0DB0083E9F9 /* MainViewController.m */; };
 		289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */; };
-		400643E2100BD35300C30F73 /* FlowCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 400643DF100BD35300C30F73 /* FlowCoverView.m */; };
-		400643E3100BD35300C30F73 /* DataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 400643E1100BD35300C30F73 /* DataCache.m */; };
 		400643E6100BD36000C30F73 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E5100BD36000C30F73 /* OpenGLES.framework */; };
 		400643EA100BD36500C30F73 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E9100BD36500C30F73 /* QuartzCore.framework */; };
+		400F9C6B101989AC00DF6442 /* S5Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 400F9C6A101989AC00DF6442 /* S5Connection.m */; };
 		407AE580100BD8250056ED02 /* folie4.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE577100BD8250056ED02 /* folie4.png */; };
 		407AE581100BD8250056ED02 /* folie7.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE578100BD8250056ED02 /* folie7.png */; };
 		407AE582100BD8250056ED02 /* folie5.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE579100BD8250056ED02 /* folie5.png */; };
@@ -32,6 +31,8 @@
 		407AE586100BD8250056ED02 /* folie9.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE57D100BD8250056ED02 /* folie9.png */; };
 		407AE587100BD8250056ED02 /* folie3.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE57E100BD8250056ED02 /* folie3.png */; };
 		407AE588100BD8250056ED02 /* folie2.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE57F100BD8250056ED02 /* folie2.png */; };
+		40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AB1018C1E800DEEB71 /* FlowCoverView.m */; };
+		40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AC1018C1E800DEEB71 /* DataCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,12 +55,10 @@
 		289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlipsideViewController.m; path = Classes/FlipsideViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Session7_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session7_Prefix.pch; sourceTree = "<group>"; };
-		400643DE100BD35300C30F73 /* FlowCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlowCoverView.h; sourceTree = "<group>"; };
-		400643DF100BD35300C30F73 /* FlowCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlowCoverView.m; sourceTree = "<group>"; };
-		400643E0100BD35300C30F73 /* DataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataCache.h; sourceTree = "<group>"; };
-		400643E1100BD35300C30F73 /* DataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataCache.m; sourceTree = "<group>"; };
 		400643E5100BD36000C30F73 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		400643E9100BD36500C30F73 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		400F9C69101989AC00DF6442 /* S5Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S5Connection.h; sourceTree = "<group>"; };
+		400F9C6A101989AC00DF6442 /* S5Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S5Connection.m; sourceTree = "<group>"; };
 		407AE577100BD8250056ED02 /* folie4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie4.png; sourceTree = "<group>"; };
 		407AE578100BD8250056ED02 /* folie7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie7.png; sourceTree = "<group>"; };
 		407AE579100BD8250056ED02 /* folie5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie5.png; sourceTree = "<group>"; };
@@ -69,6 +68,10 @@
 		407AE57D100BD8250056ED02 /* folie9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie9.png; sourceTree = "<group>"; };
 		407AE57E100BD8250056ED02 /* folie3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie3.png; sourceTree = "<group>"; };
 		407AE57F100BD8250056ED02 /* folie2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie2.png; sourceTree = "<group>"; };
+		40B029AA1018C1E800DEEB71 /* FlowCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowCoverView.h; path = Classes/FlowCoverView.h; sourceTree = "<group>"; };
+		40B029AB1018C1E800DEEB71 /* FlowCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowCoverView.m; path = Classes/FlowCoverView.m; sourceTree = "<group>"; };
+		40B029AC1018C1E800DEEB71 /* DataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataCache.m; path = Classes/DataCache.m; sourceTree = "<group>"; };
+		40B029AD1018C1E800DEEB71 /* DataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataCache.h; path = Classes/DataCache.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Session7-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Session7-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,10 +123,10 @@
 		289233A00DB2D0730083E9F9 /* Main View */ = {
 			isa = PBXGroup;
 			children = (
-				400643DE100BD35300C30F73 /* FlowCoverView.h */,
-				400643DF100BD35300C30F73 /* FlowCoverView.m */,
-				400643E0100BD35300C30F73 /* DataCache.h */,
-				400643E1100BD35300C30F73 /* DataCache.m */,
+				40B029AA1018C1E800DEEB71 /* FlowCoverView.h */,
+				40B029AB1018C1E800DEEB71 /* FlowCoverView.m */,
+				40B029AC1018C1E800DEEB71 /* DataCache.m */,
+				40B029AD1018C1E800DEEB71 /* DataCache.h */,
 				289233A40DB2D0840083E9F9 /* MainView.h */,
 				289233A50DB2D0840083E9F9 /* MainView.m */,
 				289233A80DB2D0DB0083E9F9 /* MainViewController.h */,
@@ -135,6 +138,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				400F9C681019895900DF6442 /* Utility */,
 				289233A00DB2D0730083E9F9 /* Main View */,
 				281C6CD70DB2D82200F60ACC /* Flipside View */,
 				080E96DDFE201D6D7F000001 /* Application Delegate */,
@@ -177,6 +181,15 @@
 				288765580DF743DE002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		400F9C681019895900DF6442 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				400F9C69101989AC00DF6442 /* S5Connection.h */,
+				400F9C6A101989AC00DF6442 /* S5Connection.m */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 		407AE536100BD3EC0056ED02 /* Images */ = {
@@ -272,8 +285,9 @@
 				289233A70DB2D0840083E9F9 /* MainView.m in Sources */,
 				289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */,
 				289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */,
-				400643E2100BD35300C30F73 /* FlowCoverView.m in Sources */,
-				400643E3100BD35300C30F73 /* DataCache.m in Sources */,
+				40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */,
+				40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */,
+				400F9C6B101989AC00DF6442 /* S5Connection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
