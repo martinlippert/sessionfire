@@ -21,7 +21,7 @@
 		289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */; };
 		400643E6100BD36000C30F73 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E5100BD36000C30F73 /* OpenGLES.framework */; };
 		400643EA100BD36500C30F73 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E9100BD36500C30F73 /* QuartzCore.framework */; };
-		400F9C6B101989AC00DF6442 /* S5Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 400F9C6A101989AC00DF6442 /* S5Connection.m */; };
+		400F9C6B101989AC00DF6442 /* S5URL.m in Sources */ = {isa = PBXBuildFile; fileRef = 400F9C6A101989AC00DF6442 /* S5URL.m */; };
 		407AE580100BD8250056ED02 /* folie4.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE577100BD8250056ED02 /* folie4.png */; };
 		407AE581100BD8250056ED02 /* folie7.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE578100BD8250056ED02 /* folie7.png */; };
 		407AE582100BD8250056ED02 /* folie5.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE579100BD8250056ED02 /* folie5.png */; };
@@ -57,8 +57,8 @@
 		32CA4F630368D1EE00C91783 /* Session7_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session7_Prefix.pch; sourceTree = "<group>"; };
 		400643E5100BD36000C30F73 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		400643E9100BD36500C30F73 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		400F9C69101989AC00DF6442 /* S5Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S5Connection.h; sourceTree = "<group>"; };
-		400F9C6A101989AC00DF6442 /* S5Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S5Connection.m; sourceTree = "<group>"; };
+		400F9C69101989AC00DF6442 /* S5URL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S5URL.h; sourceTree = "<group>"; };
+		400F9C6A101989AC00DF6442 /* S5URL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S5URL.m; sourceTree = "<group>"; };
 		407AE577100BD8250056ED02 /* folie4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie4.png; sourceTree = "<group>"; };
 		407AE578100BD8250056ED02 /* folie7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie7.png; sourceTree = "<group>"; };
 		407AE579100BD8250056ED02 /* folie5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie5.png; sourceTree = "<group>"; };
@@ -186,8 +186,8 @@
 		400F9C681019895900DF6442 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				400F9C69101989AC00DF6442 /* S5Connection.h */,
-				400F9C6A101989AC00DF6442 /* S5Connection.m */,
+				400F9C69101989AC00DF6442 /* S5URL.h */,
+				400F9C6A101989AC00DF6442 /* S5URL.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 				289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */,
 				40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */,
 				40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */,
-				400F9C6B101989AC00DF6442 /* S5Connection.m in Sources */,
+				400F9C6B101989AC00DF6442 /* S5URL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

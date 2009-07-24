@@ -6,10 +6,10 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "S5Connection.h"
+#import "S5URL.h"
 
 
-@implementation S5Connection
+@implementation S5URL
 
 NSString* ip;
 NSString* port;

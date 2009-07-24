@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface S5Connection : NSObject {
+@interface S5URL : NSObject {
 
 }
 - (id) initWithIp: (NSString*) ip1 andPort: (NSString*) port1;

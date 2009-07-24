@@ -7,7 +7,7 @@
 //
 
 #import "FlipsideViewController.h"
-#import "S5Connection.h"
+#import "S5URL.h"
 
 
 @implementation FlipsideViewController
@@ -21,8 +21,8 @@
 
 
 - (IBAction)done {
-	S5Connection* conn = [[S5Connection alloc] initWithIp:ip.text andPort:port.text];
-	[[NSURLConnection alloc] initWithRequest:[conn request] delegate:self];
+	S5URL* s5url = [[S5URL alloc] initWithIp:ip.text andPort:port.text];
+	[[NSURLConnection alloc] initWithRequest:[s5url request] delegate:self];
 }
 
 
