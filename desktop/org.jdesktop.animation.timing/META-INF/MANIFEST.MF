@@ -7,3 +7,4 @@ Bundle-ClassPath: TimingFramework-1.0.jar
 Export-Package: org.jdesktop.animation.timing,
  org.jdesktop.animation.timing.interpolation,
  org.jdesktop.animation.timing.triggers
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
