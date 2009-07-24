@@ -14,5 +14,7 @@
 }
 - (id) initWithIp: (NSString*) ip1 andPort: (NSString*) port1;
 - (NSURL*) url;
+- (NSURL*) urlForImage: (int) imageNr;
 - (NSURLRequest*) request ;
+- (NSURLConnection*) call: (NSString*) command andDelegate: (id) delegate;
 @end

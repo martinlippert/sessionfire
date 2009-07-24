@@ -25,7 +25,13 @@ NSString* port;
 }
 
 - (NSURL*) url {
-	return [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/numberofkeyframes", ip, port] ];
+	return [NSURL URLWithString: 
+			[NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/numberofkeyframes", 
+			 ip, port]];
+}
+
+- (NSURL*) urlForImage: (int) imageNr {
+		return [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/keyframe?at=0%d", ip, port, imageNr] ];
 }
 
 - (NSURLRequest*) request {
@@ -33,6 +39,19 @@ NSString* port;
 							cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
 						timeoutInterval:2.0];
 }
+
+- (NSURLConnection*) call: (NSString*) command andDelegate: (id) delegate {
+	NSString* url= [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", ip, port, command];
+	
+	NSLog(@"Calling %@", url);
+	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]
+												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+											timeoutInterval:5.0];
+	
+	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:delegate];
+	return theConnection;
+}
+
 
 
 @end

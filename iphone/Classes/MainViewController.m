@@ -8,6 +8,7 @@
 
 #import "MainViewController.h"
 #import "MainView.h"
+#import "S5URL.h"
 
 
 @implementation MainViewController
@@ -15,6 +16,7 @@
 NSString* ip;
 NSString* port;
 NSInteger numberofkeyframes;
+S5URL* s5url;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -37,6 +39,8 @@ NSInteger numberofkeyframes;
 	[ip retain];
 	port = controller.port.text;
 	[port retain];
+	
+	s5url = [[S5URL alloc] initWithIp:controller.ip.text andPort:controller.port.text];
 	[self dismissModalViewControllerAnimated:YES];
 }
 
@@ -52,22 +56,10 @@ NSInteger numberofkeyframes;
 	[controller release];
 }
 
-- (void)call:(NSString *)command {    
-	
-	NSString* url= [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", ip, port, command];
-	
-	NSLog(@"Calling %@", url);
-	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]
-												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-											timeoutInterval:5.0];
-	
-	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
-}
 
-- (UIImage*) callForImage:(int)whichImage {    
-	NSURL *url2 = [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/keyframe?at=0%d", ip, port, whichImage] ];
-	NSData* data = [ NSData dataWithContentsOfURL: url2 ];
-	NSLog(@"callForImage %d", whichImage );
+- (UIImage*) callForImage:(int)imageNr {   
+	NSLog(@"callForImage %d", imageNr);
+	NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:imageNr] ];
 	if([data length] > 0) {
 		//[self.imageView2.image release];
 		return [ [ UIImage alloc ] initWithData: data ];
@@ -76,25 +68,6 @@ NSInteger numberofkeyframes;
 	//[data autorelease];
 }
 
-/*
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations
- return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
 
 /************************************************************************/
 /*																		*/
@@ -119,7 +92,7 @@ NSInteger numberofkeyframes;
 
 - (void)flowCover:(FlowCoverView *)view draggedTo:(int)image
 {
-	[self call:[NSString stringWithFormat:@"go?to=%d", image]];
+	[s5url call:[NSString stringWithFormat:@"go?to=%d", image] andDelegate:self];
 }
 
 - (void)dealloc {
