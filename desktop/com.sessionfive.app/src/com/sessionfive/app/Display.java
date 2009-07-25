@@ -19,8 +19,7 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
-import com.sessionfive.animation.Camera;
-import com.sessionfive.animation.CameraSetting;
+import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 import com.sun.opengl.util.awt.Screenshot;
@@ -33,7 +32,6 @@ public class Display implements GLEventListener {
 	private final Presentation presentation;
 	
 	private Camera camera;
-	private CameraSetting cameraSetting;
 	private TextRenderer textRenderer;
 
 	private volatile boolean doScreenshot;
@@ -44,22 +42,20 @@ public class Display implements GLEventListener {
 
 	private FutureTask<byte[]> futureTask;
 
-	public Display(Presentation presentation, CameraSetting cameraSetting) {
+	public Display(Presentation presentation) {
 		this.presentation = presentation;
-		this.cameraSetting = cameraSetting;
-
-		camera = new Camera();
+		this.camera = presentation.getStartCamera();
 		
         Font font = new Font("SansSerif", Font.BOLD, 24);
         textRenderer = new TextRenderer(font, true, false);
 	}
 	
-	public CameraSetting getCameraSetting() {
-		return cameraSetting;
+	public Camera getCamera() {
+		return camera;
 	}
 	
-	public void setCameraSetting(CameraSetting cameraSetting) {
-		this.cameraSetting = cameraSetting;
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 
 	@Override
@@ -69,8 +65,7 @@ public class Display implements GLEventListener {
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		camera.setCameraSetting(cameraSetting);
-		camera.setup(gl, glu);
+		camera.setTo(gl, glu);
 		
 		List<Shape> shapes = presentation.getShapes();
 		for (Shape shape : shapes) {

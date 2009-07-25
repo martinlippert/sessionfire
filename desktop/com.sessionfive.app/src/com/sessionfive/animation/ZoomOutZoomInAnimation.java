@@ -8,35 +8,37 @@ import org.jdesktop.animation.timing.interpolation.PropertySetter;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
+import com.sessionfive.core.Camera;
+import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Shape;
 
 public class ZoomOutZoomInAnimation implements Animation {
 
 	private final Shape endShape;
-	private final Shape startShape;
+	private final Focusable startShape;
 
-	public ZoomOutZoomInAnimation(final Shape startShape, final Shape endShape) {
+	public ZoomOutZoomInAnimation(final Focusable startShape, final Shape endShape) {
 		this.startShape = startShape;
 		this.endShape = endShape;
 	}
 
 	@Override
 	public Animator getForwardAnimation(Display display) {
-		CameraSetting startSetting = display.getCameraSetting();
+		Camera startSetting = display.getCamera();
 
 		float shapeX = endShape.getX();
 
-		CameraSetting cameraMid = new CameraSetting(shapeX - 70f, -3.1f, 100f,
+		Camera cameraMid = new Camera(shapeX - 70f, -3.1f, 100f,
 				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
+		Camera cameraEnd = endShape.getFocussedCamera();
 
-		KeyValues<CameraSetting> values2 = KeyValues.create(
+		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
 				cameraEnd);
 		KeyTimes times2 = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "cameraSetting",
+		PropertySetter ps2 = new PropertySetter(display, "camera",
 				frames2);
 
 		Animator animator = new Animator(1500, ps2);
@@ -52,20 +54,20 @@ public class ZoomOutZoomInAnimation implements Animation {
 		if (startShape == null)
 			return null;
 
-		CameraSetting startSetting = display.getCameraSetting();
+		Camera startSetting = display.getCamera();
 
 		float shapeX = endShape.getX();
-		CameraSetting cameraMid = new CameraSetting(shapeX - 70f, -3.1f, 100f,
+		Camera cameraMid = new Camera(shapeX - 70f, -3.1f, 100f,
 				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(startShape);
+		Camera cameraEnd = startShape.getFocussedCamera();
 
-		KeyValues<CameraSetting> values2 = KeyValues.create(
+		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
 				cameraEnd);
 		KeyTimes times2 = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "cameraSetting",
+		PropertySetter ps2 = new PropertySetter(display, "camera",
 				frames2);
 
 		Animator animator = new Animator(1500, ps2);
@@ -78,8 +80,8 @@ public class ZoomOutZoomInAnimation implements Animation {
 
 	@Override
 	public void directlyGoTo(Display display) {
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
-		display.setCameraSetting(cameraEnd);
+		Camera cameraEnd = endShape.getFocussedCamera();
+		display.setCamera(cameraEnd);
 	}
 
 }

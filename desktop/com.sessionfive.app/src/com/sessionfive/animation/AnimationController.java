@@ -44,7 +44,7 @@ public class AnimationController {
 	}
 
 	public void backward() {
-		if (currentAnimationNo <= 0) return;
+		if (currentAnimationNo < 0) return;
 
 		Animation animation = presentation.getAnimation(currentAnimationNo);
 		Animator animator = animation.getBackwardAnimation(display);

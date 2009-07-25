@@ -27,8 +27,8 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.animation.CameraSetting;
 import com.sessionfive.core.Animation;
+import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.awt.Screenshot;
@@ -74,12 +74,12 @@ public class SessionFiveApplication implements IApplication {
 
 		canvas = new GLCanvas(caps, null, null, null);
 
-		presentation = new Presentation();
-
-		final CameraSetting startCameraSetting = new CameraSetting(-80f, -3.1f,
+		final Camera startCamera = new Camera(-80f, -3.1f,
 				90f, -20f, -3.1f, 0f, 0f, 1f, 0f);
+		presentation = new Presentation();
+		presentation.setStartCamera(startCamera);
 
-		display = new Display(presentation, startCameraSetting);
+		display = new Display(presentation);
 		animationController = new AnimationController();
 
 		canvas.addGLEventListener(display);
@@ -213,10 +213,7 @@ public class SessionFiveApplication implements IApplication {
 				512, 512,
 				canvas.getContext());
 		
-		
-		final CameraSetting startCameraSetting = new CameraSetting(-80f, -3.1f,
-				90f, -20f, -3.1f, 0f, 0f, 1f, 0f);
-		Display offscreenDisplay = new Display(presentation, startCameraSetting);
+		Display offscreenDisplay = new Display(presentation);
 		Animation animation = presentation.getAnimation(parsedNumber);
 		animation.directlyGoTo(offscreenDisplay);
 		

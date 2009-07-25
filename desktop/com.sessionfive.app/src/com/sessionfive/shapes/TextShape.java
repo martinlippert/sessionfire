@@ -59,10 +59,6 @@ public class TextShape extends AbstractShape {
 		gl.glPopMatrix();
 	}
 
-	@Override
-	public void reset() {
-	}
-
 	public Font getFont() {
 		return font;
 	}
