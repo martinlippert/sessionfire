@@ -18,7 +18,9 @@ NSString* port;
 	self = [super init];
 	if (self != nil) {
 		ip = ip1;
+		[ip retain];
 		port = port1;
+		[port retain];
 	}
 	return self;
 }
