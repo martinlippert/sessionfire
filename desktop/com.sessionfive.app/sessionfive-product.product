@@ -3,7 +3,6 @@
 
 <product name="Session Five" uid="sessionfive" id="com.sessionfive.app.product" application="com.sessionfive.app.startup" version="0.0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -11,10 +10,10 @@
       <programArgs>-noExit</programArgs>
       <vmArgs>-Xms40m -Xmx256m -Dorg.eclipse.equinox.http.jetty.http.port=8088</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <vmArgsWin>-Dsun.java2d.noddraw=true</vmArgsWin>
    </launcherArgs>
 
    <windowImages/>
-
 
    <launcher name="SessionFive">
       <solaris/>
@@ -23,10 +22,8 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="com.sessionfive.app"/>

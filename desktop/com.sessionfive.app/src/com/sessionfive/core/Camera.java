@@ -1,12 +1,17 @@
-package com.sessionfive.animation;
+package com.sessionfive.core;
 
-public class CameraSetting {
+import javax.media.opengl.GL;
+import javax.media.opengl.glu.GLU;
+
+import com.sessionfive.animation.Point;
+
+public class Camera {
 	
 	private Point location;
 	private Point target;
 	private Point up;
 	
-	public CameraSetting(float locationX, float locationY, float locationZ,
+	public Camera(float locationX, float locationY, float locationZ,
 			float targetX, float targetY, float targetZ, float upX, float upY, float upZ) {
 		super();
 		this.location = new Point(locationX, locationY, locationZ);
@@ -26,4 +31,10 @@ public class CameraSetting {
 		return up;
 	}
 
+    public void setTo(GL gl, GLU glu) {
+        glu.gluLookAt(location.getX(), location.getY(), location.getZ(),
+                      target.getX(), target.getY(), target.getZ(),
+                      up.getX(), up.getY(), up.getZ());
+    }
+    
 }

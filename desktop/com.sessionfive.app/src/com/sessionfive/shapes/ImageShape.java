@@ -46,11 +46,6 @@ public class ImageShape extends AbstractShape {
 	}
 
 	@Override
-	public void reset() {
-		t = null;
-	}
-
-	@Override
 	public void display(GL2 gl) {
 		initializeTexture(file);
 		

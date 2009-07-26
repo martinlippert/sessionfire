@@ -5,7 +5,8 @@ import java.io.File;
 import javax.media.opengl.awt.GLCanvas;
 import javax.swing.JFileChooser;
 
-import com.sessionfive.animation.MoveToAnimation;
+import com.sessionfive.animation.ZoomOutZoomInAnimation;
+import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 import com.sessionfive.shapes.ImageShape;
@@ -32,20 +33,20 @@ public class PresentationSelector {
 				
 				float rot = 0f;
 				
-				Shape startShape = null;
+				Focusable startShape = presentation;
 				for (File file : files) {
 					Shape newShape = new ImageShape(file, x, -20f, z, rot, 45f);
 					presentation.addShape(newShape);
-//					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, newShape));
-					presentation.addAnimation(new MoveToAnimation(startShape, newShape));
+					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, newShape));
+//					presentation.addAnimation(new MoveToAnimation(startShape, newShape));
 					startShape = newShape;
 					x += 50f;
 					z += 0.01f;
 					
 					TextShape textShape = new TextShape("Shape " + file.getName(), "SansSerif", 60, x, -20f, z, -rot);
 					presentation.addShape(textShape);
-//					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, textShape));
-					presentation.addAnimation(new MoveToAnimation(startShape, textShape));
+					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, textShape));
+//					presentation.addAnimation(new MoveToAnimation(startShape, textShape));
 					startShape = textShape;
 					x += 50f;
 					z += 0.01f;

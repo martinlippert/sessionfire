@@ -8,29 +8,31 @@ import org.jdesktop.animation.timing.interpolation.PropertySetter;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
+import com.sessionfive.core.Camera;
+import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Shape;
 
 public class MoveToAnimation implements Animation {
 
 	private final Shape endShape;
-	private final Shape startShape;
+	private final Focusable startShape;
 
-	public MoveToAnimation(final Shape startShape, final Shape endShape) {
+	public MoveToAnimation(final Focusable startShape, final Shape endShape) {
 		this.startShape = startShape;
 		this.endShape = endShape;
 	}
 
 	@Override
 	public Animator getForwardAnimation(Display display) {
-		CameraSetting startSetting = display.getCameraSetting();
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
+		Camera startSetting = display.getCamera();
+		Camera cameraEnd = endShape.getFocussedCamera();
 
-		KeyValues<CameraSetting> values2 = KeyValues.create(
+		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting,
 				cameraEnd);
 		KeyTimes times2 = new KeyTimes(0f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "cameraSetting",
+		PropertySetter ps2 = new PropertySetter(display, "camera",
 				frames2);
 
 		Animator animator = new Animator(800, ps2);
@@ -46,15 +48,15 @@ public class MoveToAnimation implements Animation {
 		if (startShape == null)
 			return null;
 
-		CameraSetting startSetting = display.getCameraSetting();
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(startShape);
+		Camera startSetting = display.getCamera();
+		Camera cameraEnd = startShape.getFocussedCamera();
 
-		KeyValues<CameraSetting> values2 = KeyValues.create(
+		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting,
 				cameraEnd);
 		KeyTimes times2 = new KeyTimes(0f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "cameraSetting",
+		PropertySetter ps2 = new PropertySetter(display, "camera",
 				frames2);
 
 		Animator animator = new Animator(800, ps2);
@@ -67,7 +69,7 @@ public class MoveToAnimation implements Animation {
 
 	@Override
 	public void directlyGoTo(Display display) {
-		CameraSetting cameraEnd = ShapeFocus.getFocussedShape(endShape);
-		display.setCameraSetting(cameraEnd);
+		Camera cameraEnd = endShape.getFocussedCamera();
+		display.setCamera(cameraEnd);
 	}
 }

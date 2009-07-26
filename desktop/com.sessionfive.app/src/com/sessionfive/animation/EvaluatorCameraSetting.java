@@ -2,9 +2,11 @@ package com.sessionfive.animation;
 
 import org.jdesktop.animation.timing.interpolation.Evaluator;
 
-public class EvaluatorCameraSetting extends Evaluator<CameraSetting> {
+import com.sessionfive.core.Camera;
+
+public class EvaluatorCameraSetting extends Evaluator<Camera> {
 	
-    public CameraSetting evaluate(CameraSetting v0, CameraSetting v1, float fraction) {
+    public Camera evaluate(Camera v0, Camera v1, float fraction) {
         float locationX = v0.getLocation().getX() + ((v1.getLocation().getX() - v0.getLocation().getX()) * fraction);
         float locationY = v0.getLocation().getY() + ((v1.getLocation().getY() - v0.getLocation().getY()) * fraction);
         float locationZ = v0.getLocation().getZ() + ((v1.getLocation().getZ() - v0.getLocation().getZ()) * fraction);
@@ -17,6 +19,6 @@ public class EvaluatorCameraSetting extends Evaluator<CameraSetting> {
         float upY = v0.getUp().getY() + ((v1.getUp().getY() - v0.getUp().getY()) * fraction);
         float upZ = v0.getUp().getZ() + ((v1.getUp().getZ() - v0.getUp().getZ()) * fraction);
 
-        return new CameraSetting(locationX, locationY, locationZ, targetX, targetY, targetZ, upX, upY, upZ);
+        return new Camera(locationX, locationY, locationZ, targetX, targetY, targetZ, upX, upY, upZ);
     }
 }
