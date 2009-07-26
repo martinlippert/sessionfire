@@ -8,7 +8,6 @@
 
 #import "S5URL.h"
 
-
 @implementation S5URL
 
 NSString* ip;
@@ -24,30 +23,26 @@ NSString* port;
 	return self;
 }
 
-- (NSURL*) url {
-	return [NSURL URLWithString: 
-			[NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/numberofkeyframes", 
-			 ip, port]];
+- (NSURL*) urlFor: (NSString*) command {
+	NSString* url = [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", 
+					 ip, port, command];
+	return [NSURL URLWithString:url];
 }
 
-- (NSURL*) urlForImage: (int) imageNr {
-		return [ NSURL URLWithString: [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/keyframe?at=0%d", ip, port, imageNr] ];
-}
-
-- (NSURLRequest*) request {
-	return [NSURLRequest requestWithURL:[self url]
+- (NSURLRequest*) requestFor: (NSString*) command {
+	return [NSURLRequest requestWithURL:[self urlFor:command]
 							cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
 						timeoutInterval:2.0];
 }
 
+- (NSURL*) urlForImage: (int) imageNr {
+	NSString* command = [NSString stringWithFormat:KEYFRAME_AT, imageNr];
+	return [self urlFor:command];
+}
+
+
 - (NSURLConnection*) call: (NSString*) command andDelegate: (id) delegate {
-	NSString* url= [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", ip, port, command];
-	
-	NSLog(@"Calling %@", url);
-	NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]
-												cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-											timeoutInterval:5.0];
-	
+	NSURLRequest *theRequest =	[self requestFor:command];	
 	NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:delegate];
 	return theConnection;
 }

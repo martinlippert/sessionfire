@@ -10,6 +10,7 @@
 #import "S5URL.h"
 
 
+
 @implementation FlipsideViewController
 
 @synthesize delegate, ip, port, numberofkeyframes;
@@ -22,7 +23,7 @@
 
 - (IBAction)done {
 	S5URL* s5url = [[S5URL alloc] initWithIp:ip.text andPort:port.text];
-	[[NSURLConnection alloc] initWithRequest:[s5url request] delegate:self];
+	[[NSURLConnection alloc] initWithRequest:[s5url requestFor:NUMBER_OF_KEYFRAMES] delegate:self];
 }
 
 

@@ -92,7 +92,7 @@ S5URL* s5url;
 
 - (void)flowCover:(FlowCoverView *)view draggedTo:(int)image
 {
-	[s5url call:[NSString stringWithFormat:@"go?to=%d", image] andDelegate:self];
+	[s5url call:[NSString stringWithFormat:GO_TO, image] andDelegate:self];
 }
 
 - (void)dealloc {
