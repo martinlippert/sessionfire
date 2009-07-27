@@ -37,6 +37,12 @@ public class RemoteControlServlet extends HttpServlet {
 	}
 
 	@Override
+	/*
+	 * http://localhost:8088/sessionfive/remotecontrol/go?to=4
+	 * http://localhost:8088/sessionfive/remotecontrol/numberofkeyframes
+	 * http://localhost:8088/sessionfive/remotecontrol/keyframe?at=0 (liefert
+	 * ein 512x512 PNG mit Alpha-Channel)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
