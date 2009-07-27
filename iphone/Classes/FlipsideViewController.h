@@ -20,9 +20,10 @@
 @property (nonatomic, retain) UITextField* port;
 @property (nonatomic) NSInteger numberofkeyframes;
 
-
 @property (nonatomic, assign) id <FlipsideViewControllerDelegate> delegate;
+
 - (IBAction)done;
+- (IBAction)editingdone;
 
 @end
 

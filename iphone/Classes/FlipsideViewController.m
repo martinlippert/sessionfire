@@ -26,6 +26,9 @@
 	//start connection
 	[[NSURLConnection alloc] initWithRequest:[s5url requestFor:NUMBER_OF_KEYFRAMES] delegate:self];
 }
+- (IBAction)editingdone {
+	NSLog(@"test");
+}
 
 
 
