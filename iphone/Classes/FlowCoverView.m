@@ -48,7 +48,7 @@ woody@chaosinmotion.com. Chaos In Motion is at http://www.chaosinmotion.com
 
 #define TEXTURESIZE			256		// width and height of texture; power of 2, 256 max
 #define MAXTILES			48		// maximum allocated 256x256 tiles in cache
-#define VISTILES			6		// # tiles left and right of center tile visible on screen
+#define VISTILES			24		// # tiles left and right of center tile visible on screen
 
 /*
  *	Parameters to tweak layout and animation behaviors
@@ -459,7 +459,7 @@ static void *GData = NULL;
 	 *	We don't need to draw all the tiles, just the visible ones. We guess
 	 *	there are 6 tiles visible; that can be adjusted by altering the 
 	 *	constant
-	 
+	 */
 	
 	int i,len = [self numTiles];
 	int mid = (int)floor(offset + 0.5);
@@ -479,11 +479,12 @@ static void *GData = NULL;
 	for (i = iEndPos; i >= mid; --i) {
 		[self drawTile:i atOffset:i-offset];
 	}
-	 */
-	
+	 
+	/*
 	for (int i = 0; i < [self numTiles]; ++i) {
 		[self drawTile:i atOffset:i-offset];
 	}
+	 */
 	
 	
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);

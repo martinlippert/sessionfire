@@ -32,13 +32,7 @@ S5URL* s5url;
 			(interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[self.view setNeedsLayout];
-}
-
-
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
+- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
 	numberofkeyframes = controller.numberofkeyframes;
 	ip = controller.ip.text;
 	[ip retain];
@@ -47,6 +41,10 @@ S5URL* s5url;
 	
 	s5url = [[S5URL alloc] initWithIp:controller.ip.text andPort:controller.port.text];
 	[self dismissModalViewControllerAnimated:YES];
+
+	[self.view setNeedsLayout];
+	
+	[alertView dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 

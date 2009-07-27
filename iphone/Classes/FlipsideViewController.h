@@ -28,6 +28,6 @@
 
 
 @protocol FlipsideViewControllerDelegate
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller;
+- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView;
 @end
 

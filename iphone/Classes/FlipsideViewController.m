@@ -23,6 +23,7 @@
 
 - (IBAction)done {
 	S5URL* s5url = [[S5URL alloc] initWithIp:ip.text andPort:port.text];
+	//start connection
 	[[NSURLConnection alloc] initWithRequest:[s5url requestFor:NUMBER_OF_KEYFRAMES] delegate:self];
 }
 
@@ -41,14 +42,19 @@
 #pragma mark -
 #pragma mark NSURLConnection delegate
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection succeeded" 
-													message:nil
-												   delegate:self 
-										  cancelButtonTitle:@"OK" 
-										  otherButtonTitles:nil, nil];
-	[alert show];
-	[alert release];
+{	
+	UIActivityIndicatorView* view = [[UIActivityIndicatorView alloc] 
+									 initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]; 
+	[view startAnimating];
+	[view setFrame:CGRectMake(120, 45, 50, 50)];
+	UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Loading presentation." 
+														 message:nil
+														delegate:nil 
+											   cancelButtonTitle:nil 
+											   otherButtonTitles:nil, nil];
+	[alertView addSubview:view];
+	[alertView show];
+	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:alertView];	
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data { 
@@ -68,11 +74,6 @@
 	[alert release];
 }
 
-#pragma mark -
-#pragma mark UIAlertView 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	[self.delegate flipsideViewControllerDidFinish:self];		
-}
 
 
 @end
