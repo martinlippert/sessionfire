@@ -459,7 +459,7 @@ static void *GData = NULL;
 	 *	We don't need to draw all the tiles, just the visible ones. We guess
 	 *	there are 6 tiles visible; that can be adjusted by altering the 
 	 *	constant
-	 */
+	 
 	
 	int i,len = [self numTiles];
 	int mid = (int)floor(offset + 0.5);
@@ -475,9 +475,16 @@ static void *GData = NULL;
 	if (iEndPos >= len) {
 		iEndPos = len-1;
 	}
+	
 	for (i = iEndPos; i >= mid; --i) {
 		[self drawTile:i atOffset:i-offset];
 	}
+	 */
+	
+	for (int i = 0; i < [self numTiles]; ++i) {
+		[self drawTile:i atOffset:i-offset];
+	}
+	
 	
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];

@@ -32,6 +32,11 @@ S5URL* s5url;
 			(interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[self.view setNeedsLayout];
+}
+
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
 	numberofkeyframes = controller.numberofkeyframes;
