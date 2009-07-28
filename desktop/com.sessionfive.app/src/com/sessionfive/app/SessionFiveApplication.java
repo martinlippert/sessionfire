@@ -30,6 +30,8 @@ import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
+import com.sessionfive.core.ui.CentralControlPalette;
+import com.sessionfive.core.ui.CentralControlPaletteUI;
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.awt.Screenshot;
 
@@ -50,6 +52,7 @@ public class SessionFiveApplication implements IApplication {
 	private Presentation presentation;
 
 	private static SessionFiveApplication application;
+	private CentralControlPalette centralControlPalette;
 	
 	public SessionFiveApplication() {
 		application = this;
@@ -138,8 +141,12 @@ public class SessionFiveApplication implements IApplication {
 		frame.setVisible(true);
 		animator.start();
 		animationController.init(presentation, display);
+		
+		centralControlPalette = new CentralControlPalette(presentation);
+		CentralControlPaletteUI centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette);
+		centralControlPaletteUI.show();
 
-		new PresentationSelector(presentation).selectPresentation(canvas);
+//		new PresentationSelector(presentation).selectPresentation(canvas);
 		return EXIT_OK;
 	}
 
