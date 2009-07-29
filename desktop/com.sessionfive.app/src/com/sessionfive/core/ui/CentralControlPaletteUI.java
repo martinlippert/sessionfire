@@ -1,5 +1,6 @@
 package com.sessionfive.core.ui;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,9 +19,12 @@ public class CentralControlPaletteUI {
 	private JButton choosePresentationButton;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
+	private final Component canvas;
 
-	public CentralControlPaletteUI(CentralControlPalette centralControlPalette) {
+
+	public CentralControlPaletteUI(CentralControlPalette centralControlPalette, Component canvas) {
 		this.centralControlPalette = centralControlPalette;
+		this.canvas = canvas;
 		window = new TranslucentPalette("Session Five - Central Control", false);
 		initComponents();
 		window.pack();
@@ -35,9 +39,10 @@ public class CentralControlPaletteUI {
 	private void initComponents() {
 		choosePresentationButton = new JButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.choosePresentation();
+				centralControlPalette.choosePresentation(canvas);
 			}
 		});
 		

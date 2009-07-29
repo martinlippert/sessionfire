@@ -1,7 +1,9 @@
 package com.sessionfive.core.ui;
 
+import java.awt.Component;
 import java.io.File;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
 import com.sessionfive.animation.ZoomOutZoomInAnimation;
@@ -22,7 +24,7 @@ public class CentralControlPalette {
 	public void show() {
 	}
 
-	public void choosePresentation() {
+	public void choosePresentation(Component canvas) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int showDialog = chooser.showDialog(null, "Choose Presentation");
@@ -58,6 +60,8 @@ public class CentralControlPalette {
 				}
 			}
 		}
+		canvas.requestFocus();
 	}
+
 
 }

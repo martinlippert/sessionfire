@@ -143,7 +143,7 @@ public class SessionFiveApplication implements IApplication {
 		animationController.init(presentation, display);
 		
 		centralControlPalette = new CentralControlPalette(presentation);
-		CentralControlPaletteUI centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette);
+		CentralControlPaletteUI centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, canvas);
 		centralControlPaletteUI.show();
 
 //		new PresentationSelector(presentation).selectPresentation(canvas);
