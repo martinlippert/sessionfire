@@ -99,6 +99,7 @@ public class TranslucentPalette extends JWindow {
 
 		titleLabel = new JLabel(title, JLabel.CENTER);
 		titleLabel.setForeground(Color.WHITE);
+		titleLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
 		closeButton = new JButton();
 		closeButton.setIcon(new ImageIcon(this.getClass().getResource(
 				"close.png")));
@@ -109,10 +110,9 @@ public class TranslucentPalette extends JWindow {
 		// "close_pressed.png")));
 		closeButton.setFocusable(false);
 		closeButton.setFocusPainted(false);
-		closeButton.setBorderPainted(false);
+		closeButton.setBorder(new EmptyBorder(5, 10, 5, 0));
 		closeButton.setContentAreaFilled(false);
 		titlePane = createTitlePane();
-		titlePane.setBorder(new EmptyBorder(5, 10, 5, 10));
 		titlePane.setLayout(new BorderLayout());
 		if (closeable) titlePane.add(closeButton, BorderLayout.WEST);
 		titlePane.add(titleLabel, BorderLayout.CENTER);
