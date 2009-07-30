@@ -36,6 +36,10 @@ public class CentralControlPaletteUI {
 		window.showPalette();
 	}
 	
+	public void setStatus(String status) {
+		window.setStatus(status);
+	}
+	
 	private void initComponents() {
 		choosePresentationButton = new JButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {

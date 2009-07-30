@@ -32,8 +32,7 @@ public class RemoteControlServlet extends HttpServlet {
 		} catch (UnknownHostException e) {
 		}
 
-		System.out.println("servlet initialized: " + host + ":" + port);
-
+		SessionFiveApplication.setStatus(host + ":" + port);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -37,6 +36,8 @@ import com.sun.awt.AWTUtilities;
 
 public class TranslucentPalette extends JWindow {
 
+	private static final int PALETTE_TRANSPARENCY = 95;
+
 	private static final long serialVersionUID = -2224207638362869833L;
 
 	private final boolean toFade = true;
@@ -45,16 +46,12 @@ public class TranslucentPalette extends JWindow {
 	private Timer fadeOutTimer;
 
 	private JLabel titleLabel;
-
 	private JButton closeButton;
-
 	private JComponent titlePane;
-
 	private JLabel resizeLabel;
-
 	private JComponent bottomPane;
-
 	private JPanel embeddedContentPane;
+	private JLabel statusLine;
 
 	public TranslucentPalette(String title, boolean closeable) {
 		final JPanel contentPane = new JPanel() {
@@ -81,7 +78,7 @@ public class TranslucentPalette extends JWindow {
 				g2.setComposite(AlphaComposite.Src);
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setColor(new Color(0, 0, 0));
+				g2.setColor(new Color(20, 20, 20));
 				g2.fill(box);
 				g2.dispose();
 
@@ -92,7 +89,9 @@ public class TranslucentPalette extends JWindow {
 		contentPane.setDoubleBuffered(false);
 		contentPane.setOpaque(false);
 		contentPane.setLayout(new BorderLayout());
+		contentPane.setBackground(new Color(0, 0, 0, 0));
 		this.setContentPane(contentPane);
+		this.setBackground(new Color(0, 0, 0, 0));
 
 		embeddedContentPane = new JPanel();
 		embeddedContentPane.setOpaque(false);
@@ -103,21 +102,28 @@ public class TranslucentPalette extends JWindow {
 		closeButton = new JButton();
 		closeButton.setIcon(new ImageIcon(this.getClass().getResource(
 				"close.png")));
-		// closeButton.setRolloverIcon(new
-		// ImageIcon(this.getClass().getResource(
-		// "close_hover.png")));
-		// closeButton.setPressedIcon(new ImageIcon(this.getClass().getResource(
-		// "close_pressed.png")));
+		closeButton.setRolloverIcon(new ImageIcon(this.getClass().getResource(
+				"close_hover.png")));
+		closeButton.setPressedIcon(new ImageIcon(this.getClass().getResource(
+				"close_pressed.png")));
 		closeButton.setFocusable(false);
 		closeButton.setFocusPainted(false);
 		closeButton.setBorder(new EmptyBorder(5, 10, 5, 0));
 		closeButton.setContentAreaFilled(false);
+		
 		titlePane = createTitlePane();
 		titlePane.setLayout(new BorderLayout());
-		if (closeable) titlePane.add(closeButton, BorderLayout.WEST);
+		if (closeable)
+			titlePane.add(closeButton, BorderLayout.WEST);
 		titlePane.add(titleLabel, BorderLayout.CENTER);
+
 		resizeLabel = new JLabel(new ImageIcon(this.getClass().getResource(
 				"resize.png")));
+		resizeLabel.setBorder(new EmptyBorder(0, 0, 0, 5));
+		statusLine = new JLabel();
+		statusLine.setForeground(new Color(100, 100, 100));
+		statusLine.setBorder(new EmptyBorder(0, 15, 5, 0));
+		
 		bottomPane = createBottomPane();
 
 		contentPane.add(titlePane, BorderLayout.NORTH);
@@ -131,6 +137,11 @@ public class TranslucentPalette extends JWindow {
 
 	public JComponent getEmbeddedContentPane() {
 		return embeddedContentPane;
+	}
+	
+	public void setStatus(String status) {
+		statusLine.setText(status);
+		statusLine.revalidate();
 	}
 
 	public void showPalette() {
@@ -156,14 +167,13 @@ public class TranslucentPalette extends JWindow {
 			this.fadeInTimer = new Timer(50, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					currOpacity += 20;
-					if (currOpacity <= 95) {
-						AWTUtilities.setWindowOpacity(TranslucentPalette.this,
-								(currOpacity / 100.0f));
-						TranslucentPalette.this.getContentPane().repaint();
-					} else {
-						currOpacity = 95;
+					if (currOpacity > PALETTE_TRANSPARENCY) {
+						currOpacity = PALETTE_TRANSPARENCY;
 						fadeInTimer.stop();
 					}
+					AWTUtilities.setWindowOpacity(TranslucentPalette.this,
+							(currOpacity / 100.0f));
+					TranslucentPalette.this.getContentPane().repaint();
 				}
 			});
 			this.fadeInTimer.setRepeats(true);
@@ -186,7 +196,7 @@ public class TranslucentPalette extends JWindow {
 
 			this.fadeOutTimer = new Timer(50, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					currOpacity -= 19;
+					currOpacity -= 20;
 					if (currOpacity >= 0) {
 						AWTUtilities.setWindowOpacity(TranslucentPalette.this,
 								(currOpacity / 100.0f));
@@ -208,8 +218,9 @@ public class TranslucentPalette extends JWindow {
 	private JComponent createBottomPane() {
 		JPanel result = new JPanel();
 		result.setOpaque(false);
-		result.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		result.add(resizeLabel);
+		result.setLayout(new BorderLayout());
+		result.add(resizeLabel, BorderLayout.EAST);
+		result.add(statusLine, BorderLayout.WEST);
 		return result;
 	}
 
@@ -240,57 +251,63 @@ public class TranslucentPalette extends JWindow {
 		};
 		return result;
 	}
-	
+
 	private class MouseInputHandler implements MouseInputListener {
-		
-        private boolean isMovingWindow;
-        private int dragOffsetX;
-        private int dragOffsetY;
+
+		private boolean isMovingWindow;
+		private int dragOffsetX;
+		private int dragOffsetY;
 		private Window w;
-        private static final int BORDER_DRAG_THICKNESS = 5;
-        
-        public MouseInputHandler(Window w) {
-        	this.w = w;
-        }
+		private static final int BORDER_DRAG_THICKNESS = 5;
 
-        public void mousePressed(MouseEvent ev) {
-            Point dragWindowOffset = ev.getPoint();
-            Point convertedDragWindowOffset = SwingUtilities.convertPoint(
-                           w, dragWindowOffset, titlePane);
+		public MouseInputHandler(Window w) {
+			this.w = w;
+		}
 
-            if (titlePane.contains(convertedDragWindowOffset)) {
-                if (dragWindowOffset.y >= BORDER_DRAG_THICKNESS
-                        && dragWindowOffset.x >= BORDER_DRAG_THICKNESS
-                        && dragWindowOffset.x < w.getWidth()
-                            - BORDER_DRAG_THICKNESS) {
-                    isMovingWindow = true;
-                    dragOffsetX = dragWindowOffset.x;
-                    dragOffsetY = dragWindowOffset.y;
-                }
-            }
-            else {
-                dragOffsetX = dragWindowOffset.x;
-                dragOffsetY = dragWindowOffset.y;
-            }
-        }
+		public void mousePressed(MouseEvent ev) {
+			Point dragWindowOffset = ev.getPoint();
+			Point convertedDragWindowOffset = SwingUtilities.convertPoint(w,
+					dragWindowOffset, titlePane);
 
-        public void mouseReleased(MouseEvent ev) {
-            isMovingWindow = false;
-        }
+			if (titlePane.contains(convertedDragWindowOffset)) {
+				if (dragWindowOffset.y >= BORDER_DRAG_THICKNESS
+						&& dragWindowOffset.x >= BORDER_DRAG_THICKNESS
+						&& dragWindowOffset.x < w.getWidth()
+								- BORDER_DRAG_THICKNESS) {
+					isMovingWindow = true;
+					dragOffsetX = dragWindowOffset.x;
+					dragOffsetY = dragWindowOffset.y;
+				}
+			} else {
+				dragOffsetX = dragWindowOffset.x;
+				dragOffsetY = dragWindowOffset.y;
+			}
+		}
 
-        public void mouseDragged(MouseEvent ev) {
-            if (isMovingWindow) {
-                Point windowPt = MouseInfo.getPointerInfo().getLocation();
-                windowPt.x = windowPt.x - dragOffsetX;
-                windowPt.y = windowPt.y - dragOffsetY;
-                w.setLocation(windowPt);
-            }
-        }
+		public void mouseReleased(MouseEvent ev) {
+			isMovingWindow = false;
+		}
 
-        public void mouseClicked(MouseEvent e) {}
-        public void mouseEntered(MouseEvent e) {}
-        public void mouseExited(MouseEvent e) {}
-        public void mouseMoved(MouseEvent e) {}
+		public void mouseDragged(MouseEvent ev) {
+			if (isMovingWindow) {
+				Point windowPt = MouseInfo.getPointerInfo().getLocation();
+				windowPt.x = windowPt.x - dragOffsetX;
+				windowPt.y = windowPt.y - dragOffsetY;
+				w.setLocation(windowPt);
+			}
+		}
+
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		public void mouseExited(MouseEvent e) {
+		}
+
+		public void mouseMoved(MouseEvent e) {
+		}
 	}
 
 }
