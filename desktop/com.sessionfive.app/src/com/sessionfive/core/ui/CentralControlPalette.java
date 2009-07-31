@@ -1,5 +1,6 @@
 package com.sessionfive.core.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
 import java.security.acl.LastOwnerException;
@@ -72,5 +73,12 @@ public class CentralControlPalette {
 		canvas.requestFocus();
 	}
 
+	public void setBackgroundColor(Color newColor) {
+		this.presentation.setBackgroundColor(newColor);
+	}
+
+	public Color getBackgroundColor() {
+		return this.presentation.getBackgroundColor();
+	}
 
 }

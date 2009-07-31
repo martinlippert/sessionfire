@@ -6,6 +6,7 @@ import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class Display implements GLEventListener {
 	private static final GLU glu = new GLU();
 
 	private final Presentation presentation;
-	
+
 	private Camera camera;
 	private TextRenderer textRenderer;
 
@@ -45,15 +46,15 @@ public class Display implements GLEventListener {
 	public Display(Presentation presentation) {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
-		
-        Font font = new Font("SansSerif", Font.BOLD, 24);
-        textRenderer = new TextRenderer(font, true, false);
+
+		Font font = new Font("SansSerif", Font.BOLD, 24);
+		textRenderer = new TextRenderer(font, true, false);
 	}
-	
+
 	public Camera getCamera() {
 		return camera;
 	}
-	
+
 	public void setCamera(Camera camera) {
 		this.camera = camera;
 	}
@@ -61,27 +62,33 @@ public class Display implements GLEventListener {
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
+
+		Color backgroundColor = presentation.getBackgroundColor();
+		gl.glClearColor((float) backgroundColor.getRed() / 255f,
+				(float) backgroundColor.getGreen() / 255f,
+				(float) backgroundColor.getBlue() / 255f, 0.0f);
+
 		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 
 		camera.setTo(gl, glu);
-		
+
 		List<Shape> shapes = presentation.getShapes();
 		for (Shape shape : shapes) {
 			shape.display(gl);
 		}
-		
-        int x = drawable.getWidth() - 120;
-        int y = drawable.getHeight() - 23;
-        float c = 0.55f;
-        textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
-        textRenderer.setColor(c, c, c, c);
-        textRenderer.draw("it-agile.de", x, y);
-        textRenderer.endRendering();
-        
-        if (doScreenshot) {
-        	doScreenshot = false;
+
+		int x = drawable.getWidth() - 120;
+		int y = drawable.getHeight() - 23;
+		float c = 0.55f;
+		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
+		textRenderer.setColor(c, c, c, c);
+		textRenderer.draw("it-agile.de", x, y);
+		textRenderer.endRendering();
+
+		if (doScreenshot) {
+			doScreenshot = false;
 			try {
 				Screenshot.writeToFile(new File("shot1.jpg"), width, height);
 			} catch (GLException e1) {
@@ -89,14 +96,14 @@ public class Display implements GLEventListener {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-        }
-        
-        if (futureTask != null) {
-        	futureTask.run();
-        	futureTask = null;
-        }
+		}
+
+		if (futureTask != null) {
+			futureTask.run();
+			futureTask = null;
+		}
 	}
-	
+
 	@Override
 	public void init(GLAutoDrawable drawable) {
 		GL gl = drawable.getGL();
@@ -108,7 +115,7 @@ public class Display implements GLEventListener {
 		int height = drawable.getHeight();
 		reshape(drawable, 0, 0, width, height);
 	}
-	
+
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {

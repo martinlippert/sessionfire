@@ -1,5 +1,6 @@
 package com.sessionfive.core;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -8,11 +9,14 @@ public class Presentation implements Focusable {
 	private Camera startCamera;
 	private List<Shape> shapes;
 	private List<Animation> animations;
+	
+	private Color backgroundColor;
 
 	public Presentation() {
 		shapes = new CopyOnWriteArrayList<Shape>();
 		animations = new CopyOnWriteArrayList<Animation>();
 		startCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
+		backgroundColor = Color.BLACK;
 	}
 	
 	public Camera getStartCamera() {
@@ -54,6 +58,14 @@ public class Presentation implements Focusable {
 	@Override
 	public Camera getFocussedCamera() {
 		return startCamera;
+	}
+	
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Color newColor) {
+		backgroundColor = newColor;
 	}
 
 }
