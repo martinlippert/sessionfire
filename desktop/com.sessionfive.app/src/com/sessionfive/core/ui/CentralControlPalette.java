@@ -2,6 +2,9 @@ package com.sessionfive.core.ui;
 
 import java.awt.Component;
 import java.io.File;
+import java.security.acl.LastOwnerException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import javax.swing.JFileChooser;
 
@@ -31,6 +34,13 @@ public class CentralControlPalette {
 			File selectedFile = chooser.getSelectedFile();
 			if (selectedFile.isDirectory()) {
 				File[] files = selectedFile.listFiles();
+				
+				Arrays.sort(files, new Comparator<File>() {
+					@Override
+					public int compare(File o1, File o2) {
+						return (int) (o1.lastModified() - o2.lastModified());
+					}
+				});
 				
 				float x = -40f;
 				float z = 0f;
