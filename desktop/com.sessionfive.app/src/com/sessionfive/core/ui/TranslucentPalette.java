@@ -4,6 +4,8 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -120,6 +122,7 @@ public class TranslucentPalette extends JWindow {
 		resizeLabel = new JLabel(new ImageIcon(this.getClass().getResource(
 				"resize.png")));
 		resizeLabel.setBorder(new EmptyBorder(0, 0, 0, 5));
+		resizeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 		statusLine = new JLabel();
 		statusLine.setForeground(new Color(100, 100, 100));
 		statusLine.setBorder(new EmptyBorder(0, 15, 5, 0));
@@ -130,9 +133,13 @@ public class TranslucentPalette extends JWindow {
 		contentPane.add(embeddedContentPane, BorderLayout.CENTER);
 		contentPane.add(bottomPane, BorderLayout.SOUTH);
 
-		MouseInputHandler handler = new MouseInputHandler(this);
-		titlePane.addMouseListener(handler);
-		titlePane.addMouseMotionListener(handler);
+		MovePaletteMouseHandler moveHandler = new MovePaletteMouseHandler(this);
+		titlePane.addMouseListener(moveHandler);
+		titlePane.addMouseMotionListener(moveHandler);
+
+		ResizePaletteMouseHandler resizeHandler = new ResizePaletteMouseHandler(this);
+		resizeLabel.addMouseListener(resizeHandler);
+		resizeLabel.addMouseMotionListener(resizeHandler);
 	}
 
 	public JComponent getEmbeddedContentPane() {
@@ -252,7 +259,7 @@ public class TranslucentPalette extends JWindow {
 		return result;
 	}
 
-	private class MouseInputHandler implements MouseInputListener {
+	private class MovePaletteMouseHandler implements MouseInputListener {
 
 		private boolean isMovingWindow;
 		private int dragOffsetX;
@@ -260,7 +267,7 @@ public class TranslucentPalette extends JWindow {
 		private Window w;
 		private static final int BORDER_DRAG_THICKNESS = 5;
 
-		public MouseInputHandler(Window w) {
+		public MovePaletteMouseHandler(Window w) {
 			this.w = w;
 		}
 
@@ -310,4 +317,49 @@ public class TranslucentPalette extends JWindow {
 		}
 	}
 
+	private class ResizePaletteMouseHandler implements MouseInputListener {
+
+		private boolean isResizingWindow;
+		private int dragOffsetX;
+		private int dragOffsetY;
+		private Window w;
+		private Dimension dragOffsetWindowSize;
+		
+		public ResizePaletteMouseHandler(Window w) {
+			this.w = w;
+		}
+
+		public void mousePressed(MouseEvent ev) {
+			isResizingWindow = true;
+			Point mousePt = MouseInfo.getPointerInfo().getLocation();
+			dragOffsetX = mousePt.x;
+			dragOffsetY = mousePt.y;
+			dragOffsetWindowSize = w.getSize();
+		}
+
+		public void mouseReleased(MouseEvent ev) {
+			isResizingWindow = false;
+		}
+
+		public void mouseDragged(MouseEvent ev) {
+			if (isResizingWindow) {
+				Point windowPt = MouseInfo.getPointerInfo().getLocation();
+				int width = Math.max(20, dragOffsetWindowSize.width + windowPt.x - dragOffsetX);
+				int height = Math.max(20, dragOffsetWindowSize.height + windowPt.y - dragOffsetY);
+				w.setSize(width, height);
+			}
+		}
+
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		public void mouseExited(MouseEvent e) {
+		}
+
+		public void mouseMoved(MouseEvent e) {
+		}
+	}
 }
