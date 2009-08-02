@@ -46,7 +46,9 @@ public class CentralControlPaletteUI {
 		choosePresentationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.choosePresentation(canvas);
+				centralControlPalette.choosePresentation(canvas,
+						(Layouter) layoutChoice.getSelectedItem(),
+						animationChoice.getSelectedItem());
 			}
 		});
 
@@ -56,10 +58,18 @@ public class CentralControlPaletteUI {
 		contentPane.add(choosePresentationButton);
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
-		layoutModel.addElement("Line");
-		layoutModel.addElement("Line with rotation");
-		layoutModel.addElement("Tiling");
+		Layouter[] allLayouter = centralControlPalette.getLayouter();
+		for (Layouter layouter : allLayouter) {
+			layoutModel.addElement(layouter);
+		}
 		layoutChoice = new JComboBox(layoutModel);
+		layoutChoice.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralControlPalette.changeLayout((Layouter) layoutChoice
+						.getSelectedItem());
+			}
+		});
 		contentPane.add(layoutChoice);
 
 		DefaultComboBoxModel animationModel = new DefaultComboBoxModel();
@@ -83,7 +93,7 @@ public class CentralControlPaletteUI {
 		Color newColor = JColorChooser.showDialog(window,
 				"Choose Background Color", centralControlPalette
 						.getBackgroundColor());
-		
+
 		if (newColor != null) {
 			centralControlPalette.setBackgroundColor(newColor);
 		}

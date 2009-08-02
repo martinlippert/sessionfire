@@ -10,6 +10,9 @@ public interface Shape extends Focusable {
 	public float getHeight();
 	public float getRotation();
 	
+	public void setPosition(float x, float f, float z);
+	public void setRotation(float rot);
+	
 	public void display(GL2 gl);
 
 }

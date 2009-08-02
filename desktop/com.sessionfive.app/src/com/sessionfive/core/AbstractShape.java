@@ -15,34 +15,33 @@ public abstract class AbstractShape implements Shape {
 		this.rotation = rotation;
 	}
 
+	@Override
 	public float getX() {
 		return x;
 	}
 
-	public void setX(float x) {
-		this.x = x;
-	}
-
+	@Override
 	public float getY() {
 		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
 	}
 
 	public float getZ() {
 		return z;
 	}
 
-	public void setZ(float z) {
+	@Override
+	public void setPosition(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
 		this.z = z;
 	}
 
+	@Override
 	public float getRotation() {
 		return rotation;
 	}
 
+	@Override
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
