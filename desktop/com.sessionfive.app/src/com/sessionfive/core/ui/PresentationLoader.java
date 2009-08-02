@@ -6,8 +6,6 @@ import java.util.Comparator;
 
 import javax.swing.JFileChooser;
 
-import com.sessionfive.animation.ZoomOutZoomInAnimation;
-import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 import com.sessionfive.shapes.ImageShape;
@@ -31,30 +29,30 @@ public class PresentationLoader {
 					}
 				});
 				
-				float x = -40f;
-				float z = 0f;
-				
-				float rot = 0f;
-				
-				Focusable startShape = presentation;
+//				float x = -40f;
+//				float z = 0f;
+//				
+//				float rot = 0f;
+//				
+//				Focusable startShape = presentation;
 				for (File file : files) {
 					Shape newShape = new ImageShape(file, 0, 0, 0, 0, 45f);
 					presentation.addShape(newShape);
-					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, newShape));
+//					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, newShape));
 //					presentation.addAnimation(new MoveToAnimation(startShape, newShape));
-					startShape = newShape;
-					x += 50f;
-					z += 0.01f;
+//					startShape = newShape;
+//					x += 50f;
+//					z += 0.01f;
 					
-					TextShape textShape = new TextShape("Shape " + file.getName(), "SansSerif", 60, x, -20f, z, -rot);
+					TextShape textShape = new TextShape("Shape " + file.getName(), "SansSerif", 60, 0, 0, 0, 0);
 					presentation.addShape(textShape);
-					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, textShape));
+//					presentation.addAnimation(new ZoomOutZoomInAnimation(startShape, textShape));
 //					presentation.addAnimation(new MoveToAnimation(startShape, textShape));
-					startShape = textShape;
-					x += 50f;
-					z += 0.01f;
+//					startShape = textShape;
+//					x += 50f;
+//					z += 0.01f;
 
-					rot += 5f;
+//					rot += 5f;
 				}
 			}
 		}

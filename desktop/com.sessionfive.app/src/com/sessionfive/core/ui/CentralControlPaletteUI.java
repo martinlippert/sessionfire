@@ -48,7 +48,7 @@ public class CentralControlPaletteUI {
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.choosePresentation(canvas,
 						(Layouter) layoutChoice.getSelectedItem(),
-						animationChoice.getSelectedItem());
+						(AnimationFactory) animationChoice.getSelectedItem());
 			}
 		});
 
@@ -73,9 +73,18 @@ public class CentralControlPaletteUI {
 		contentPane.add(layoutChoice);
 
 		DefaultComboBoxModel animationModel = new DefaultComboBoxModel();
-		animationModel.addElement("Zoom Out - Zoom In");
-		animationModel.addElement("Move To");
+		AnimationFactory[] animationFactories = centralControlPalette.getAnimators();
+		for (AnimationFactory animationFactory : animationFactories) {
+			animationModel.addElement(animationFactory);
+		}
 		animationChoice = new JComboBox(animationModel);
+		animationChoice.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralControlPalette.changeAnimation((AnimationFactory) animationChoice
+						.getSelectedItem());
+			}
+		});
 		contentPane.add(animationChoice);
 
 		JButton backgroundChooser = new JButton("Choose Background Color...");

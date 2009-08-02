@@ -55,6 +55,10 @@ public class Presentation implements Focusable {
 		animations.remove(animation);
 	}
 
+	public void removeAllAnimations() {
+		animations.clear();
+	}
+
 	@Override
 	public Camera getFocussedCamera() {
 		return startCamera;
