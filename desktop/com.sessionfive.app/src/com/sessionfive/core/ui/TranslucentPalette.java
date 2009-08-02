@@ -55,7 +55,9 @@ public class TranslucentPalette extends JWindow {
 	private JPanel embeddedContentPane;
 	private JLabel statusLine;
 
-	public TranslucentPalette(String title, boolean closeable) {
+	public TranslucentPalette(String title, boolean closeable, Window parent) {
+		super(parent);
+
 		final JPanel contentPane = new JPanel() {
 			private static final long serialVersionUID = -1505112600358149151L;
 
@@ -97,7 +99,7 @@ public class TranslucentPalette extends JWindow {
 
 		embeddedContentPane = new JPanel();
 		embeddedContentPane.setOpaque(false);
-
+		
 		titleLabel = new JLabel(title, JLabel.CENTER);
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setBorder(new EmptyBorder(5, 10, 5, 10));

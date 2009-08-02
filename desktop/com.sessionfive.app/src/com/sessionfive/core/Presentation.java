@@ -11,6 +11,7 @@ public class Presentation implements Focusable {
 	private List<Animation> animations;
 	
 	private Color backgroundColor;
+	private String layerText = "Session Five";
 
 	public Presentation() {
 		shapes = new CopyOnWriteArrayList<Shape>();
@@ -72,4 +73,12 @@ public class Presentation implements Focusable {
 		backgroundColor = newColor;
 	}
 
+	public String getLayerText() {
+		return layerText;
+	}
+
+	public void setLayerText(String layerText) {
+		this.layerText = layerText;
+	}
+	
 }

@@ -8,6 +8,7 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -79,13 +80,20 @@ public class Display implements GLEventListener {
 			shape.display(gl);
 		}
 
-		int x = drawable.getWidth() - 120;
-		int y = drawable.getHeight() - 23;
-		float c = 0.55f;
-		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
-		textRenderer.setColor(c, c, c, c);
-		textRenderer.draw("it-agile.de", x, y);
-		textRenderer.endRendering();
+		String layerText = this.presentation.getLayerText();
+		if (layerText != null && layerText.length() > 0) {
+			
+			Rectangle2D bounds = textRenderer.getBounds(layerText);
+			
+			int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
+			int y = drawable.getHeight() - 23;
+
+			float color = 0.55f;
+			textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
+			textRenderer.setColor(color, color, color, color);
+			textRenderer.draw(layerText, x, y);
+			textRenderer.endRendering();
+		}
 
 		if (doScreenshot) {
 			doScreenshot = false;

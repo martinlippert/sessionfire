@@ -11,7 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class CentralControlPaletteUI {
 
@@ -21,13 +25,14 @@ public class CentralControlPaletteUI {
 	private JButton choosePresentationButton;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
+	private JTextField layerText;
 	private final Component canvas;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
 			Component canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
-		window = new TranslucentPalette("Session Five - Central Control", false);
+		window = new TranslucentPalette("Session Five - Central Control", false, SwingUtilities.getWindowAncestor(canvas));
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
@@ -54,7 +59,7 @@ public class CentralControlPaletteUI {
 
 		JComponent contentPane = (JComponent) window.getEmbeddedContentPane();
 		contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-		contentPane.setLayout(new GridLayout(4, 1, 15, 15));
+		contentPane.setLayout(new GridLayout(5, 1, 15, 15));
 		contentPane.add(choosePresentationButton);
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
@@ -95,7 +100,25 @@ public class CentralControlPaletteUI {
 				chooseBackground();
 			}
 		});
-
+		
+		layerText = new JTextField(centralControlPalette.getLayerText());
+		contentPane.add(layerText);
+		layerText.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				centralControlPalette.setLayerText(layerText.getText());
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				centralControlPalette.setLayerText(layerText.getText());
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				centralControlPalette.setLayerText(layerText.getText());
+			}
+		});
 	}
 
 	protected void chooseBackground() {
