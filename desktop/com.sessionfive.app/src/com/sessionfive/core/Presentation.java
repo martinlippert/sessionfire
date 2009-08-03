@@ -40,6 +40,10 @@ public class Presentation implements Focusable {
 		shapes.remove(shape);
 	}
 	
+	public void removeAllShapes() {
+		shapes.clear();
+	}
+	
 	public int getAnimationCount() {
 		return animations.size();
 	}
@@ -80,5 +84,5 @@ public class Presentation implements Focusable {
 	public void setLayerText(String layerText) {
 		this.layerText = layerText;
 	}
-	
+
 }

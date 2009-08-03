@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
 
+import com.sessionfive.animation.AnimationController;
+import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
@@ -12,9 +14,13 @@ import com.sessionfive.core.Shape;
 public class CentralControlPalette {
 	
 	private final Presentation presentation;
+	private final Display display;
+	private final AnimationController animationController;
 
-	public CentralControlPalette(Presentation presentation) {
+	public CentralControlPalette(Presentation presentation, Display display, AnimationController animationController) {
 		this.presentation = presentation;
+		this.display = display;
+		this.animationController = animationController;
 	}
 	
 	public void show() {
@@ -26,6 +32,8 @@ public class CentralControlPalette {
 		
 		changeLayout(layouter);
 		changeAnimation(animationFactory);
+		display.setCamera(presentation.getStartCamera());
+		animationController.reset();
 
 		canvas.requestFocus();
 	}
