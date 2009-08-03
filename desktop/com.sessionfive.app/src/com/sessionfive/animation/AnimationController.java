@@ -1,16 +1,10 @@
 package com.sessionfive.animation;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Presentation;
-import com.sessionfive.shapes.ImageShape;
 
 public class AnimationController {
 
@@ -58,23 +52,6 @@ public class AnimationController {
 		currentAnimator.start();
 	}
 	
-	public InputStream nextImage() throws IOException {
-		return image(currentAnimationNo+1);
-	}
-	public InputStream prevImage() throws IOException {
-		return image(currentAnimationNo-1);
-	}
-	
-	public InputStream image(int imageNo) throws IOException {
-		if(imageNo >= 0 && imageNo < presentation.getShapes().size()){
-			ImageShape img = (ImageShape) presentation.getShapes().get(imageNo);
-			File file = img.getFile();
-			FileInputStream fis = new FileInputStream(file);
-			return fis;		
-		}
-		return null;
-	}
-
 	public int getNumberOfKeyFrames() {
 		return presentation.getAnimationCount();
 	}
@@ -94,6 +71,10 @@ public class AnimationController {
 
 		currentAnimator = animator;
 		currentAnimator.start();
+	}
+
+	public void reset() {
+		this.currentAnimationNo = -1;
 	}
 
 }

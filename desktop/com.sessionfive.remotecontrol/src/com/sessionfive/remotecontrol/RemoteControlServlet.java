@@ -1,7 +1,6 @@
 package com.sessionfive.remotecontrol;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -56,10 +55,6 @@ public class RemoteControlServlet extends HttpServlet {
 			returnKeyFrameAt(request, response);
 		} else if ("/go".equals(pathInfo)) {
 			goTo(request, response);
-		} else if ("/nextImage".equals(pathInfo)) {
-			returnImages(request, response, pathInfo);
-		} else if ("/prevImage".equals(pathInfo)) {
-			returnImages(request, response, pathInfo);
 		}
 	}
 
@@ -112,30 +107,6 @@ public class RemoteControlServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		super.doGet(request, response);
-	}
-
-	private void returnImages(HttpServletRequest request, HttpServletResponse response,
-			String pathInfo) throws IOException {
-		InputStream in;
-		if ("/nextImage".equals(pathInfo)) {
-			in = SessionFiveApplication.getInstance().getAnimationController().nextImage();
-		} else {// if ("/prevImage".equals(pathInfo)) {
-			in = SessionFiveApplication.getInstance().getAnimationController().prevImage();
-		}
-
-		if (in != null) {
-			response.setContentType("image/jpg");
-			response.setStatus(HttpServletResponse.SC_OK);
-
-			ServletOutputStream out = response.getOutputStream();
-			byte[] buf = new byte[1024];
-			int count = 0;
-			while ((count = in.read(buf)) >= 0) {
-				out.write(buf, 0, count);
-			}
-			in.close();
-			out.close();
-		}
 	}
 
 }
