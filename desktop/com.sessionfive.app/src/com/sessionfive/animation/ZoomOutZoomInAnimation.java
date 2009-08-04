@@ -25,17 +25,19 @@ public class ZoomOutZoomInAnimation implements Animation {
 	@Override
 	public Animator getForwardAnimation(Display display) {
 		Camera startSetting = display.getCamera();
+		Camera endSetting = endShape.getFocussedCamera();
 
 		float shapeX = endShape.getX();
 
-		Camera cameraMid = new Camera(shapeX - 70f, -3.1f, 100f,
-				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
+		float positionY = (startSetting.getLocation().getY() + endSetting.getLocation().getY()) / 2;
+		float targetY = (startSetting.getTarget().getY() + endSetting.getTarget().getY()) / 2;
 
-		Camera cameraEnd = endShape.getFocussedCamera();
+		Camera cameraMid = new Camera(shapeX - 70f, positionY, 100f,
+				shapeX - 10f, targetY, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
 		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
-				cameraEnd);
+				endSetting);
 		KeyTimes times2 = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
 		PropertySetter ps2 = new PropertySetter(display, "camera",
@@ -55,16 +57,19 @@ public class ZoomOutZoomInAnimation implements Animation {
 			return null;
 
 		Camera startSetting = display.getCamera();
+		Camera endSetting = startShape.getFocussedCamera();
 
 		float shapeX = endShape.getX();
-		Camera cameraMid = new Camera(shapeX - 70f, -3.1f, 100f,
-				shapeX - 10f, -3.1f, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
-		Camera cameraEnd = startShape.getFocussedCamera();
+		float positionY = (startSetting.getLocation().getY() + endSetting.getLocation().getY()) / 2;
+		float targetY = (startSetting.getTarget().getY() + endSetting.getTarget().getY()) / 2;
+
+		Camera cameraMid = new Camera(shapeX - 70f, positionY, 100f,
+				shapeX - 10f, targetY, 0, startSetting.getUp().getX(), startSetting.getUp().getY(), startSetting.getUp().getZ());
 
 		KeyValues<Camera> values2 = KeyValues.create(
 				new EvaluatorCameraSetting(), startSetting, cameraMid,
-				cameraEnd);
+				endSetting);
 		KeyTimes times2 = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames2 = new KeyFrames(values2, times2);
 		PropertySetter ps2 = new PropertySetter(display, "camera",

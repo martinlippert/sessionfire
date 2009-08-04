@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.util.List;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
@@ -14,12 +13,10 @@ import com.sessionfive.core.Shape;
 public class CentralControlPalette {
 	
 	private final Presentation presentation;
-	private final Display display;
 	private final AnimationController animationController;
 
-	public CentralControlPalette(Presentation presentation, Display display, AnimationController animationController) {
+	public CentralControlPalette(Presentation presentation, AnimationController animationController) {
 		this.presentation = presentation;
-		this.display = display;
 		this.animationController = animationController;
 	}
 	
@@ -30,16 +27,16 @@ public class CentralControlPalette {
 		PresentationLoader loader = new PresentationLoader();
 		loader.loadPresentation(presentation);
 		
-		changeLayout(layouter);
+		layouter.layout(presentation);
 		changeAnimation(animationFactory);
-		display.setCamera(presentation.getStartCamera());
-		animationController.reset();
+		animationController.resetTo(-1);
 
 		canvas.requestFocus();
 	}
 
 	public void changeLayout(Layouter layouter) {
 		layouter.layout(presentation);
+		animationController.resetTo(animationController.getCurrentAnimationNo());
 	}
 
 	public void changeAnimation(AnimationFactory animationFactory) {
@@ -63,7 +60,7 @@ public class CentralControlPalette {
 	}
 	
 	public Layouter[] getLayouter() {
-		return new Layouter[] {new LineLayouter(false), new LineLayouter(true)};
+		return new Layouter[] {new LineLayouter(false), new LineLayouter(true), new TileLayouter()};
 	}
 	
 	public AnimationFactory[] getAnimators() {

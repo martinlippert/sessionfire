@@ -28,7 +28,6 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Animation;
-import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
@@ -80,11 +79,7 @@ public class SessionFiveApplication implements IApplication {
 
 		canvas = new GLCanvas(caps, null, null, null);
 
-		final Camera startCamera = new Camera(-80f, -3.1f,
-				90f, -20f, -3.1f, 0f, 0f, 1f, 0f);
 		presentation = new Presentation();
-		presentation.setStartCamera(startCamera);
-
 		display = new Display(presentation);
 		animationController = new AnimationController();
 
@@ -145,7 +140,7 @@ public class SessionFiveApplication implements IApplication {
 		animator.start();
 		animationController.init(presentation, display);
 		
-		centralControlPalette = new CentralControlPalette(presentation, display, animationController);
+		centralControlPalette = new CentralControlPalette(presentation, animationController);
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, canvas);
 		centralControlPaletteUI.show();
 		centralControlPaletteUI.setStatus(generalStatus);

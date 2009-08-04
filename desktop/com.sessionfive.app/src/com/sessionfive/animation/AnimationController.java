@@ -19,6 +19,10 @@ public class AnimationController {
 		this.display = display;
 		this.currentAnimationNo = -1;
 	}
+	
+	public int getCurrentAnimationNo() {
+		return currentAnimationNo;
+	}
 
 	public void forward() {
 		if (currentAnimationNo >= presentation.getAnimationCount() - 1) {
@@ -60,10 +64,23 @@ public class AnimationController {
 		if (parsedNumber < 0 || parsedNumber >= presentation.getAnimationCount() || parsedNumber == currentAnimationNo) {
 			return;
 		}
+		resetTo(parsedNumber);
+	}
 
-		currentAnimationNo = parsedNumber;
-		Animation animation = presentation.getAnimation(currentAnimationNo);
-		Animator animator = animation.getForwardAnimation(display);
+	public void resetTo(int animationNo) {
+		currentAnimationNo = animationNo;
+		
+		Animation animation = null;
+		Animator animator = null;
+
+		if (animationNo == -1) {
+			animation = presentation.getAnimation(0);
+			animator = animation.getBackwardAnimation(display);
+		}
+		else {
+			animation = presentation.getAnimation(currentAnimationNo);
+			animator = animation.getForwardAnimation(display);
+		}
 		
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.stop();
@@ -71,10 +88,6 @@ public class AnimationController {
 
 		currentAnimator = animator;
 		currentAnimator.start();
-	}
-
-	public void reset() {
-		this.currentAnimationNo = -1;
 	}
 
 }
