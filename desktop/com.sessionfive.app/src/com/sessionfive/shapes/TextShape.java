@@ -14,8 +14,8 @@ public class TextShape extends AbstractShape {
 	private String text;
 
 	public TextShape(String text, String font, int fontSize, float x, float y,
-			float z, float rotation) {
-		super(x, y, z, rotation);
+			float z, float angleX, float angleY, float angleZ) {
+		super(x, y, z, angleX, angleY, angleZ);
 		this.text = text;
 		this.renderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 60), true,
 				false);
@@ -46,7 +46,9 @@ public class TextShape extends AbstractShape {
 		gl.glTranslatef(x + (w/2),
                 y + (h/2),
                 0);
-        gl.glRotatef(getRotation(), 0f, 0f, 1f);
+        gl.glRotatef(getRotationAngleX(), 1f, 0f, 0f);
+        gl.glRotatef(getRotationAngleY(), 0f, 1f, 0f);
+        gl.glRotatef(getRotationAngleZ(), 0f, 0f, 1f);
 		gl.glTranslatef(-(x + (w/2)),
                 -(y + (h/2)),
                 0);

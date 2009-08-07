@@ -29,7 +29,7 @@ public class LineLayouter implements Layouter {
 		
 		for (Shape shape: presentation.getShapes()) {
 			shape.setPosition(x, -20f, z);
-			shape.setRotation(rot);
+			shape.setRotation(0, 0, rot);
 			
 			x += 50f;
 			z += 0.01f;

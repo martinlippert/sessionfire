@@ -5,14 +5,18 @@ public abstract class AbstractShape implements Shape {
 	private float x;
 	private float y;
 	private float z;
-	private float rotation;
+	private float angleX;
+	private float angleY;
+	private float angleZ;
 
-	public AbstractShape(float x, float y, float z, float rotation) {
+	public AbstractShape(float x, float y, float z, float angleX, float angleY, float angleZ) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.rotation = rotation;
+		this.angleX = angleX;
+		this.angleY = angleY;
+		this.angleZ = angleZ;
 	}
 
 	@Override
@@ -37,13 +41,25 @@ public abstract class AbstractShape implements Shape {
 	}
 
 	@Override
-	public float getRotation() {
-		return rotation;
+	public float getRotationAngleX() {
+		return angleX;
+	}
+	
+	@Override
+	public float getRotationAngleY() {
+		return angleY;
+	}
+	
+	@Override
+	public float getRotationAngleZ() {
+		return angleZ;
 	}
 
 	@Override
-	public void setRotation(float rotation) {
-		this.rotation = rotation;
+	public void setRotation(float angleX, float angleY, float angleZ) {
+		this.angleX = angleX;
+		this.angleY = angleY;
+		this.angleZ = angleZ;
 	}
 	
 	@Override
@@ -54,7 +70,7 @@ public abstract class AbstractShape implements Shape {
 		float shapeWidth = this.getWidth();
 		float shapeHeight = this.getHeight();
 		
-		float rotationAngle = -this.getRotation();
+		float rotationAngle = -this.getRotationAngleZ();
 		double rotationRadian = Math.toRadians(rotationAngle);
 		
 		double upX = Math.sin(rotationRadian);

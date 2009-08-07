@@ -28,8 +28,8 @@ public class ImageShape extends AbstractShape {
 	private final float width;
 	private float imageRatio;
 
-	public ImageShape(File file, float x, float y, float z, float rotation, float width) {
-		super(x, y, z, rotation);
+	public ImageShape(File file, float x, float y, float z, float angleX, float angleY, float angleZ, float width) {
+		super(x, y, z, angleX, angleY, angleZ);
 		this.file = file;
 		this.width = width;
 	}
@@ -74,7 +74,9 @@ public class ImageShape extends AbstractShape {
 		gl.glTranslatef(x + (w/2),
                 y + (h/2),
                 0);
-        gl.glRotatef(getRotation(), 0f, 0f, 1f);
+        gl.glRotatef(getRotationAngleX(), 1f, 0f, 0f);
+        gl.glRotatef(getRotationAngleY(), 0f, 1f, 0f);
+        gl.glRotatef(getRotationAngleZ(), 0f, 0f, 1f);
 		gl.glTranslatef(-(x + (w/2)),
                 -(y + (h/2)),
                 0);
@@ -94,6 +96,16 @@ public class ImageShape extends AbstractShape {
 		gl.glVertex3f(x + w, y, z);
 		gl.glTexCoord2f(tx1, ty2);
 		gl.glVertex3f(x, y, z);
+
+//		gl.glTexCoord2f(tx1, ty1);
+//		gl.glVertex3f(x, y + h, z);
+//		gl.glTexCoord2f(tx2, ty1);
+//		gl.glVertex3f(x, y + h, z - w);
+//		gl.glTexCoord2f(tx2, ty2);
+//		gl.glVertex3f(x, y, z - w);
+//		gl.glTexCoord2f(tx1, ty2);
+//		gl.glVertex3f(x, y, z);
+		
 		y -= h;
 
 		// Render "reflected" image

@@ -33,7 +33,7 @@ public class PresentationLoader {
 				}
 
 				for (File file : files) {
-					Shape newShape = new ImageShape(file, 0, 0, 0, 0, 45f);
+					Shape newShape = new ImageShape(file, 0, 0, 0, 0, 0, 0, 45f);
 					presentation.addShape(newShape);
 					
 //					TextShape textShape = new TextShape("Shape " + file.getName(), "SansSerif", 60, 0, 0, 0, 0);
