@@ -97,15 +97,6 @@ public class ImageShape extends AbstractShape {
 		gl.glTexCoord2f(tx1, ty2);
 		gl.glVertex3f(x, y, z);
 
-//		gl.glTexCoord2f(tx1, ty1);
-//		gl.glVertex3f(x, y + h, z);
-//		gl.glTexCoord2f(tx2, ty1);
-//		gl.glVertex3f(x, y + h, z - w);
-//		gl.glTexCoord2f(tx2, ty2);
-//		gl.glVertex3f(x, y, z - w);
-//		gl.glTexCoord2f(tx1, ty2);
-//		gl.glVertex3f(x, y, z);
-		
 		y -= h;
 
 		// Render "reflected" image
