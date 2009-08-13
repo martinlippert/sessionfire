@@ -75,4 +75,11 @@ public class CentralControlPalette {
 		return this.presentation.getLayerText();
 	}
 
+	public void setRotation(int x, int y, int z) {
+		List<Shape> shapes = presentation.getShapes();
+		for (Shape shape : shapes) {
+			shape.setRotation(x, y, z);
+		}
+	}
+
 }
