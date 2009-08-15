@@ -72,10 +72,9 @@ public class SessionFiveApplication implements IApplication {
 	public Object start(IApplicationContext context) throws Exception {
 		frame = new Frame("Session Five - A New Kind of Presentation Tool");
 
-		GLProfile glp = GLProfile.getDefault();
-		caps = new GLCapabilities(glp);
+	    caps = new GLCapabilities(GLProfile.getDefault());
 		caps.setSampleBuffers(true);
-		caps.setNumSamples(4);
+		caps.setNumSamples(2);
 
 		canvas = new GLCanvas(caps, null, null, null);
 
@@ -111,8 +110,6 @@ public class SessionFiveApplication implements IApplication {
 
 				} else if (e.getKeyCode() == KeyEvent.VK_F11 || e.getKeyChar() == 'f') {
 					switchFullScreen();
-				} else if (e.getKeyCode() == KeyEvent.VK_F12) {
-					display.doScreenshot(canvas.getWidth(), canvas.getHeight());
 				}
 			}
 		};

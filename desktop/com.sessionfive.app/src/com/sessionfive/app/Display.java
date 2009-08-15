@@ -9,8 +9,6 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
@@ -18,13 +16,11 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sun.opengl.util.awt.Screenshot;
 import com.sun.opengl.util.awt.TextRenderer;
 
 public class Display implements GLEventListener {
@@ -35,12 +31,6 @@ public class Display implements GLEventListener {
 
 	private Camera camera;
 	private TextRenderer textRenderer;
-
-	private volatile boolean doScreenshot;
-
-	private int width;
-
-	private int height;
 
 	private FutureTask<byte[]> futureTask;
 
@@ -95,16 +85,14 @@ public class Display implements GLEventListener {
 			textRenderer.endRendering();
 		}
 
-		if (doScreenshot) {
-			doScreenshot = false;
-			try {
-				Screenshot.writeToFile(new File("shot1.jpg"), width, height);
-			} catch (GLException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
+//		try {
+//			long timestamp = System.currentTimeMillis();
+//			Screenshot.writeToFile(new File("shot" + timestamp + ".jpg"), 400, 300);
+//		} catch (GLException e1) {
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
 
 		if (futureTask != null) {
 			futureTask.run();
@@ -129,7 +117,13 @@ public class Display implements GLEventListener {
 			int height) {
 		GL2 gl = drawable.getGL().getGL2();
 
-		gl.glViewport(0, 0, width, height);
+	    System.err.println();
+	    System.err.println("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR));
+	    System.err.println("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER));
+	    System.err.println("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION));
+	    System.err.println();
+
+	    gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL_PROJECTION);
 		gl.glLoadIdentity();
 		double aspectRatio = (double) width / (double) height;
@@ -137,12 +131,6 @@ public class Display implements GLEventListener {
 
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
-	}
-
-	public void doScreenshot(int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.doScreenshot = true;
 	}
 
 	@Override

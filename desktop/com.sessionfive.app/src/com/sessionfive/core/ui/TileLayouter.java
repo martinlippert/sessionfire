@@ -33,7 +33,6 @@ public class TileLayouter implements Layouter {
 
 		for (Shape shape: presentation.getShapes()) {
 			shape.setPosition(x, y, z);
-			shape.setRotation(0, 0, 0);
 			
 			x += 50f;
 			z += 0.01f;
