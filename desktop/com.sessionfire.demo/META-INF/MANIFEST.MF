@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Demo
+Bundle-SymbolicName: com.sessionfire.demo
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.sessionfire.demo.Activator
+Bundle-Vendor: SESSIONFIRE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.sessionfive.animation,
+ com.sessionfive.app,
+ com.sessionfive.core,
+ com.sessionfive.shapes,
+ org.osgi.framework;version="1.5.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0"

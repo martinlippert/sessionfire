@@ -16,5 +16,6 @@ Import-Package: com.sun.opengl.util,
  org.jdesktop.animation.timing.interpolation
 Export-Package: com.sessionfive.animation,
  com.sessionfive.app,
- com.sessionfive.core
+ com.sessionfive.core,
+ com.sessionfive.shapes
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -67,10 +67,14 @@ public class SessionFiveApplication implements IApplication {
 	public AnimationController getAnimationController() {
 		return animationController;
 	}
+	
+	public Presentation getPresentation() {
+		return presentation;
+	}
 
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
-		frame = new Frame("Session Five - A New Kind of Presentation Tool");
+		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
 
 	    caps = new GLCapabilities(GLProfile.getDefault());
 		caps.setSampleBuffers(true);
