@@ -11,7 +11,7 @@ public class Presentation implements Focusable {
 	private List<Animation> animations;
 	
 	private Color backgroundColor;
-	private String layerText = "Session Five";
+	private String layerText = "Sessionfire";
 
 	public Presentation() {
 		shapes = new CopyOnWriteArrayList<Shape>();
