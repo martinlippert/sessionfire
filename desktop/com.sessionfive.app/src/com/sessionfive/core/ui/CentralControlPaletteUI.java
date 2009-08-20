@@ -43,7 +43,7 @@ public class CentralControlPaletteUI {
 			Component canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
-		window = new TranslucentPalette("Session Five - Central Control",
+		window = new TranslucentPalette("Sessionfire - Central Control",
 				false, SwingUtilities.getWindowAncestor(canvas));
 		initComponents();
 		window.pack();
