@@ -61,6 +61,11 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 	[self presentModalViewController:controller animated:YES];
 	controller.port.text = port;
 	controller.ip.text = ip;
+	if(selectedInterfaceOrientation == UIInterfaceOrientationLandscapeLeft) {//horizental
+		[controller.orientation setSelectedSegmentIndex:0];
+	} else {//vertical
+		[controller.orientation setSelectedSegmentIndex:1];
+	}
 	
 	[controller release];
 }
