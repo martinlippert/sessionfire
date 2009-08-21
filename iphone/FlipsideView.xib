@@ -77,7 +77,7 @@
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<string key="IBUIText">10.211.55.2</string>
+						<string key="IBUIText"/>
 						<int key="IBUIBorderStyle">3</int>
 						<string key="IBUIPlaceholder">IP</string>
 						<object class="NSColor" key="IBUITextColor">
@@ -110,7 +110,7 @@
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<string key="IBUIText">8088</string>
+						<string key="IBUIText"/>
 						<int key="IBUIBorderStyle">3</int>
 						<string key="IBUIPlaceholder">Port</string>
 						<object class="NSColor" key="IBUITextColor">
@@ -309,8 +309,8 @@
 							<reference ref="111983350"/>
 							<reference ref="176725855"/>
 							<reference ref="265897330"/>
-							<reference ref="669646606"/>
 							<reference ref="1055886885"/>
+							<reference ref="669646606"/>
 						</object>
 						<reference key="parent" ref="534997628"/>
 					</object>

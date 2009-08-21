@@ -21,6 +21,8 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         // Custom initialization
+		ip = @"localhost";
+		port = @"8088";
     }
     return self;
 }
@@ -34,9 +36,9 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
 	numberofkeyframes = controller.numberofkeyframes;
 	ip = controller.ip.text;
-	[ip retain];
+	//[ip retain];
 	port = controller.port.text;
-	[port retain];
+	//[port retain];
 	if([controller.orientation selectedSegmentIndex] == 0) {//horizental
 		selectedInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
 	} else {//vertical
@@ -53,12 +55,12 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 
 
 - (IBAction)showInfo {    
-	
 	FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideView" bundle:nil];
 	controller.delegate = self;
-	
 	controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	[self presentModalViewController:controller animated:YES];
+	controller.port.text = port;
+	controller.ip.text = ip;
 	
 	[controller release];
 }
