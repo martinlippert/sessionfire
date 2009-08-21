@@ -54,8 +54,8 @@ woody@chaosinmotion.com. Chaos In Motion is at http://www.chaosinmotion.com
  *	Parameters to tweak layout and animation behaviors
  */
 
-#define SPREADIMAGE			0.1		// spread between images (screen measured from -1 to 1)
-#define FLANKSPREAD			0.4		// flank spread out; this is how much an image moves way from center
+//#define SPREADIMAGE			0.1		// spread between images (screen measured from -1 to 1)
+//#define FLANKSPREAD			0.4		// flank spread out; this is how much an image moves way from center
 #define FRICTION			10.0	// friction
 #define MAXSPEED			10.0	// throttle speed to this value
 
@@ -78,6 +78,15 @@ const GLshort GTextures[] = {
 	0, 1,
 	1, 1,
 };
+
+/************************************************************************/
+/*																		*/
+/*	Orientation MDL														*/
+/*																		*/
+/************************************************************************/
+
+#define ORIENTATION_HORIZENTAL			orientation == 0 
+#define ORIENTATION_VERTICAL			orientation == 1 
 
 /************************************************************************/
 /*																		*/
@@ -116,6 +125,8 @@ const GLshort GTextures[] = {
 
 
 @implementation FlowCoverView
+
+NSInteger orientation;
 
 @synthesize delegate;
 
@@ -380,36 +391,55 @@ static void *GData = NULL;
 	FlowCoverRecord *fcr = [self getTileAtIndex:index];
 	GLfloat m[16];
 	memset(m,0,sizeof(m));
-	m[10] = 1;
-	m[15] = 1;
+	
+	//identy matrix
 	m[0] = 1;
 	m[5] = 1;
-	double trans = off * SPREADIMAGE;
+	m[10] = 1;
+	m[15] = 1;
 	
-	double f = off * FLANKSPREAD;
-	if (f < -FLANKSPREAD) {
-		f = -FLANKSPREAD;
-	} else if (f > FLANKSPREAD) {
-		f = FLANKSPREAD;
+	double spreadimage;
+	double flankspread;
+	if(ORIENTATION_HORIZENTAL) spreadimage = 0.1;
+	if(ORIENTATION_HORIZENTAL) flankspread = 0.4;
+	if(ORIENTATION_VERTICAL) spreadimage = 0.2;
+	if(ORIENTATION_VERTICAL) flankspread = 0.1;
+	
+	double trans = off * spreadimage;
+	double f = off * flankspread;
+	if(ORIENTATION_HORIZENTAL){
+	if (f < -flankspread) {
+		f = -flankspread;
+	} else if (f > flankspread) {
+		f = flankspread;
+		}
 	}
-	m[3] = -f;
+
 	m[0] = 1-fabs(f);
-	double sc = 0.45 * (1 - fabs(f));
+	if(ORIENTATION_VERTICAL) m[11] = -f; 
+	if(ORIENTATION_HORIZENTAL) m[3] = -f;
+	double sc = 0.65 * (1 - fabs(f)); 	//Scale. orig: double sc = 0.45 * (1 - fabs(f));
 	trans += f * 1;
-	
+
+	double color = (1 - fabs(trans * 1)) ;
+	glColor4f(color,color,color,color);
+
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D,fcr.texture);
 	glTranslatef(trans, 0, 0);
 	glScalef(sc,sc,1.0);
-	glMultMatrixf(m);
+	if(ORIENTATION_VERTICAL) glRotatef(-90.0, 0.0, 0.0, 1.0); //vertical
+	glMultMatrixf(	m);
 	glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 	
 	// reflect
-	glTranslatef(0,-2,0);
-	glScalef(1,-1,1);
-	glColor4f(0.5,0.5,0.5,0.5);
-	glDrawArrays(GL_TRIANGLE_STRIP,0,4);
-	glColor4f(1,1,1,1);
+	if(ORIENTATION_HORIZENTAL) {
+		glTranslatef(0,-2,0);
+		glScalef(1,-1,1);
+		glColor4f(0.5,0.5,0.5,0.5);
+		glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+		glColor4f(1,1,1,1);
+	}
 	
 	glPopMatrix();
 }
@@ -666,5 +696,11 @@ static void *GData = NULL;
 		lastPos = pos;
 	}
 }
+
+- (void) setOrientation:(NSInteger) index
+{
+	orientation = index;
+}
+
 
 @end

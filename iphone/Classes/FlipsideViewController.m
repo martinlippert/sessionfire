@@ -13,7 +13,7 @@
 
 @implementation FlipsideViewController
 
-@synthesize delegate, ip, port, numberofkeyframes;
+@synthesize delegate, ip, port, numberofkeyframes, orientation;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,9 +32,8 @@
 
 
 
-// Only landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) ;
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 
@@ -75,6 +74,10 @@
 										  otherButtonTitles:nil, nil];
 	[alert show];
 	[alert release];
+	//dummy data
+	numberofkeyframes = 5;
+	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:alert];	
+
 }
 
 

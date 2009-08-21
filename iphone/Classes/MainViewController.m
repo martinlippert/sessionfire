@@ -7,7 +7,6 @@
 //
 
 #import "MainViewController.h"
-#import "MainView.h"
 #import "S5URL.h"
 
 
@@ -17,6 +16,7 @@ NSString* ip;
 NSString* port;
 NSInteger numberofkeyframes;
 S5URL* s5url;
+UIInterfaceOrientation selectedInterfaceOrientation;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -28,8 +28,7 @@ S5URL* s5url;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
-    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-			(interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+    return interfaceOrientation == UIInterfaceOrientationLandscapeLeft;
 }
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
@@ -38,10 +37,15 @@ S5URL* s5url;
 	[ip retain];
 	port = controller.port.text;
 	[port retain];
-	
+	if([controller.orientation selectedSegmentIndex] == 0) {//horizental
+		selectedInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
+	} else {//vertical
+		selectedInterfaceOrientation = UIInterfaceOrientationPortrait;
+	}
 	s5url = [[S5URL alloc] initWithIp:controller.ip.text andPort:controller.port.text];
 	[self dismissModalViewControllerAnimated:YES];
 
+	[self.view setOrientation:[controller.orientation selectedSegmentIndex]];
 	[self.view setNeedsLayout];
 	
 	[alertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -67,6 +71,8 @@ S5URL* s5url;
 		//[self.imageView2.image release];
 		return [ [ UIImage alloc ] initWithData: data ];
 	}
+	//dummy data
+	return [UIImage imageNamed:[NSString stringWithFormat:@"folie%d.png", imageNr]];
 	return nil;
 	//[data autorelease];
 }
