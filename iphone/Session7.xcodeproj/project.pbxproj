@@ -16,12 +16,13 @@
 		280E754F0DD40C5E005A515E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754C0DD40C5E005A515E /* MainWindow.xib */; };
 		288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765580DF743DE002DB57D /* CoreGraphics.framework */; };
 		289233A60DB2D0840083E9F9 /* FlipsideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A30DB2D0840083E9F9 /* FlipsideView.m */; };
-		289233A70DB2D0840083E9F9 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A50DB2D0840083E9F9 /* MainView.m */; };
 		289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A90DB2D0DB0083E9F9 /* MainViewController.m */; };
 		289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */; };
 		400643E6100BD36000C30F73 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E5100BD36000C30F73 /* OpenGLES.framework */; };
 		400643EA100BD36500C30F73 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400643E9100BD36500C30F73 /* QuartzCore.framework */; };
 		400F9C6B101989AC00DF6442 /* S5URL.m in Sources */ = {isa = PBXBuildFile; fileRef = 400F9C6A101989AC00DF6442 /* S5URL.m */; };
+		407803FA103EE4F7003EE3B0 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 407803F9103EE4F7003EE3B0 /* Icon.png */; };
+		40780489103EEC74003EE3B0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 40780488103EEC74003EE3B0 /* Default.png */; };
 		407AE580100BD8250056ED02 /* folie4.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE577100BD8250056ED02 /* folie4.png */; };
 		407AE581100BD8250056ED02 /* folie7.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE578100BD8250056ED02 /* folie7.png */; };
 		407AE582100BD8250056ED02 /* folie5.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE579100BD8250056ED02 /* folie5.png */; };
@@ -33,6 +34,7 @@
 		407AE588100BD8250056ED02 /* folie2.png in Resources */ = {isa = PBXBuildFile; fileRef = 407AE57F100BD8250056ED02 /* folie2.png */; };
 		40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AB1018C1E800DEEB71 /* FlowCoverView.m */; };
 		40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AC1018C1E800DEEB71 /* DataCache.m */; };
+		40FB32D0101E482D00C510A6 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 40FB32CF101E482D00C510A6 /* background.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,8 +49,6 @@
 		288765580DF743DE002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		289233A20DB2D0840083E9F9 /* FlipsideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlipsideView.h; path = Classes/FlipsideView.h; sourceTree = "<group>"; };
 		289233A30DB2D0840083E9F9 /* FlipsideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlipsideView.m; path = Classes/FlipsideView.m; sourceTree = "<group>"; };
-		289233A40DB2D0840083E9F9 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainView.h; path = Classes/MainView.h; sourceTree = "<group>"; };
-		289233A50DB2D0840083E9F9 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainView.m; path = Classes/MainView.m; sourceTree = "<group>"; };
 		289233A80DB2D0DB0083E9F9 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
 		289233A90DB2D0DB0083E9F9 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = Classes/MainViewController.m; sourceTree = "<group>"; };
 		289233AC0DB2D0DB0083E9F9 /* FlipsideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlipsideViewController.h; path = Classes/FlipsideViewController.h; sourceTree = "<group>"; };
@@ -59,6 +59,8 @@
 		400643E9100BD36500C30F73 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		400F9C69101989AC00DF6442 /* S5URL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S5URL.h; sourceTree = "<group>"; };
 		400F9C6A101989AC00DF6442 /* S5URL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S5URL.m; sourceTree = "<group>"; };
+		407803F9103EE4F7003EE3B0 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		40780488103EEC74003EE3B0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		407AE577100BD8250056ED02 /* folie4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie4.png; sourceTree = "<group>"; };
 		407AE578100BD8250056ED02 /* folie7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie7.png; sourceTree = "<group>"; };
 		407AE579100BD8250056ED02 /* folie5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folie5.png; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		40B029AB1018C1E800DEEB71 /* FlowCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowCoverView.m; path = Classes/FlowCoverView.m; sourceTree = "<group>"; };
 		40B029AC1018C1E800DEEB71 /* DataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataCache.m; path = Classes/DataCache.m; sourceTree = "<group>"; };
 		40B029AD1018C1E800DEEB71 /* DataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataCache.h; path = Classes/DataCache.h; sourceTree = "<group>"; };
+		40FB32CF101E482D00C510A6 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Session7-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Session7-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,8 +130,6 @@
 				40B029AB1018C1E800DEEB71 /* FlowCoverView.m */,
 				40B029AC1018C1E800DEEB71 /* DataCache.m */,
 				40B029AD1018C1E800DEEB71 /* DataCache.h */,
-				289233A40DB2D0840083E9F9 /* MainView.h */,
-				289233A50DB2D0840083E9F9 /* MainView.m */,
 				289233A80DB2D0DB0083E9F9 /* MainViewController.h */,
 				289233A90DB2D0DB0083E9F9 /* MainViewController.m */,
 			);
@@ -195,6 +196,9 @@
 		407AE536100BD3EC0056ED02 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				40780488103EEC74003EE3B0 /* Default.png */,
+				407803F9103EE4F7003EE3B0 /* Icon.png */,
+				40FB32CF101E482D00C510A6 /* background.png */,
 				407AE57B100BD8250056ED02 /* folie1.png */,
 				407AE57F100BD8250056ED02 /* folie2.png */,
 				407AE57E100BD8250056ED02 /* folie3.png */,
@@ -269,6 +273,9 @@
 				407AE586100BD8250056ED02 /* folie9.png in Resources */,
 				407AE587100BD8250056ED02 /* folie3.png in Resources */,
 				407AE588100BD8250056ED02 /* folie2.png in Resources */,
+				40FB32D0101E482D00C510A6 /* background.png in Resources */,
+				407803FA103EE4F7003EE3B0 /* Icon.png in Resources */,
+				40780489103EEC74003EE3B0 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +289,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* Session7AppDelegate.m in Sources */,
 				289233A60DB2D0840083E9F9 /* FlipsideView.m in Sources */,
-				289233A70DB2D0840083E9F9 /* MainView.m in Sources */,
 				289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */,
 				289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */,
 				40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */,
@@ -304,7 +310,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Session7_Prefix.pch;
 				INFOPLIST_FILE = "Session7-Info.plist";
-				PRODUCT_NAME = Session7;
+				PRODUCT_NAME = SessionFire;
 			};
 			name = Debug;
 		};
