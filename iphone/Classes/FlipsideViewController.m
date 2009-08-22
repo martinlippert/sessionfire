@@ -20,17 +20,22 @@
     self.view.backgroundColor = [UIColor viewFlipsideBackgroundColor];      
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[ip becomeFirstResponder];
+}
 
 - (IBAction)done {
 	S5URL* s5url = [[S5URL alloc] initWithIp:ip.text andPort:port.text];
 	//start connection
 	[[NSURLConnection alloc] initWithRequest:[s5url requestFor:NUMBER_OF_KEYFRAMES] delegate:self];
 }
-- (IBAction)editingdone {
-	NSLog(@"test");
+
+- (IBAction)editingdoneIp {
+	[port becomeFirstResponder];
 }
-
-
+- (IBAction)editingdonePort {
+	[ip becomeFirstResponder];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
