@@ -79,10 +79,6 @@
 										  otherButtonTitles:nil, nil];
 	[alert show];
 	[alert release];
-	//dummy data
-	numberofkeyframes = 5;
-	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:alert];	
-
 }
 
 
