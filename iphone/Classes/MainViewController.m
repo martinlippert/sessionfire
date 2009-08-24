@@ -12,17 +12,14 @@
 
 @implementation MainViewController
 
-NSString* ip;
-NSString* port;
+@synthesize ip2, port;
+
 NSInteger numberofkeyframes;
 S5URL* s5url;
 UIInterfaceOrientation selectedInterfaceOrientation;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        // Custom initialization
-		ip = @"localhost";
-		port = @"8088";
     }
     return self;
 }
@@ -35,10 +32,10 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
 	numberofkeyframes = controller.numberofkeyframes;
-	ip = controller.ip.text;
-	//[ip retain];
+	ip2 = controller.ip.text;
+	[ip2 retain];
 	port = controller.port.text;
-	//[port retain];
+	[port retain];
 	if([controller.orientation selectedSegmentIndex] == 0) {//horizental
 		selectedInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
 	} else {//vertical
@@ -60,8 +57,8 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 	controller.delegate = self;
 	controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	[self presentModalViewController:controller animated:YES];
-	controller.port.text = port;
-	controller.ip.text = ip;
+	[controller.port setText:[self port]];
+	[controller.ip setText:[self ip2]];
 	if(selectedInterfaceOrientation == UIInterfaceOrientationLandscapeLeft) {//horizental
 		[controller.orientation setSelectedSegmentIndex:0];
 	} else {//vertical
