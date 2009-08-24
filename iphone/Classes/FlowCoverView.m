@@ -582,7 +582,7 @@ static void *GData = NULL;
 	//added by mdl:
 	if(nearest < 0) nearest = 0;
 	int nrImages = [delegate flowCoverNumberImages:self];
-	if(nearest > nrImages) nearest = nrImages;
+	if(nearest > nrImages) nearest = nrImages - 1;
 	
 	startSpeed = sqrt(fabs(nearest - startOff) * FRICTION * 2);
 	if (nearest < startOff) startSpeed = -startSpeed;
