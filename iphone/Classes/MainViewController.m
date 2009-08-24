@@ -79,8 +79,6 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 		//[self.imageView2.image release];
 		return [ [ UIImage alloc ] initWithData: data ];
 	}
-	//dummy data
-	return [UIImage imageNamed:[NSString stringWithFormat:@"folie%d.png", imageNr]];
 	return nil;
 	//[data autorelease];
 }
