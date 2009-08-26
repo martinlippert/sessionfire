@@ -96,6 +96,8 @@ public class TranslucentPalette extends JWindow {
 		contentPane.setBackground(new Color(0, 0, 0, 0));
 		this.setContentPane(contentPane);
 		this.setBackground(new Color(0, 0, 0, 0));
+		//Workaround for Mac:
+		this.getRootPane().putClientProperty("apple.awt.draggableWindowBackground", false);
 
 		embeddedContentPane = new JPanel();
 		embeddedContentPane.setOpaque(false);
