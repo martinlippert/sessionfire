@@ -621,7 +621,7 @@ static void *GData = NULL;
 	lastPos = startPos;
 	
 	[self endAnimation];
-	[self draggedToIndex:nearest];
+	[self draggedToIndex:(int)floor(offset + 0.01)];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
