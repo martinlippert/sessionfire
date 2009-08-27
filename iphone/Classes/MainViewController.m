@@ -17,6 +17,8 @@
 NSInteger numberofkeyframes;
 S5URL* s5url;
 UIInterfaceOrientation selectedInterfaceOrientation;
+UIAlertView* progressAlert;
+UIProgressView* progressView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -31,6 +33,16 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 }
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
+	progressAlert = [[UIAlertView alloc] initWithTitle: @"Loading"
+											   message: @"message"
+											  delegate: self
+									 cancelButtonTitle: nil
+									 otherButtonTitles: nil];
+    progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(30.0f, 80.0f, 225.0f, 90.0f)];
+	[progressView setProgressViewStyle:UIProgressViewStyleDefault];
+    [progressAlert addSubview:progressView];
+	[progressAlert show];
+	
 	numberofkeyframes = controller.numberofkeyframes;
 	ip2 = controller.ip.text;
 	[ip2 retain];
@@ -48,7 +60,7 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 
 	[self.view setNeedsLayout];
 	
-	[alertView dismissWithClickedButtonIndex:0 animated:YES];
+	[progressAlert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 
@@ -92,10 +104,23 @@ UIInterfaceOrientation selectedInterfaceOrientation;
 	return numberofkeyframes;
 }
 
+- (void) updateProgressView:(NSNumber*) image
+{
+	//TODO klären ob das richtig ist
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc]init];
+	[progressAlert setMessage:[NSString stringWithFormat:@"Image number %d",[image intValue]]];
+	float progress = ((float)[image intValue] / (float)numberofkeyframes);
+	[progressView setProgress:  1 - progress];
+	[pool release];
+}
+
 - (UIImage *)flowCover:(FlowCoverView *)view cover:(int)image
 {
+	NSNumber* number = [NSNumber numberWithInt:image];
+	[self performSelectorInBackground:@selector(updateProgressView:) withObject:number];
 	return [self callForImage:image];
 }
+
 
 - (void)flowCover:(FlowCoverView *)view didSelect:(int)image
 {

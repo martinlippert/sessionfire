@@ -50,18 +50,7 @@
 #pragma mark NSURLConnection delegate
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {	
-	UIActivityIndicatorView* view = [[UIActivityIndicatorView alloc] 
-									 initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]; 
-	[view startAnimating];
-	[view setFrame:CGRectMake(120, 45, 50, 50)];
-	UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Loading presentation." 
-														 message:nil
-														delegate:nil 
-											   cancelButtonTitle:nil 
-											   otherButtonTitles:nil, nil];
-	[alertView addSubview:view];
-	[alertView show];
-	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:alertView];	
+	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:nil];	
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data { 
