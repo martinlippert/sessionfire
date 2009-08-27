@@ -61,7 +61,7 @@ public class AnimationController {
 	}
 
 	public void goTo(int parsedNumber) {
-		if (parsedNumber < 0 || parsedNumber >= presentation.getAnimationCount() || parsedNumber == currentAnimationNo) {
+		if (parsedNumber < -1 || parsedNumber >= presentation.getAnimationCount() || parsedNumber == currentAnimationNo) {
 			return;
 		}
 		resetTo(parsedNumber);
