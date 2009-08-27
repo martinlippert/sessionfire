@@ -25,6 +25,8 @@
 		40780489103EEC74003EE3B0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 40780488103EEC74003EE3B0 /* Default.png */; };
 		40B029AE1018C1E800DEEB71 /* FlowCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AB1018C1E800DEEB71 /* FlowCoverView.m */; };
 		40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B029AC1018C1E800DEEB71 /* DataCache.m */; };
+		40CADFFF1046D88E00D1F153 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CADFFE1046D88E00D1F153 /* Reachability.m */; };
+		40CAE0061046D8D000D1F153 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */; };
 		40D69BDD1042F14E00DA7D58 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D69BDC1042F14E00DA7D58 /* Preferences.m */; };
 		40FB32D0101E482D00C510A6 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 40FB32CF101E482D00C510A6 /* background.png */; };
 /* End PBXBuildFile section */
@@ -33,7 +35,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* Session7AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session7AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* Session7AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session7AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Session7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Session7.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* SessionFire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SessionFire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		280E754A0DD40C5E005A515E /* FlipsideView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlipsideView.xib; sourceTree = "<group>"; };
 		280E754B0DD40C5E005A515E /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainView.xib; sourceTree = "<group>"; };
@@ -57,6 +59,9 @@
 		40B029AB1018C1E800DEEB71 /* FlowCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowCoverView.m; path = Classes/FlowCoverView.m; sourceTree = "<group>"; };
 		40B029AC1018C1E800DEEB71 /* DataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataCache.m; path = Classes/DataCache.m; sourceTree = "<group>"; };
 		40B029AD1018C1E800DEEB71 /* DataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataCache.h; path = Classes/DataCache.h; sourceTree = "<group>"; };
+		40CADFFD1046D88E00D1F153 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		40CADFFE1046D88E00D1F153 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		40D69BDB1042F14E00DA7D58 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		40D69BDC1042F14E00DA7D58 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		40FB32CF101E482D00C510A6 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
@@ -73,6 +78,7 @@
 				288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */,
 				400643E6100BD36000C30F73 /* OpenGLES.framework in Frameworks */,
 				400643EA100BD36500C30F73 /* QuartzCore.framework in Frameworks */,
+				40CAE0061046D8D000D1F153 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +98,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Session7.app */,
+				1D6058910D05DD3D006BFB54 /* SessionFire.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +140,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				400643E5100BD36000C30F73 /* OpenGLES.framework */,
 				400643E9100BD36500C30F73 /* QuartzCore.framework */,
+				40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -172,6 +179,8 @@
 		400F9C681019895900DF6442 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				40CADFFD1046D88E00D1F153 /* Reachability.h */,
+				40CADFFE1046D88E00D1F153 /* Reachability.m */,
 				40D69BDB1042F14E00DA7D58 /* Preferences.h */,
 				40D69BDC1042F14E00DA7D58 /* Preferences.m */,
 				400F9C69101989AC00DF6442 /* S5URL.h */,
@@ -207,7 +216,7 @@
 			);
 			name = Session7;
 			productName = Session7;
-			productReference = 1D6058910D05DD3D006BFB54 /* Session7.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* SessionFire.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -264,6 +273,7 @@
 				40B029AF1018C1E800DEEB71 /* DataCache.m in Sources */,
 				400F9C6B101989AC00DF6442 /* S5URL.m in Sources */,
 				40D69BDD1042F14E00DA7D58 /* Preferences.m in Sources */,
+				40CADFFF1046D88E00D1F153 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +302,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Session7_Prefix.pch;
 				INFOPLIST_FILE = "Session7-Info.plist";
-				PRODUCT_NAME = Session7;
+				PRODUCT_NAME = SessionFire;
 			};
 			name = Release;
 		};
