@@ -230,8 +230,14 @@ public class SessionFiveApplication implements IApplication {
 				canvas.getContext());
 		
 		Display offscreenDisplay = new Display(presentation);
-		Animation animation = presentation.getAnimation(parsedNumber);
-		animation.directlyGoTo(offscreenDisplay);
+		
+		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
+			Animation animation = presentation.getAnimation(parsedNumber);
+			animation.directlyGoTo(offscreenDisplay);
+		}
+		else {
+			offscreenDisplay.setCamera(presentation.getStartCamera());
+		}
 		
 		pbuffer.addGLEventListener(offscreenDisplay);
 		
