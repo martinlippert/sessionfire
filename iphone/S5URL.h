@@ -11,7 +11,7 @@
 //Available commands
 #define NUMBER_OF_KEYFRAMES 	@"numberofkeyframes"
 #define GO_TO			@"go?to=%d"
-#define KEYFRAME_AT		@"keyframe?at=0%d"
+#define KEYFRAME_AT		@"keyframe?at=%d"
 
 @interface S5URL : NSObject {
 

@@ -84,17 +84,13 @@ UIProgressView* progressView;
 
 
 - (UIImage*) callForImage:(int)imageNr {   
-	NSLog(@"callForImage %d", imageNr);
-	if(imageNr == 0) {
-		return  [UIImage imageNamed:@"start.png"];		
-	} else {
-		NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:imageNr-1] ];
+	NSLog(@"callForImage %d", (imageNr-1));
+		NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:(imageNr-1)] ];
 		if([data length] > 0) {
 			//[self.imageView2.image release];
 			return [ [ UIImage alloc ] initWithData: data ];
 		}
 		return nil;		
-	}
 	//[data autorelease];
 }
 
