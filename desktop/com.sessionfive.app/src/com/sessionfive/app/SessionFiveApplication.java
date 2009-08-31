@@ -22,6 +22,7 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.GLPbuffer;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
+import javax.swing.ImageIcon;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -75,6 +76,7 @@ public class SessionFiveApplication implements IApplication {
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
+		frame.setIconImage(new ImageIcon(this.getClass().getResource("sf16.png")).getImage());
 
 	    caps = new GLCapabilities(GLProfile.getDefault());
 		caps.setSampleBuffers(true);
@@ -228,8 +230,14 @@ public class SessionFiveApplication implements IApplication {
 				canvas.getContext());
 		
 		Display offscreenDisplay = new Display(presentation);
-		Animation animation = presentation.getAnimation(parsedNumber);
-		animation.directlyGoTo(offscreenDisplay);
+		
+		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
+			Animation animation = presentation.getAnimation(parsedNumber);
+			animation.directlyGoTo(offscreenDisplay);
+		}
+		else {
+			offscreenDisplay.setCamera(presentation.getStartCamera());
+		}
 		
 		pbuffer.addGLEventListener(offscreenDisplay);
 		

@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Sessionfire" uid="sessionfive" id="com.sessionfive.app.product" application="com.sessionfive.app.startup" version="0.0.1" useFeatures="false" includeLaunchers="true">
+<product name="SessionFire" uid="sessionfire" id="com.sessionfive.app.product" application="com.sessionfive.app.startup" version="0.0.1" useFeatures="false" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
       <programArgs>-noExit</programArgs>
-      <vmArgs>-Xms40m -Xmx256m -Dorg.eclipse.equinox.http.jetty.http.port=8088</vmArgs>
+      <vmArgs>-Xms40m -Xmx256m -Dorg.eclipse.equinox.http.jetty.http.port=8088 -Dorg.osgi.framework.system.packages.extra=com.sun.awt</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
-      <vmArgsWin>-Dsun.java2d.noddraw=true</vmArgsWin>
+      <vmArgsWin>-Dsun.java2d.noddraw=true -Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel</vmArgsWin>
    </launcherArgs>
 
    <windowImages/>
 
+   <splash
+      location="com.sessionfive.app" />
    <launcher name="SessionFive">
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <ico path="/com.sessionfive.app/icons/sf128.ico"/>
+         <bmp
+            winSmallHigh="/com.sessionfive.app/icons/sf16x32.bmp"
+            winSmallLow="/com.sessionfive.app/icons/sf16x8.bmp"
+            winMediumHigh="/com.sessionfive.app/icons/sf32x32.bmp"
+            winMediumLow="/com.sessionfive.app/icons/sf32x8.bmp"
+            winLargeHigh="/com.sessionfive.app/icons/sf48x32.bmp"
+            winLargeLow="/com.sessionfive.app/icons/sf48x8.bmp"/>
       </win>
    </launcher>
 
