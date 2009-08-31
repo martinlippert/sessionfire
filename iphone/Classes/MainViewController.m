@@ -43,7 +43,7 @@ UIProgressView* progressView;
     [progressAlert addSubview:progressView];
 	[progressAlert show];
 	
-	numberofkeyframes = controller.numberofkeyframes;
+	numberofkeyframes = controller.numberofkeyframes +1;//first overview page
 	ip2 = controller.ip.text;
 	[ip2 retain];
 	port = controller.port.text;
