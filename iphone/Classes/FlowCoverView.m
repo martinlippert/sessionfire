@@ -703,5 +703,10 @@ static void *GData = NULL;
 	orientation = index;
 }
 
+- (void) resetCache
+{
+	[cache release];
+	cache = [[DataCache alloc] initWithCapacity:MAXTILES];
+}
 
 @end

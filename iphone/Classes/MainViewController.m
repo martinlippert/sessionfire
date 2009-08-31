@@ -57,6 +57,8 @@ UIProgressView* progressView;
 	[self dismissModalViewControllerAnimated:YES];
 
 	[(FlowCoverView*)self.view setOrientation:[controller.orientation selectedSegmentIndex]];
+	[(FlowCoverView*)self.view resetCache];
+	
 
 	[self.view setNeedsLayout];
 	
