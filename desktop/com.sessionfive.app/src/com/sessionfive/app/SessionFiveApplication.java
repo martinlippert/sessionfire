@@ -231,17 +231,20 @@ public class SessionFiveApplication implements IApplication {
 		
 		Display offscreenDisplay = new Display(presentation);
 		
+		boolean alpha;
 		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
 			Animation animation = presentation.getAnimation(parsedNumber);
 			animation.directlyGoTo(offscreenDisplay);
+			alpha = true;
 		}
 		else {
 			offscreenDisplay.setCamera(presentation.getStartCamera());
+			alpha = false;
 		}
 		
 		pbuffer.addGLEventListener(offscreenDisplay);
 		
-		KeyFrameCreator keyFrameCreator = new KeyFrameCreator(512, 512);
+		KeyFrameCreator keyFrameCreator = new KeyFrameCreator(512, 512, alpha);
 		FutureTask<byte[]> futureTask = new FutureTask<byte[]>(keyFrameCreator);
 		offscreenDisplay.executeInDisplay(futureTask);
 		pbuffer.display();
@@ -262,10 +265,12 @@ public class SessionFiveApplication implements IApplication {
 		
 		private final int width;
 		private final int height;
+		private final boolean alpha;
 
-		public KeyFrameCreator(int width, int height) {
+		public KeyFrameCreator(int width, int height, boolean alpha) {
 			this.width = width;
 			this.height = height;
+			this.alpha = alpha;
 		}
 
 		@Override
@@ -273,7 +278,7 @@ public class SessionFiveApplication implements IApplication {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			
 			try {
-			    BufferedImage image = Screenshot.readToBufferedImage(0, 0, width, height, true);
+			    BufferedImage image = Screenshot.readToBufferedImage(0, 0, width, height, alpha);
 			    if (!ImageIO.write(image, "png", bos)) {
 			      throw new IOException("Unsupported file format png");
 			    }
