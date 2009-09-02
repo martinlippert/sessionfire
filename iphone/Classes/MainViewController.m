@@ -43,7 +43,7 @@ UIProgressView* progressView;
     [progressAlert addSubview:progressView];
 	[progressAlert show];
 	
-	numberofkeyframes = controller.numberofkeyframes;
+	numberofkeyframes = controller.numberofkeyframes +1;//first overview page
 	ip2 = controller.ip.text;
 	[ip2 retain];
 	port = controller.port.text;
@@ -57,6 +57,8 @@ UIProgressView* progressView;
 	[self dismissModalViewControllerAnimated:YES];
 
 	[(FlowCoverView*)self.view setOrientation:[controller.orientation selectedSegmentIndex]];
+	[(FlowCoverView*)self.view resetCache];
+	
 
 	[self.view setNeedsLayout];
 	
@@ -82,17 +84,13 @@ UIProgressView* progressView;
 
 
 - (UIImage*) callForImage:(int)imageNr {   
-	NSLog(@"callForImage %d", imageNr);
-	if(imageNr == 0) {
-		return  [UIImage imageNamed:@"start.png"];		
-	} else {
-		NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:imageNr-1] ];
+	NSLog(@"callForImage %d", (imageNr-1));
+		NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:(imageNr-1)] ];
 		if([data length] > 0) {
 			//[self.imageView2.image release];
 			return [ [ UIImage alloc ] initWithData: data ];
 		}
 		return nil;		
-	}
 	//[data autorelease];
 }
 

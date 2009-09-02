@@ -26,7 +26,7 @@ NSString* port;
 }
 
 - (NSURL*) urlFor: (NSString*) command {
-	NSString* url = [NSString stringWithFormat:@"http://%@:%@/sessionfive/remotecontrol/%@", 
+	NSString* url = [NSString stringWithFormat:@"http://%@:%@/sessionfire/remotecontrol/%@", 
 					 ip, port, command];
 	return [NSURL URLWithString:url];
 }
