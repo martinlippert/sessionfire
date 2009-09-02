@@ -220,10 +220,14 @@ public class SessionFiveApplication implements IApplication {
 	}
 	
 	public byte[] getKeyFrame(int parsedNumber) {
+	    GLCapabilities caps = new GLCapabilities(GLProfile.getDefault());
+		caps.setSampleBuffers(true);
+		caps.setNumSamples(2);
+		caps.setDoubleBuffered(false);
+
 		if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer()) {
 			throw new GLException("Pbuffers not supported with this graphics card");
 		}
-		caps.setDoubleBuffered(false);
 		GLPbuffer pbuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createGLPbuffer(caps,
 				null,
 				512, 512,
@@ -254,7 +258,10 @@ public class SessionFiveApplication implements IApplication {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-
+		
+		pbuffer.removeGLEventListener(offscreenDisplay);
+		pbuffer.destroy();
+		
 		return result;
 	}
 	
