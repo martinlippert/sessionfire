@@ -21,17 +21,14 @@ public class TextShape extends AbstractShape {
 				false);
 	}
 
-	@Override
 	public float getWidth() {
 		return (float) renderer.getBounds(text).getWidth() * 0.05f;
 	}
 
-	@Override
 	public float getHeight() {
 		return (float) renderer.getBounds(text).getHeight() * 0.05f;
 	}
 
-	@Override
 	public void display(GL2 gl) {
 		gl.getContext().getGLDrawable().getWidth();
 		gl.getContext().getGLDrawable().getHeight();

@@ -5,4 +5,4 @@ Bundle-SymbolicName: javax.media.opengl.win32.win32.x86-64;singleton:=true
 Bundle-Version: 1.1.1
 Fragment-Host: javax.media.opengl;bundle-version="1.1.1"
 Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=x86_64))
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

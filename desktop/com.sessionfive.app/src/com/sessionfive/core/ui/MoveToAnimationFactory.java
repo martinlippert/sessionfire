@@ -7,12 +7,10 @@ import com.sessionfive.core.Shape;
 
 public class MoveToAnimationFactory implements AnimationFactory {
 
-	@Override
 	public Animation createAnimation(Focusable startShape, Shape endShape) {
 		return new MoveToAnimation(startShape, endShape);
 	}
 
-	@Override
 	public String getName() {
 		return "Move To";
 	}

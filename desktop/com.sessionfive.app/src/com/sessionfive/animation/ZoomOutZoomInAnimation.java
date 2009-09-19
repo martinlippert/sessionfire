@@ -22,7 +22,6 @@ public class ZoomOutZoomInAnimation implements Animation {
 		this.endShape = endShape;
 	}
 
-	@Override
 	public Animator getForwardAnimation(Display display) {
 		Camera startSetting = display.getCamera();
 		Camera endSetting = endShape.getFocussedCamera();
@@ -51,7 +50,6 @@ public class ZoomOutZoomInAnimation implements Animation {
 		return animator;
 	}
 
-	@Override
 	public Animator getBackwardAnimation(Display display) {
 		if (startShape == null)
 			return null;
@@ -83,7 +81,6 @@ public class ZoomOutZoomInAnimation implements Animation {
 		return animator;
 	}
 
-	@Override
 	public void directlyGoTo(Display display) {
 		Camera cameraEnd = endShape.getFocussedCamera();
 		display.setCamera(cameraEnd);

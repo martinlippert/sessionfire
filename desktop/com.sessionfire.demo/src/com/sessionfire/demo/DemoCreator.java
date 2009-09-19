@@ -13,7 +13,7 @@ import com.sessionfive.shapes.ImageShape;
 public class DemoCreator {
 
 	public void createDemo(Presentation presentation) throws Exception {
-		ImageShape titleShape = new ImageShape(getImage("title.png"), 0, 0, 0, 0, 0, 0, 45);
+		ImageShape titleShape = new ImageShape(getImage("title2.png"), 0, 0, 0, 0, 0, 0, 45);
 		presentation.addShape(titleShape);
 		presentation.addAnimation(new MoveToAnimation(presentation, titleShape));
 	}

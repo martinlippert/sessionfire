@@ -48,7 +48,6 @@ public class PresentationLoader {
 	
 	private File[] sortImageFiles(File[] files) {
 		Arrays.sort(files, new Comparator<File>() {
-			@Override
 			public int compare(File o1, File o2) {
 				Integer no1 = extractNumber(o1.getName());
 				Integer no2 = extractNumber(o2.getName());

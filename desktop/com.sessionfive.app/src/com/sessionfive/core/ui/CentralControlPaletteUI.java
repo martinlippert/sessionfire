@@ -61,7 +61,6 @@ public class CentralControlPaletteUI {
 	private void initComponents() {
 		choosePresentationButton = new JButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.choosePresentation(canvas,
 						(Layouter) layoutChoice.getSelectedItem(),
@@ -90,7 +89,6 @@ public class CentralControlPaletteUI {
 		}
 		layoutChoice = new JComboBox(layoutModel);
 		layoutChoice.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.changeLayout((Layouter) layoutChoice
 						.getSelectedItem());
@@ -106,7 +104,6 @@ public class CentralControlPaletteUI {
 		}
 		animationChoice = new JComboBox(animationModel);
 		animationChoice.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette
 						.changeAnimation((AnimationFactory) animationChoice
@@ -118,7 +115,6 @@ public class CentralControlPaletteUI {
 		JButton backgroundChooser = new JButton("Choose Background Color...");
 		subContentPane.add(backgroundChooser);
 		backgroundChooser.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
 			}
@@ -127,17 +123,12 @@ public class CentralControlPaletteUI {
 		layerText = new JTextField(centralControlPalette.getLayerText());
 		subContentPane.add(layerText);
 		layerText.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
 			public void removeUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
-
-			@Override
 			public void insertUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
-
-			@Override
 			public void changedUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
@@ -151,7 +142,6 @@ public class CentralControlPaletteUI {
 		subContentPane.add(zRotationSlider);
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
-			@Override
 			public void stateChanged(ChangeEvent e) {
 				centralControlPalette.setRotation(xRotationSlider.getValue(),
 						yRotationSlider.getValue(), zRotationSlider.getValue());

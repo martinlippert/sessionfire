@@ -34,18 +34,15 @@ public class ImageShape extends AbstractShape {
 		this.width = width;
 	}
 
-	@Override
 	public float getWidth() {
 		return width;
 	}
 
-	@Override
 	public float getHeight() {
 		initializeTexture(file);
 		return getWidth() * imageRatio;
 	}
 
-	@Override
 	public void display(GL2 gl) {
 		initializeTexture(file);
 		

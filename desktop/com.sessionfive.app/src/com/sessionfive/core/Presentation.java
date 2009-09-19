@@ -64,7 +64,6 @@ public class Presentation implements Focusable {
 		animations.clear();
 	}
 
-	@Override
 	public Camera getFocussedCamera() {
 		return startCamera;
 	}

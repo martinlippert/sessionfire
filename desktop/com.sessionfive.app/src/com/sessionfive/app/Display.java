@@ -50,7 +50,6 @@ public class Display implements GLEventListener {
 		this.camera = camera;
 	}
 
-	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -100,7 +99,6 @@ public class Display implements GLEventListener {
 		}
 	}
 
-	@Override
 	public void init(GLAutoDrawable drawable) {
 		GL gl = drawable.getGL();
 		gl.setSwapInterval(0);
@@ -112,7 +110,6 @@ public class Display implements GLEventListener {
 		reshape(drawable, 0, 0, width, height);
 	}
 
-	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
 		GL2 gl = drawable.getGL().getGL2();
@@ -133,7 +130,6 @@ public class Display implements GLEventListener {
 		gl.glLoadIdentity();
 	}
 
-	@Override
 	public void dispose(GLAutoDrawable arg0) {
 	}
 

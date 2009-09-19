@@ -19,12 +19,10 @@ public abstract class AbstractShape implements Shape {
 		this.angleZ = angleZ;
 	}
 
-	@Override
 	public float getX() {
 		return x;
 	}
 
-	@Override
 	public float getY() {
 		return y;
 	}
@@ -33,36 +31,30 @@ public abstract class AbstractShape implements Shape {
 		return z;
 	}
 
-	@Override
 	public void setPosition(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	@Override
 	public float getRotationAngleX() {
 		return angleX;
 	}
 	
-	@Override
 	public float getRotationAngleY() {
 		return angleY;
 	}
 	
-	@Override
 	public float getRotationAngleZ() {
 		return angleZ;
 	}
 
-	@Override
 	public void setRotation(float angleX, float angleY, float angleZ) {
 		this.angleX = angleX;
 		this.angleY = angleY;
 		this.angleZ = angleZ;
 	}
 	
-	@Override
 	public Camera getFocussedCamera() {
 		float shapeX = this.getX();
 		float shapeY = this.getY();

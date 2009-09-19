@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.LinearGradientPaint;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -22,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Method;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,8 +33,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MouseInputListener;
-
-import com.sun.awt.AWTUtilities;
 
 public class TranslucentPalette extends JWindow {
 
@@ -166,13 +164,13 @@ public class TranslucentPalette extends JWindow {
 
 		if (this.toFade) {
 			this.currOpacity = 0;
-			AWTUtilities.setWindowOpacity(this, (currOpacity / 100.0f));
+			setWindowOpacity(this, (currOpacity / 100.0f));
 		}
 
 		this.setVisible(true);
 		// this.hoverWindow.pack();
 
-		AWTUtilities.setWindowOpaque(this, false);
+		setWindowOpaque(this, false);
 
 		if (this.toFade) {
 			this.fadeInTimer = new Timer(50, new ActionListener() {
@@ -182,13 +180,34 @@ public class TranslucentPalette extends JWindow {
 						currOpacity = PALETTE_TRANSPARENCY;
 						fadeInTimer.stop();
 					}
-					AWTUtilities.setWindowOpacity(TranslucentPalette.this,
+					setWindowOpacity(TranslucentPalette.this,
 							(currOpacity / 100.0f));
 					TranslucentPalette.this.getContentPane().repaint();
 				}
 			});
 			this.fadeInTimer.setRepeats(true);
 			this.fadeInTimer.start();
+		}
+	}
+
+	private void setWindowOpaque(TranslucentPalette translucentPalette,
+			boolean b) {
+		try {
+			Class<?> clazz = this.getClass().getClassLoader().loadClass("com.sun.awt.AWTUtilities");
+			Method setOpaqueMethod = clazz.getMethod("setWindowOpaque", Window.class, boolean.class);
+			setOpaqueMethod.invoke(null, this, Boolean.FALSE);
+		}
+		catch (Exception e) {
+		}
+	}
+
+	private void setWindowOpacity(TranslucentPalette translucentPalette, float f) {
+		try {
+			Class<?> clazz = this.getClass().getClassLoader().loadClass("com.sun.awt.AWTUtilities");
+			Method setOpacityMethod = clazz.getMethod("setWindowOpacity", Window.class, float.class);
+			setOpacityMethod.invoke(null, this, (currOpacity / 100.0f));
+		}
+		catch (Exception e) {
 		}
 	}
 
@@ -209,7 +228,7 @@ public class TranslucentPalette extends JWindow {
 				public void actionPerformed(ActionEvent e) {
 					currOpacity -= 20;
 					if (currOpacity >= 0) {
-						AWTUtilities.setWindowOpacity(TranslucentPalette.this,
+						setWindowOpacity(TranslucentPalette.this,
 								(currOpacity / 100.0f));
 						TranslucentPalette.this.getContentPane().repaint();
 					} else {
@@ -248,11 +267,11 @@ public class TranslucentPalette extends JWindow {
 				g2.setComposite(AlphaComposite.getInstance(
 						AlphaComposite.SRC_OVER, 0.75f));
 
-				LinearGradientPaint paint = new LinearGradientPaint(0, 0, 0,
-						getHeight(), new float[] { .0f, .499f, .5f, 1.0f },
-						new Color[] { new Color(0x858585), new Color(0x3c3c3c),
-								new Color(0x2c2c2c), new Color(0x333334) });
-				g2.setPaint(paint);
+//				LinearGradientPaint paint = new LinearGradientPaint(0, 0, 0,
+//						getHeight(), new float[] { .0f, .499f, .5f, 1.0f },
+//						new Color[] { new Color(0x858585), new Color(0x3c3c3c),
+//								new Color(0x2c2c2c), new Color(0x333334) });
+//				g2.setPaint(paint);
 				Shape shape = new RoundRectangle2D.Float(0, 0, getWidth(),
 						getHeight(), 16, 16);
 				g2.fill(shape);

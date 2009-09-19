@@ -73,7 +73,6 @@ public class SessionFiveApplication implements IApplication {
 		return presentation;
 	}
 
-	@Override
 	public Object start(IApplicationContext context) throws Exception {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
 		frame.setIconImage(new ImageIcon(this.getClass().getResource("sf16.png")).getImage());
@@ -92,16 +91,10 @@ public class SessionFiveApplication implements IApplication {
 		animator = new Animator(canvas);
 
 		keyListener = new KeyListener() {
-
-			@Override
 			public void keyTyped(KeyEvent e) {
 			}
-
-			@Override
 			public void keyReleased(KeyEvent e) {
 			}
-
-			@Override
 			public void keyPressed(KeyEvent e) {
 
 				if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN
@@ -207,7 +200,6 @@ public class SessionFiveApplication implements IApplication {
 		}
 	}
 
-	@Override
 	public void stop() {
 	}
 	
@@ -280,7 +272,6 @@ public class SessionFiveApplication implements IApplication {
 			this.alpha = alpha;
 		}
 
-		@Override
 		public byte[] call() throws Exception {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			
