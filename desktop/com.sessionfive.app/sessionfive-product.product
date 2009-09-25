@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="SessionFire" uid="sessionfire" id="com.sessionfive.app.product" application="com.sessionfive.app.startup" version="0.0.1" useFeatures="false" includeLaunchers="true">
-
+<product name="SessionFire" uid="sessionfire" id="com.sessionfive.app.product" application="com.sessionfive.app.startup" version="0.0.1" useFeatures="false" includeLaunchers="false">
 
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
       <programArgs>-noExit</programArgs>
+      <programArgsMac>-debug
+true
+--launcher.secondThread</programArgsMac>
       <vmArgs>-Xms40m -Xmx256m -Dorg.eclipse.equinox.http.jetty.http.port=8088 -Dorg.osgi.framework.system.packages.extra=com.sun.awt</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -Dcom.apple.eawt.CocoaComponent.CompatibilityMode=false</vmArgsMac>
       <vmArgsWin>-Dsun.java2d.noddraw=true -Dswing.defaultlaf=com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel</vmArgsWin>
    </launcherArgs>
 
@@ -32,6 +34,9 @@
             winLargeLow="/com.sessionfive.app/icons/sf48x8.bmp"/>
       </win>
    </launcher>
+
+   <vm>
+   </vm>
 
    <plugins>
       <plugin id="com.sessionfive.app"/>
