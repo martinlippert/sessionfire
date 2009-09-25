@@ -18,10 +18,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.sessionfive.app.startup"
-            name="Session Five">
+            name="SessionFire">
          <property
                name="appName"
-               value="Session Five">
+               value="SessionFire">
          </property>
       </product>
    </extension>
