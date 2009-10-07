@@ -28,6 +28,7 @@
 		40CADFFF1046D88E00D1F153 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CADFFE1046D88E00D1F153 /* Reachability.m */; };
 		40CAE0061046D8D000D1F153 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */; };
 		40D69BDD1042F14E00DA7D58 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D69BDC1042F14E00DA7D58 /* Preferences.m */; };
+		40F36E72107D13C500774D34 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40F36E71107D13C500774D34 /* Entitlements.plist */; };
 		40FB32D0101E482D00C510A6 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 40FB32CF101E482D00C510A6 /* background.png */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		40D69BDB1042F14E00DA7D58 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		40D69BDC1042F14E00DA7D58 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
+		40F36E71107D13C500774D34 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		40FB32CF101E482D00C510A6 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Session7-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Session7-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +143,7 @@
 				400643E5100BD36000C30F73 /* OpenGLES.framework */,
 				400643E9100BD36500C30F73 /* QuartzCore.framework */,
 				40CAE0051046D8D000D1F153 /* SystemConfiguration.framework */,
+				40F36E71107D13C500774D34 /* Entitlements.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				40FB32D0101E482D00C510A6 /* background.png in Resources */,
 				407803FA103EE4F7003EE3B0 /* Icon.png in Resources */,
 				40780489103EEC74003EE3B0 /* Default.png in Resources */,
+				40F36E72107D13C500774D34 /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +310,33 @@
 			};
 			name = Release;
 		};
+		40F36E6D107D131C00774D34 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Matthias Lübken";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D6CFCE9C-8ED9-4ADE-8254-7FDD43417997";
+				SDKROOT = iphoneos3.0;
+			};
+			name = Distribution;
+		};
+		40F36E6E107D131C00774D34 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Session7_Prefix.pch;
+				INFOPLIST_FILE = "Session7-Info.plist";
+				PRODUCT_NAME = SessionFire;
+			};
+			name = Distribution;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -340,6 +371,7 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				40F36E6E107D131C00774D34 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -349,6 +381,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				40F36E6D107D131C00774D34 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
