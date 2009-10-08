@@ -12,7 +12,6 @@ import javax.swing.JFileChooser;
 
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sessionfive.shapes.ImageShape;
 
 public class PresentationLoader {
 
@@ -92,12 +91,10 @@ public class PresentationLoader {
 	}
 
 	private void readFiles(Presentation presentation, File[] files) {
+		ShapeExtensionCreator creator = new ShapeExtensionCreator();
 		for (File file : files) {
-			Shape newShape = new ImageShape(file, 0, 0, 0, 0, 0, 0, 45f);
-			presentation.addShape(newShape);
-			
-//					TextShape textShape = new TextShape("Shape " + file.getName(), "SansSerif", 60, 0, 0, 0, 0);
-//					presentation.addShape(textShape);
+			Shape newShape = creator.createShape(file);
+			if (newShape != null) presentation.addShape(newShape);
 		}
 	}
 

@@ -13,9 +13,7 @@ public class TextShape extends AbstractShape {
 	private TextRenderer renderer;
 	private String text;
 
-	public TextShape(String text, String font, int fontSize, float x, float y,
-			float z, float angleX, float angleY, float angleZ) {
-		super(x, y, z, angleX, angleY, angleZ);
+	public TextShape(String text) {
 		this.text = text;
 		this.renderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 60), true,
 				false);
