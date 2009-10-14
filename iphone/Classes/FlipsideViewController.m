@@ -64,6 +64,11 @@ BOOL dialogHasBeenShown = NO;
 	}	
 }
 
+- (IBAction)sample {
+	numberofkeyframes = 9;
+	[self.delegate flipsideViewControllerDidFinish:self showingAlertView:nil];	
+}
+
 - (IBAction)editingdoneIp {
 	[port becomeFirstResponder];
 }

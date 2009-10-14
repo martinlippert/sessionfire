@@ -27,6 +27,7 @@
 - (IBAction)done;
 - (IBAction)editingdoneIp;
 - (IBAction)editingdonePort;
+- (IBAction)sample;
 
 @end
 
