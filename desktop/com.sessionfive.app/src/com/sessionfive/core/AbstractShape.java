@@ -9,14 +9,8 @@ public abstract class AbstractShape implements Shape {
 	private float angleY;
 	private float angleZ;
 
-	public AbstractShape(float x, float y, float z, float angleX, float angleY, float angleZ) {
+	public AbstractShape() {
 		super();
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.angleX = angleX;
-		this.angleY = angleY;
-		this.angleZ = angleZ;
 	}
 
 	public float getX() {

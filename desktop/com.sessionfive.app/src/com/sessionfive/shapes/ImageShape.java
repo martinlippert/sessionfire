@@ -25,17 +25,19 @@ public class ImageShape extends AbstractShape {
 
 	private Texture t;
 	private final File file;
-	private final float width;
+	private float width;
 	private float imageRatio;
 
-	public ImageShape(File file, float x, float y, float z, float angleX, float angleY, float angleZ, float width) {
-		super(x, y, z, angleX, angleY, angleZ);
+	public ImageShape(File file) {
 		this.file = file;
-		this.width = width;
 	}
 
 	public float getWidth() {
 		return width;
+	}
+	
+	public void setWidth(float width) {
+		this.width = width;
 	}
 
 	public float getHeight() {
