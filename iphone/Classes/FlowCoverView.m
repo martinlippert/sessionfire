@@ -125,7 +125,8 @@ const GLshort GTextures[] = {
 
 
 @implementation FlowCoverView
-
+BOOL zoomedIn = NO;
+CGPoint zoominAt;
 NSInteger orientation;
 
 @synthesize delegate;
@@ -273,8 +274,22 @@ NSInteger orientation;
 	}
 }
 
-- (void)touchAtIndex:(int)index
+- (void)touchAtIndex:(int)index withTouch: (UITouch*) touch
 {
+	BOOL doubleTab = [touch tapCount] == 2;
+	if(doubleTab) {
+		CGPoint where = [touch locationInView:self];
+		if(zoomedIn) {
+			//NSLog(@"Zoomout");
+			zoomedIn = NO;
+			//zoominAt = nil;
+		}else {		
+			//NSLog(@"Zoomin at %f/%f", where.x, where.y);
+			zoomedIn = YES;
+			zoominAt = where;
+		}
+		[self draw];
+	}
 	if (delegate) {
 		[delegate flowCover:self didSelect:index];
 	}
@@ -388,11 +403,16 @@ static void *GData = NULL;
 
 - (void)drawTile:(int)index atOffset:(double)off
 {
+	//if(offset == index) { //I have the current main images
+		//NSLog(@"Zoomin: %i at %f/%f", zoomedIn, zoominAt.x, zoominAt.y);
+		//NSLog(@"index / offset: %i/%f", index, off);
+	//}
+	
 	FlowCoverRecord *fcr = [self getTileAtIndex:index];
-	GLfloat m[16];
-	memset(m,0,sizeof(m));
 	
 	//identy matrix
+	GLfloat m[16];
+	memset(m,0,sizeof(m));
 	m[0] = 1;
 	m[5] = 1;
 	m[10] = 1;
@@ -405,34 +425,60 @@ static void *GData = NULL;
 	if(ORIENTATION_VERTICAL) spreadimage = 0.2;
 	if(ORIENTATION_VERTICAL) flankspread = 0.1;
 	
-	double trans = off * spreadimage;
 	double f = off * flankspread;
 	if(ORIENTATION_HORIZENTAL){
-	if (f < -flankspread) {
-		f = -flankspread;
-	} else if (f > flankspread) {
-		f = flankspread;
+		if (f < -flankspread) {
+			f = -flankspread;
+		} else if (f > flankspread) {
+			f = flankspread;
 		}
 	}
 
 	m[0] = 1-fabs(f);
 	if(ORIENTATION_VERTICAL) m[11] = -f; 
 	if(ORIENTATION_HORIZENTAL) m[3] = -f;
+	
 	double sc = 0.65 * (1 - fabs(f)); 	//Scale. orig: double sc = 0.45 * (1 - fabs(f));
+
+	/*
+	if(zoomedIn && offset == index){
+		sc = 0.85 * (1 - fabs(f));
+	} else {
+		sc = 0.65 * (1 - fabs(f)); 	//Scale. orig: double sc = 0.45 * (1 - fabs(f));
+	}
+	 */
+	
+	double trans = off * spreadimage;
 	trans += f * 1;
 
 	double color = (1 - fabs(trans * 1)) ;
 	glColor4f(color,color,color,color);
 
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D,fcr.texture);
-	glTranslatef(trans, 0, 0);
-	glScalef(sc,sc,1.0);
-	if(ORIENTATION_VERTICAL) glRotatef(-90.0, 0.0, 0.0, 1.0); //vertical
-	glMultMatrixf(	m);
-	glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+	
+	glBindTexture(GL_TEXTURE_2D, fcr.texture);
+	
+	//multiply the current matrix by a ... matrix
+	glTranslatef(trans, 0, 0); //verschiebung
+	glScalef(sc, sc, 1.0); //generelle skalierung
+	if(ORIENTATION_VERTICAL) glRotatef(-90.0, 0.0, 0.0, 1.0); //rotation
+	//glMultMatrixf(m); //einfaches multiply relative skalierung  (!?)
+	if(zoomedIn && offset == index){
+		//(GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar);
+		//glOrthof(0.0f, -2.0f, 0.0f, 1.0f, -10.0f, 1.0f);
+		//glOrthof(-0.8f, 0.9f, 0.0f, 1.0f, -10.0f, 1.0f);
+		
+		//?? how to only a show part of an texture in opengles
+		float transx = zoominAt.x / 256 ;
+		float transy = zoominAt.y / 256 ;
+		glTranslatef((transy - 0.65) * -2.3, (transx - 1.0) * -4, 0);
+		glScalef(2.5, 2.5, 2.5);
+		
+	}
+	glDrawArrays(GL_TRIANGLE_STRIP, 0 , 4);
 	
 	// reflect
+	/*
 	if(ORIENTATION_HORIZENTAL) {
 		glTranslatef(0,-2,0);
 		glScalef(1,-1,1);
@@ -440,6 +486,7 @@ static void *GData = NULL;
 		glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 		glColor4f(1,1,1,1);
 	}
+	 */
 	
 	glPopMatrix();
 }
@@ -633,13 +680,13 @@ static void *GData = NULL;
 	
 	if (touchFlag == YES) {
 		// Touched location; only accept on touching inner 256x256 area
-		r.origin.x += (r.size.width - 256)/2;
-		r.origin.y += (r.size.height - 256)/2;
-		r.size.width = 256;
-		r.size.height = 256;
+		r.origin.x += (r.size.width - 320)/2;
+		r.origin.y += (r.size.height - 320)/2;
+		r.size.width = 320;
+		r.size.height = 320;
 		
 		if (CGRectContainsPoint(r, where)) {
-			[self touchAtIndex:(int)floor(offset + 0.01)];	// make sure .99 is 1
+			[self touchAtIndex:(int)floor(offset + 0.01) withTouch:t];	// make sure .99 is 1
 		} else {
 			if( where.x < r.origin.x) {
 				startOff -=0.6;

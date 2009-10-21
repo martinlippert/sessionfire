@@ -85,12 +85,15 @@ UIProgressView* progressView;
 
 - (UIImage*) callForImage:(int)imageNr {   
 	NSLog(@"callForImage %d", (imageNr-1));
-		NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:(imageNr-1)] ];
-		if([data length] > 0) {
-			//[self.imageView2.image release];
-			return [ [ UIImage alloc ] initWithData: data ];
-		}
-		return nil;		
+	NSData* data = [ NSData dataWithContentsOfURL: [s5url urlForImage:(imageNr-1)] ];
+	if([data length] > 0) {
+		//[self.imageView2.image release];
+		return [ [ UIImage alloc ] initWithData: data ];
+	} else { //sample
+		UIImage* image = [UIImage imageNamed:[NSString stringWithFormat:@"SessionFireDemo.00%i.png", imageNr]]; 
+		return image;
+	}
+	return nil;		
 	//[data autorelease];
 }
 
@@ -126,7 +129,7 @@ UIProgressView* progressView;
 
 - (void)flowCover:(FlowCoverView *)view didSelect:(int)image
 {
-	NSLog(@"Selected Index %d",image);
+	//NSLog(@"Selected Index %d",image);
 }
 
 - (void)flowCover:(FlowCoverView *)view draggedTo:(int)image
