@@ -277,7 +277,7 @@ NSInteger orientation;
 - (void)touchAtIndex:(int)index withTouch: (UITouch*) touch
 {
 	BOOL doubleTab = [touch tapCount] == 2;
-	if(doubleTab) {
+	if(doubleTab && NO) { //TODO DISABLED !!!
 		CGPoint where = [touch locationInView:self];
 		if(zoomedIn) {
 			//NSLog(@"Zoomout");
@@ -680,10 +680,10 @@ static void *GData = NULL;
 	
 	if (touchFlag == YES) {
 		// Touched location; only accept on touching inner 256x256 area
-		r.origin.x += (r.size.width - 320)/2;
-		r.origin.y += (r.size.height - 320)/2;
-		r.size.width = 320;
-		r.size.height = 320;
+		r.origin.x += (r.size.width - 256)/2;
+		r.origin.y += (r.size.height - 256)/2;
+		r.size.width = 256;
+		r.size.height = 256;
 		
 		if (CGRectContainsPoint(r, where)) {
 			[self touchAtIndex:(int)floor(offset + 0.01) withTouch:t];	// make sure .99 is 1
