@@ -2,10 +2,10 @@ package com.sessionfive.shapes;
 
 import java.awt.Font;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 import com.sessionfive.core.AbstractShape;
-import com.sun.opengl.util.awt.TextRenderer;
+import com.sun.opengl.util.j2d.TextRenderer;
 
 public class TextShape extends AbstractShape {
 
@@ -27,10 +27,7 @@ public class TextShape extends AbstractShape {
 		return (float) renderer.getBounds(text).getHeight() * 0.05f;
 	}
 
-	public void display(GL2 gl) {
-		gl.getContext().getGLDrawable().getWidth();
-		gl.getContext().getGLDrawable().getHeight();
-		
+	public void display(GL gl) {
 		float x = getX();
 		float y = getY();
 		float z = getZ();

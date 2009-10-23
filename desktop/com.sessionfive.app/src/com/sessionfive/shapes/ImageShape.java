@@ -6,14 +6,14 @@ import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
 import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
-import static javax.media.opengl.GL2ES1.GL_MODULATE;
-import static javax.media.opengl.GL2ES1.GL_TEXTURE_ENV;
-import static javax.media.opengl.GL2ES1.GL_TEXTURE_ENV_MODE;
+import static javax.media.opengl.GL.GL_MODULATE;
+import static javax.media.opengl.GL.GL_TEXTURE_ENV;
+import static javax.media.opengl.GL.GL_TEXTURE_ENV_MODE;
 
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.GLException;
 
 import com.sessionfive.core.AbstractShape;
@@ -45,7 +45,7 @@ public class ImageShape extends AbstractShape {
 		return getWidth() * imageRatio;
 	}
 
-	public void display(GL2 gl) {
+	public void display(GL gl) {
 		initializeTexture(file);
 		
 		Texture tex = t;
@@ -82,7 +82,7 @@ public class ImageShape extends AbstractShape {
 
 		tex.bind();
 		tex.enable();
-		gl.glBegin(GL2.GL_QUADS);
+		gl.glBegin(GL.GL_QUADS);
 
         // Render image right-side up
 		float a = 1f;

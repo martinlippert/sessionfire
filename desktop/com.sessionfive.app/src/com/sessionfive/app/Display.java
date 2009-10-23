@@ -3,8 +3,8 @@ package com.sessionfive.app;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
+import static javax.media.opengl.GL.GL_MODELVIEW;
+import static javax.media.opengl.GL.GL_PROJECTION;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.concurrent.FutureTask;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
@@ -21,7 +20,7 @@ import javax.media.opengl.glu.GLU;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sun.opengl.util.awt.TextRenderer;
+import com.sun.opengl.util.j2d.TextRenderer;
 
 public class Display implements GLEventListener {
 
@@ -51,7 +50,7 @@ public class Display implements GLEventListener {
 	}
 
 	public void display(GLAutoDrawable drawable) {
-		GL2 gl = drawable.getGL().getGL2();
+		GL gl = drawable.getGL();
 
 		Color backgroundColor = presentation.getBackgroundColor();
 		gl.glClearColor((float) backgroundColor.getRed() / 255f,
@@ -112,12 +111,12 @@ public class Display implements GLEventListener {
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		GL2 gl = drawable.getGL().getGL2();
+		GL gl = drawable.getGL();
 
 	    System.err.println();
-	    System.err.println("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR));
-	    System.err.println("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER));
-	    System.err.println("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION));
+	    System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
+	    System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
+	    System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
 	    System.err.println();
 
 	    gl.glViewport(0, 0, width, height);
@@ -135,6 +134,9 @@ public class Display implements GLEventListener {
 
 	public void executeInDisplay(FutureTask<byte[]> futureTask) {
 		this.futureTask = futureTask;
+	}
+
+	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
 	}
 
 }

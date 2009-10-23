@@ -20,8 +20,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLPbuffer;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
+import javax.media.opengl.GLCanvas;
 import javax.swing.ImageIcon;
 
 import org.eclipse.equinox.app.IApplication;
@@ -33,7 +32,7 @@ import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
 import com.sun.opengl.util.Animator;
-import com.sun.opengl.util.awt.Screenshot;
+import com.sun.opengl.util.Screenshot;
 
 public class SessionFiveApplication implements IApplication {
 
@@ -77,7 +76,7 @@ public class SessionFiveApplication implements IApplication {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
 		frame.setIconImage(new ImageIcon(this.getClass().getResource("sf16.png")).getImage());
 
-	    caps = new GLCapabilities(GLProfile.getDefault());
+	    caps = new GLCapabilities();
 		caps.setSampleBuffers(true);
 		caps.setNumSamples(2);
 
@@ -212,15 +211,15 @@ public class SessionFiveApplication implements IApplication {
 	}
 	
 	public byte[] getKeyFrame(int parsedNumber) {
-	    GLCapabilities caps = new GLCapabilities(GLProfile.getDefault());
+	    GLCapabilities caps = new GLCapabilities();
 		caps.setSampleBuffers(true);
 		caps.setNumSamples(2);
 		caps.setDoubleBuffered(false);
 
-		if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer()) {
+		if (!GLDrawableFactory.getFactory().canCreateGLPbuffer()) {
 			throw new GLException("Pbuffers not supported with this graphics card");
 		}
-		GLPbuffer pbuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createGLPbuffer(caps,
+		GLPbuffer pbuffer = GLDrawableFactory.getFactory().createGLPbuffer(caps,
 				null,
 				512, 512,
 				canvas.getContext());

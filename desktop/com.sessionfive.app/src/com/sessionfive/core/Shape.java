@@ -1,6 +1,6 @@
 package com.sessionfive.core;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 public interface Shape extends Focusable {
 	
@@ -16,6 +16,6 @@ public interface Shape extends Focusable {
 	public void setPosition(float x, float f, float z);
 	public void setRotation(float angleX, float angleY, float angleZ);
 	
-	public void display(GL2 gl);
+	public void display(GL gl);
 
 }
