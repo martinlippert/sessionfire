@@ -9,6 +9,8 @@ import static javax.media.opengl.GL.GL_PROJECTION;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
@@ -27,16 +29,17 @@ public class Display implements GLEventListener {
 	private static final GLU glu = new GLU();
 
 	private final Presentation presentation;
-
 	private Camera camera;
 	private TextRenderer textRenderer;
 
 	private FutureTask<byte[]> futureTask;
+	private List<DisplayChangedListener> changeListeners;
 
 	public Display(Presentation presentation) {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
-
+		this.changeListeners = new LinkedList<DisplayChangedListener>();
+		
 		Font font = new Font("SansSerif", Font.BOLD, 24);
 		textRenderer = new TextRenderer(font, true, false);
 	}
@@ -47,6 +50,7 @@ public class Display implements GLEventListener {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+		fireDisplayChangedEvent();
 	}
 
 	public void display(GLAutoDrawable drawable) {
@@ -137,6 +141,23 @@ public class Display implements GLEventListener {
 	}
 
 	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
+	}
+	
+	public void addDisplayChangedListener(DisplayChangedListener listener) {
+		changeListeners.add(listener);
+	}
+	
+	public void removeDisplayChangedListener(DisplayChangedListener listener) {
+		changeListeners.remove(listener);
+	}
+	
+	protected void fireDisplayChangedEvent() {
+		DisplayChangedEvent event = new DisplayChangedEvent(this);
+		
+		Iterator<DisplayChangedListener> listeners = changeListeners.iterator();
+		while (listeners.hasNext()) {
+			listeners.next().displayChanged(event);
+		}
 	}
 
 }

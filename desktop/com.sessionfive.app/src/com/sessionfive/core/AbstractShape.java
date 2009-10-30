@@ -1,5 +1,9 @@
 package com.sessionfive.core;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class AbstractShape implements Shape {
 
 	private float x;
@@ -8,9 +12,11 @@ public abstract class AbstractShape implements Shape {
 	private float angleX;
 	private float angleY;
 	private float angleZ;
+	private List<ShapeChangedListener> changeListeners;
 
 	public AbstractShape() {
 		super();
+		this.changeListeners = new LinkedList<ShapeChangedListener>();
 	}
 
 	public float getX() {
@@ -29,6 +35,8 @@ public abstract class AbstractShape implements Shape {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		fireShapeChangedEvent();
 	}
 
 	public float getRotationAngleX() {
@@ -47,6 +55,8 @@ public abstract class AbstractShape implements Shape {
 		this.angleX = angleX;
 		this.angleY = angleY;
 		this.angleZ = angleZ;
+		
+		fireShapeChangedEvent();
 	}
 	
 	public Camera getFocussedCamera() {
@@ -103,6 +113,22 @@ public abstract class AbstractShape implements Shape {
 				lookAtX, lookAtY, lookAtZ, (float)upX, (float)upY, (float)upZ);
 		
 		return cameraSetting;
+	}
+	
+	public void addShapeChangedListener(ShapeChangedListener listener) {
+		changeListeners.add(listener);
+	}
+	
+	public void removeShapeChangedListener(ShapeChangedListener listener) {
+		changeListeners.remove(listener);
+	}
+	
+	protected void fireShapeChangedEvent() {
+		ShapeChangedEvent event = new ShapeChangedEvent(this);
+		Iterator<ShapeChangedListener> listeners = changeListeners.iterator();
+		while (listeners.hasNext()) {
+			listeners.next().shapeChanged(event);
+		}
 	}
 
 }

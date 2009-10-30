@@ -38,6 +38,8 @@ public class ImageShape extends AbstractShape {
 	
 	public void setWidth(float width) {
 		this.width = width;
+		
+		fireShapeChangedEvent();
 	}
 
 	public float getHeight() {

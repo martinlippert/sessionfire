@@ -16,11 +16,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import javax.imageio.ImageIO;
+import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLPbuffer;
-import javax.media.opengl.GLCanvas;
 import javax.swing.ImageIcon;
 
 import org.eclipse.equinox.app.IApplication;
@@ -31,19 +31,16 @@ import com.sessionfive.core.Animation;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
-import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
 
 public class SessionFiveApplication implements IApplication {
 
 	private Frame fullScreenFrame;
-	private Animator fullScreenAnimator;
 
 	private GLCapabilities caps;
 	private GLCanvas canvas;
 
 	private KeyListener keyListener;
-	private Animator animator;
 	private Display display;
 	private Frame frame;
 
@@ -56,6 +53,10 @@ public class SessionFiveApplication implements IApplication {
 	private CentralControlPalette centralControlPalette;
 	private CentralControlPaletteUI centralControlPaletteUI;
 	private StringBuffer goToKeyframeDirectlyBuffer;
+
+	private DisplayRepaintManager displayRepaintManager;
+
+	private DisplayRepaintManager fullScreenDisplayRepaintManager;
 
 	public SessionFiveApplication() {
 		application = this;
@@ -88,9 +89,10 @@ public class SessionFiveApplication implements IApplication {
 		presentation = new Presentation();
 		display = new Display(presentation);
 		animationController = new AnimationController();
+		
+		displayRepaintManager = new DisplayRepaintManager(display, presentation, canvas);
 
 		canvas.addGLEventListener(display);
-		animator = new Animator(canvas);
 
 		keyListener = new KeyListener() {
 			public void keyTyped(KeyEvent e) {
@@ -146,7 +148,7 @@ public class SessionFiveApplication implements IApplication {
 			public void windowClosing(WindowEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						animator.stop();
+						displayRepaintManager.dispose();
 						System.exit(0);
 					}
 				}).start();
@@ -154,7 +156,6 @@ public class SessionFiveApplication implements IApplication {
 		});
 
 		frame.setVisible(true);
-		animator.start();
 		animationController.init(presentation, display);
 
 		centralControlPalette = new CentralControlPalette(presentation,
@@ -195,8 +196,8 @@ public class SessionFiveApplication implements IApplication {
 					.getContext(), null);
 			fullScreenCanvas.addGLEventListener(display);
 			fullScreenCanvas.setFocusable(true);
+			fullScreenDisplayRepaintManager = new DisplayRepaintManager(display, presentation, fullScreenCanvas);
 			fullScreenFrame.add(fullScreenCanvas, BorderLayout.CENTER);
-			fullScreenAnimator = new Animator(fullScreenCanvas);
 
 			fullScreenFrame.addKeyListener(keyListener);
 			fullScreenCanvas.addKeyListener(keyListener);
@@ -209,21 +210,7 @@ public class SessionFiveApplication implements IApplication {
 			GraphicsDevice screenDevice = GraphicsEnvironment
 					.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			screenDevice.setFullScreenWindow(fullScreenFrame);
-
-			fullScreenAnimator.start();
-
-			new Thread(new Runnable() {
-				public void run() {
-					animator.stop();
-				}
-			}).start();
 		} else {
-			new Thread(new Runnable() {
-				public void run() {
-					fullScreenAnimator.stop();
-				}
-			}).start();
-
 			GraphicsDevice screenDevice = GraphicsEnvironment
 					.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
@@ -231,8 +218,10 @@ public class SessionFiveApplication implements IApplication {
 			fullScreenFrame.setVisible(false);
 			fullScreenFrame.dispose();
 			fullScreenFrame = null;
+			
+			fullScreenDisplayRepaintManager.dispose();
+			fullScreenDisplayRepaintManager = null;
 			frame.toFront();
-			animator.start();
 		}
 	}
 

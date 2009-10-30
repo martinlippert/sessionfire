@@ -59,6 +59,8 @@ public class TextShape extends AbstractShape {
 
 	public void setFont(Font font) {
 		this.font = font;
+		
+		fireShapeChangedEvent();
 	}
 
 	public String getText() {
@@ -67,6 +69,8 @@ public class TextShape extends AbstractShape {
 
 	public void setText(String text) {
 		this.text = text;
+		
+		fireShapeChangedEvent();
 	}
 
 }

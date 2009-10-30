@@ -43,8 +43,8 @@ public class CentralControlPaletteUI {
 			Component canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
-		window = new TranslucentPalette("Sessionfire - Central Control",
-				false, SwingUtilities.getWindowAncestor(canvas));
+		window = new TranslucentPalette("Sessionfire - Central Control", false,
+				SwingUtilities.getWindowAncestor(canvas));
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
@@ -65,7 +65,7 @@ public class CentralControlPaletteUI {
 				centralControlPalette.choosePresentation(canvas,
 						(Layouter) layoutChoice.getSelectedItem(),
 						(AnimationFactory) animationChoice.getSelectedItem());
-				
+
 				centralControlPalette.setRotation(xRotationSlider.getValue(),
 						yRotationSlider.getValue(), zRotationSlider.getValue());
 			}
@@ -90,8 +90,11 @@ public class CentralControlPaletteUI {
 		layoutChoice = new JComboBox(layoutModel);
 		layoutChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.changeLayout((Layouter) layoutChoice
-						.getSelectedItem());
+				Object selectedLayouter = layoutChoice.getSelectedItem();
+				if (selectedLayouter != null) {
+					centralControlPalette
+							.changeLayout((Layouter) selectedLayouter);
+				}
 			}
 		});
 		subContentPane.add(layoutChoice);
@@ -105,9 +108,11 @@ public class CentralControlPaletteUI {
 		animationChoice = new JComboBox(animationModel);
 		animationChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette
-						.changeAnimation((AnimationFactory) animationChoice
-								.getSelectedItem());
+				Object selectedAnimation = animationChoice.getSelectedItem();
+				if (selectedAnimation != null) {
+					centralControlPalette
+							.changeAnimation((AnimationFactory) selectedAnimation);
+				}
 			}
 		});
 		subContentPane.add(animationChoice);
@@ -126,9 +131,11 @@ public class CentralControlPaletteUI {
 			public void removeUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
+
 			public void insertUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
+
 			public void changedUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
 			}
