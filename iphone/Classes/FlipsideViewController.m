@@ -13,7 +13,7 @@
 
 @implementation FlipsideViewController
 
-@synthesize delegate, ip, port, numberofkeyframes, orientation;
+@synthesize delegate, ip, port, numberofkeyframes;
 BOOL dialogHasBeenShown = NO;
 
 - (void)viewDidLoad {

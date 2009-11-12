@@ -39,7 +39,7 @@
 					<object class="IBUIButton" id="558454645">
 						<reference key="NSNextResponder" ref="883825266"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{9, 6}, {18, 19}}</string>
+						<string key="NSFrame">{{9, 433}, {18, 19}}</string>
 						<reference key="NSSuperview" ref="883825266"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -66,7 +66,7 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrameSize">{487, 330}</string>
+				<string key="NSFrameSize">{320, 460}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -76,6 +76,9 @@
 					</object>
 				</object>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
+					<int key="IBUIStatusBarStyle">2</int>
+				</object>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -161,7 +164,7 @@
 					<string>MainViewController</string>
 					<string>UIResponder</string>
 					<string>FlowCoverView</string>
-					<string>{{255, 396}, {487, 330}}</string>
+					<string>{{335, 326}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
