@@ -48,7 +48,7 @@ woody@chaosinmotion.com. Chaos In Motion is at http://www.chaosinmotion.com
 
 #define TEXTURESIZE			256		// width and height of texture; power of 2, 256 max
 #define MAXTILES			48		// maximum allocated 256x256 tiles in cache
-#define VISTILES			24		// # tiles left and right of center tile visible on screen
+#define VISTILES			5		// # tiles left and right of center tile visible on screen
 
 /*
  *	Parameters to tweak layout and animation behaviors
@@ -375,7 +375,6 @@ static void *GData = NULL;
 		/*
 		 *	Object at index doesn't exist. Create a new texture
 		 */
-		
 		GLuint texture = [self imageToTexture:[self tileImage:index]];
 		fcr = [[[FlowCoverRecord alloc] initWithTexture:texture] autorelease];
 		[cache setObject:fcr forKey:num];
@@ -732,6 +731,11 @@ static void *GData = NULL;
 {
 	[cache release];
 	cache = [[DataCache alloc] initWithCapacity:MAXTILES];
+	int nrimages = [delegate flowCoverNumberImages:self];
+	for (int i = -1; i < nrimages; i++) {
+		[self getTileAtIndex: i];
+	}
+	
 }
 
 @end
