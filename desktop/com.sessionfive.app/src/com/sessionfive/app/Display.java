@@ -19,15 +19,6 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.interpolation.Evaluator;
-import org.jdesktop.animation.timing.interpolation.KeyFrames;
-import org.jdesktop.animation.timing.interpolation.KeyTimes;
-import org.jdesktop.animation.timing.interpolation.KeyValues;
-import org.jdesktop.animation.timing.interpolation.PropertySetter;
-import org.omg.CORBA.FREE_MEM;
-
-import com.sessionfive.animation.EvaluatorCameraSetting;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
