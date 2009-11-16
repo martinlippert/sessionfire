@@ -19,6 +19,15 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.interpolation.Evaluator;
+import org.jdesktop.animation.timing.interpolation.KeyFrames;
+import org.jdesktop.animation.timing.interpolation.KeyTimes;
+import org.jdesktop.animation.timing.interpolation.KeyValues;
+import org.jdesktop.animation.timing.interpolation.PropertySetter;
+import org.omg.CORBA.FREE_MEM;
+
+import com.sessionfive.animation.EvaluatorCameraSetting;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -31,15 +40,26 @@ public class Display implements GLEventListener {
 	private final Presentation presentation;
 	private Camera camera;
 	private TextRenderer textRenderer;
+	private Color color = Color.BLACK;
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+		fireDisplayChangedEvent();
+	}
 
 	private FutureTask<byte[]> futureTask;
 	private List<DisplayChangedListener> changeListeners;
+
 
 	public Display(Presentation presentation) {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
 		this.changeListeners = new LinkedList<DisplayChangedListener>();
-		
+
 		Font font = new Font("SansSerif", Font.BOLD, 24);
 		textRenderer = new TextRenderer(font, true, false);
 	}
@@ -74,27 +94,26 @@ public class Display implements GLEventListener {
 
 		String layerText = this.presentation.getLayerText();
 		if (layerText != null && layerText.length() > 0) {
-			
+
 			Rectangle2D bounds = textRenderer.getBounds(layerText);
-			
 			int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 			int y = drawable.getHeight() - 23;
 
-			float color = 0.55f;
 			textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
-			textRenderer.setColor(color, color, color, color);
+			textRenderer.setColor(color);
 			textRenderer.draw(layerText, x, y);
 			textRenderer.endRendering();
 		}
 
-//		try {
-//			long timestamp = System.currentTimeMillis();
-//			Screenshot.writeToFile(new File("shot" + timestamp + ".jpg"), 400, 300);
-//		} catch (GLException e1) {
-//			e1.printStackTrace();
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
+		// try {
+		// long timestamp = System.currentTimeMillis();
+		// Screenshot.writeToFile(new File("shot" + timestamp + ".jpg"), 400,
+		// 300);
+		// } catch (GLException e1) {
+		// e1.printStackTrace();
+		// } catch (IOException e1) {
+		// e1.printStackTrace();
+		// }
 
 		if (futureTask != null) {
 			futureTask.run();
@@ -113,17 +132,16 @@ public class Display implements GLEventListener {
 		reshape(drawable, 0, 0, width, height);
 	}
 
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
-			int height) {
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 		GL gl = drawable.getGL();
 
-	    System.err.println();
-	    System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
-	    System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
-	    System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
-	    System.err.println();
+		System.err.println();
+		System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
+		System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
+		System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
+		System.err.println();
 
-	    gl.glViewport(0, 0, width, height);
+		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL_PROJECTION);
 		gl.glLoadIdentity();
 		double aspectRatio = (double) width / (double) height;
@@ -142,22 +160,23 @@ public class Display implements GLEventListener {
 
 	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
 	}
-	
+
 	public void addDisplayChangedListener(DisplayChangedListener listener) {
 		changeListeners.add(listener);
 	}
-	
+
 	public void removeDisplayChangedListener(DisplayChangedListener listener) {
 		changeListeners.remove(listener);
 	}
-	
+
 	protected void fireDisplayChangedEvent() {
 		DisplayChangedEvent event = new DisplayChangedEvent(this);
-		
+
 		Iterator<DisplayChangedListener> listeners = changeListeners.iterator();
 		while (listeners.hasNext()) {
 			listeners.next().displayChanged(event);
 		}
 	}
+	
 
 }

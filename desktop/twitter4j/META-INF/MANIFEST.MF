@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Twitter4j
+Bundle-SymbolicName: twitter4j
+Bundle-Version: 1.0.0
+Bundle-ClassPath: twitter4j-2.0.9.jar
+Export-Package: twitter4j,
+ twitter4j.examples,
+ twitter4j.http,
+ twitter4j.org.json
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

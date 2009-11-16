@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Twitter
+Bundle-SymbolicName: com.sessionfire.twitter
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SESSIONFIRE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.sessionfive.animation,
+ com.sessionfive.app,
+ org.osgi.framework;version="1.5.0",
+ twitter4j,
+ twitter4j.examples,
+ twitter4j.http,
+ twitter4j.org.json
+Export-Package: com.sessionfire.twitter
+Bundle-Activator: com.sessionfire.twitter.Activator
