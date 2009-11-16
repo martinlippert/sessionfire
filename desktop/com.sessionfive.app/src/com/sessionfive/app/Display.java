@@ -33,15 +33,6 @@ public class Display implements GLEventListener {
 	private TextRenderer textRenderer;
 	private Color color = Color.BLACK;
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-		fireDisplayChangedEvent();
-	}
-
 	private FutureTask<byte[]> futureTask;
 	private List<DisplayChangedListener> changeListeners;
 
@@ -61,6 +52,15 @@ public class Display implements GLEventListener {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+		fireDisplayChangedEvent();
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 		fireDisplayChangedEvent();
 	}
 
