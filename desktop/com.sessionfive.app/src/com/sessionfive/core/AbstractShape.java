@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.media.opengl.GLContext;
+
 public abstract class AbstractShape implements Shape {
 
 	private float x;
@@ -113,6 +115,9 @@ public abstract class AbstractShape implements Shape {
 				lookAtX, lookAtY, lookAtZ, (float)upX, (float)upY, (float)upZ);
 		
 		return cameraSetting;
+	}
+	
+	public void initialize(GLContext context) throws Exception {
 	}
 	
 	public void addShapeChangedListener(ShapeChangedListener listener) {

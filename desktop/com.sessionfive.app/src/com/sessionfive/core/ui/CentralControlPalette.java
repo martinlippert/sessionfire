@@ -1,8 +1,9 @@
 package com.sessionfive.core.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.util.List;
+
+import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Animation;
@@ -23,14 +24,10 @@ public class CentralControlPalette {
 	public void show() {
 	}
 
-	public void choosePresentation(Component canvas, Layouter layouter, AnimationFactory animationFactory) {
+	public void choosePresentation(GLCanvas canvas, Layouter layouter, AnimationFactory animationFactory) {
 		PresentationLoader loader = new PresentationLoader();
-		loader.loadPresentation(presentation);
+		loader.loadPresentation(presentation, canvas, layouter, animationFactory);
 		
-		layouter.layout(presentation);
-		changeAnimation(animationFactory);
-		animationController.resetTo(-1);
-
 		canvas.requestFocus();
 	}
 

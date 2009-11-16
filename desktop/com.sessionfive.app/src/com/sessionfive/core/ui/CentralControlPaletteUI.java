@@ -2,11 +2,11 @@ package com.sessionfive.core.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.media.opengl.GLCanvas;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -31,7 +31,7 @@ public class CentralControlPaletteUI {
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
 	private JTextField layerText;
-	private final Component canvas;
+	private final GLCanvas canvas;
 
 	private JSlider xRotationSlider;
 
@@ -40,7 +40,7 @@ public class CentralControlPaletteUI {
 	private JSlider zRotationSlider;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
-			Component canvas) {
+			GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
 		window = new TranslucentPalette("Sessionfire - Central Control", false,

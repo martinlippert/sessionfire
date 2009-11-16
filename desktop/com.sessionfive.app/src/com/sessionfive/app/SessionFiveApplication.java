@@ -18,6 +18,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLContext;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLPbuffer;
@@ -314,6 +315,10 @@ public class SessionFiveApplication implements IApplication {
 			return null;
 		}
 
+	}
+
+	public GLContext getGLContext() {
+		return canvas.getContext();
 	}
 
 }

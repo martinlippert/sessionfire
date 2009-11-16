@@ -1,50 +1,44 @@
 package com.sessionfive.core.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
+import javax.media.opengl.GLCanvas;
 import javax.swing.JFileChooser;
+import javax.swing.ProgressMonitor;
 
 import com.sessionfive.core.Presentation;
-import com.sessionfive.core.Shape;
 
-public class PresentationLoader {
+public class PresentationLoader implements PropertyChangeListener {
 
-	private Set<String> imageTypes;
-	
+	private PresentationLoaderTask task;
+	private ProgressMonitor progressMonitor;
+
 	public PresentationLoader() {
-		imageTypes = new HashSet<String>();
-		imageTypes.add("jpg");
-		imageTypes.add("jpeg");
-		imageTypes.add("png");
-		imageTypes.add("gif");
 	}
 
-	public void loadPresentation(Presentation presentation) {
+	public void loadPresentation(Presentation presentation, GLCanvas canvas,
+			Layouter layouter, AnimationFactory animationFactory) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
-		
+
 		int showDialog = chooser.showDialog(null, "Choose Presentation");
 
 		if (showDialog == JFileChooser.APPROVE_OPTION) {
 			File[] files = getFiles(chooser);
-			
-			files = filerImageFiles(files);
+
 			files = sortImageFiles(files);
-				
+
 			if (files.length > 0) {
-				presentation.removeAllShapes();
-				readFiles(presentation, files);
+				readFiles(presentation, files, canvas, layouter, animationFactory);
 			}
 		}
 	}
-	
+
 	private File[] sortImageFiles(File[] files) {
 		Arrays.sort(files, new Comparator<File>() {
 			public int compare(File o1, File o2) {
@@ -60,41 +54,16 @@ public class PresentationLoader {
 		return files;
 	}
 
-	private File[] filerImageFiles(File[] files) {
-		List<File> result = new ArrayList<File>();
-		
-		for (File file : files) {
-			String fileName = file.getName();
-			int lastIndexOf = fileName.lastIndexOf('.');
-			if (lastIndexOf != -1 && lastIndexOf < fileName.length()) {
-				String suffix = fileName.substring(lastIndexOf + 1).toLowerCase();
-				if (imageTypes.contains(suffix)) result.add(file);
-			}
-		}
-
-		return result.toArray(new File[result.size()]);
-	}
-
 	private File[] getFiles(JFileChooser chooser) {
 		File[] selectedFiles = chooser.getSelectedFiles();
 		if (selectedFiles != null) {
 			if (selectedFiles.length == 1 && selectedFiles[0].isDirectory()) {
 				return selectedFiles[0].listFiles();
-			}
-			else {
+			} else {
 				return selectedFiles;
 			}
-		}
-		else {
+		} else {
 			return new File[0];
-		}
-	}
-
-	private void readFiles(Presentation presentation, File[] files) {
-		ShapeExtensionCreator creator = new ShapeExtensionCreator();
-		for (File file : files) {
-			Shape newShape = creator.createShape(file);
-			if (newShape != null) presentation.addShape(newShape);
 		}
 	}
 
@@ -107,9 +76,35 @@ public class PresentationLoader {
 		}
 		if (digits.length() > 0) {
 			return Integer.parseInt(digits.toString());
-		}
-		else {
+		} else {
 			return null;
+		}
+	}
+
+	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas,
+			Layouter layouter, AnimationFactory animationFactory) {
+		ShapeExtensionCreator creator = new ShapeExtensionCreator();
+
+		progressMonitor = new ProgressMonitor(null, "Loading Presentation", "",
+				0, 100);
+		progressMonitor.setProgress(0);
+
+		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter, animationFactory);
+		task.addPropertyChangeListener(this);
+		task.execute();
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("progress" == evt.getPropertyName()) {
+			int progress = (Integer) evt.getNewValue();
+			progressMonitor.setProgress(progress);
+			String message = String.format("Completed %d%%.\n", progress);
+			progressMonitor.setNote(message);
+			if (progressMonitor.isCanceled() || task.isDone()) {
+				if (progressMonitor.isCanceled()) {
+					task.cancel(true);
+				}
+			}
 		}
 	}
 

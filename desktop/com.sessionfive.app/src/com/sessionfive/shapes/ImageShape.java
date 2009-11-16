@@ -2,23 +2,25 @@ package com.sessionfive.shapes;
 
 import static javax.media.opengl.GL.GL_BLEND;
 import static javax.media.opengl.GL.GL_LINEAR;
+import static javax.media.opengl.GL.GL_MODULATE;
 import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
-import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
-import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
-import static javax.media.opengl.GL.GL_MODULATE;
 import static javax.media.opengl.GL.GL_TEXTURE_ENV;
 import static javax.media.opengl.GL.GL_TEXTURE_ENV_MODE;
+import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
+import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GLContext;
 import javax.media.opengl.GLException;
+import javax.media.opengl.Threading;
 
 import com.sessionfive.core.AbstractShape;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureCoords;
+import com.sun.opengl.util.texture.TextureData;
 import com.sun.opengl.util.texture.TextureIO;
 
 public class ImageShape extends AbstractShape {
@@ -27,7 +29,7 @@ public class ImageShape extends AbstractShape {
 	private final File file;
 	private float width;
 	private float imageRatio;
-
+	
 	public ImageShape(File file) {
 		this.file = file;
 	}
@@ -43,12 +45,11 @@ public class ImageShape extends AbstractShape {
 	}
 
 	public float getHeight() {
-		initializeTexture(file);
 		return getWidth() * imageRatio;
 	}
 
 	public void display(GL gl) {
-		initializeTexture(file);
+		if (t == null) return;
 		
 		Texture tex = t;
 		TextureCoords tc = tex.getImageTexCoords();
@@ -118,20 +119,26 @@ public class ImageShape extends AbstractShape {
         gl.glPopMatrix();
 		gl.glDisable(GL_BLEND);
 	}
+	
+	@Override
+	public void initialize(final GLContext context) throws Exception {
+		super.initialize(context);
+		
+		final TextureData textureData = TextureIO.newTextureData(this.file, true, null);
 
-	private void initializeTexture(File file) {
-		if (t == null) {
-			try {
-				t = TextureIO.newTexture(file, false);
-				t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth(); 
-			} catch (GLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		Threading.invokeOnOpenGLThread(new Runnable() {
+			public void run() {
+				try {
+					context.makeCurrent();
+					t = TextureIO.newTexture(textureData);
+					t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
+				} catch (GLException e) {
+					e.printStackTrace();
+				}
 			}
-		}
+		});
 	}
 
 	public File getFile() {
