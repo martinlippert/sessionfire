@@ -52,7 +52,7 @@
 					<object class="IBUINavigationBar" id="871675769">
 						<reference key="NSNextResponder" ref="249263867"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{312, 44}</string>
+						<string key="NSFrameSize">{320, 44}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -169,66 +169,10 @@
 							<int key="IBUIAutocapitalizationType">2</int>
 						</object>
 					</object>
-					<object class="IBUITextView" id="748198164">
-						<reference key="NSNextResponder" ref="249263867"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 135}, {110, 32}}</string>
-						<reference key="NSSuperview" ref="249263867"/>
-						<bool key="IBUIOpaque">NO</bool>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
-						<bool key="IBUIDelaysContentTouches">NO</bool>
-						<bool key="IBUICanCancelContentTouches">NO</bool>
-						<bool key="IBUIBouncesZoom">NO</bool>
-						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Orientation:</string>
-						<reference key="IBUITextColor" ref="866473211"/>
-						<reference key="IBUIFont" ref="693815053"/>
-						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-							<int key="IBUIAutocapitalizationType">2</int>
-						</object>
-					</object>
-					<object class="IBUISegmentedControl" id="1055886885">
-						<reference key="NSNextResponder" ref="249263867"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{129, 138}, {156, 30}}</string>
-						<reference key="NSSuperview" ref="249263867"/>
-						<bool key="IBUIOpaque">NO</bool>
-						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-						<int key="IBSegmentControlStyle">2</int>
-						<int key="IBNumberOfSegments">2</int>
-						<int key="IBSelectedSegmentIndex">0</int>
-						<object class="NSArray" key="IBSegmentTitles">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>Horizental</string>
-							<string>Vertical</string>
-						</object>
-						<object class="NSMutableArray" key="IBSegmentWidths">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<real value="0.000000e+00"/>
-							<real value="0.000000e+00"/>
-						</object>
-						<object class="NSMutableArray" key="IBSegmentEnabledStates">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<boolean value="YES" id="5"/>
-							<reference ref="5"/>
-						</object>
-						<object class="NSMutableArray" key="IBSegmentContentOffsets">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>{0, 0}</string>
-							<string>{0, 0}</string>
-						</object>
-						<object class="NSMutableArray" key="IBSegmentImages">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="NSNull" id="4"/>
-							<reference ref="4"/>
-						</object>
-					</object>
 					<object class="IBUIButton" id="127728812">
 						<reference key="NSNextResponder" ref="249263867"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{26, 187}, {173, 47}}</string>
+						<string key="NSFrame">{{26, 141}, {173, 47}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -256,8 +200,8 @@
 					</object>
 					<object class="IBUIButton" id="1011313832">
 						<reference key="NSNextResponder" ref="249263867"/>
-						<int key="NSvFlags">-2147483356</int>
-						<string key="NSFrame">{{215, 187}, {70, 47}}</string>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{215, 141}, {70, 47}}</string>
 						<reference key="NSSuperview" ref="249263867"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -278,7 +222,7 @@
 						<reference key="IBUINormalTitleShadowColor" ref="694490916"/>
 					</object>
 				</object>
-				<string key="NSFrameSize">{312, 526}</string>
+				<string key="NSFrameSize">{320, 460}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -286,6 +230,9 @@
 					<reference key="NSCustomColorSpace" ref="732463728"/>
 				</object>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
+					<int key="IBUIStatusBarStyle">2</int>
+				</object>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -314,14 +261,6 @@
 						<reference key="destination" ref="111983350"/>
 					</object>
 					<int key="connectionID">50</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">orientation</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="1055886885"/>
-					</object>
-					<int key="connectionID">60</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -390,11 +329,9 @@
 							<reference ref="279037103"/>
 							<reference ref="111983350"/>
 							<reference ref="411653788"/>
-							<reference ref="1055886885"/>
 							<reference ref="871675769"/>
 							<reference ref="265897330"/>
 							<reference ref="669646606"/>
-							<reference ref="748198164"/>
 							<reference ref="1011313832"/>
 							<reference ref="127728812"/>
 						</object>
@@ -432,11 +369,6 @@
 						<reference key="parent" ref="249263867"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">57</int>
-						<reference key="object" ref="1055886885"/>
-						<reference key="parent" ref="249263867"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">63</int>
 						<reference key="object" ref="127728812"/>
 						<reference key="parent" ref="249263867"/>
@@ -449,11 +381,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">65</int>
 						<reference key="object" ref="411653788"/>
-						<reference key="parent" ref="249263867"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">66</int>
-						<reference key="object" ref="748198164"/>
 						<reference key="parent" ref="249263867"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -479,10 +406,8 @@
 					<string>48.IBPluginDependency</string>
 					<string>51.IBPluginDependency</string>
 					<string>52.IBPluginDependency</string>
-					<string>57.IBPluginDependency</string>
 					<string>63.IBPluginDependency</string>
 					<string>65.IBPluginDependency</string>
-					<string>66.IBPluginDependency</string>
 					<string>67.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -490,11 +415,9 @@
 					<string>FlipsideViewController</string>
 					<string>UIResponder</string>
 					<string>FlipsideView</string>
-					<string>{{448, 227}, {312, 526}}</string>
+					<string>{{448, 273}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<reference ref="5"/>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -565,14 +488,12 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>delegate</string>
 							<string>ip</string>
-							<string>orientation</string>
 							<string>port</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>UITextField</string>
-							<string>UISegmentedControl</string>
 							<string>UITextField</string>
 						</object>
 					</object>

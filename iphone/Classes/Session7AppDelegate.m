@@ -19,6 +19,8 @@ Preferences* prefs1;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	
+	[application setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
+	
 	//Load prefs
 	prefs1 = [[Preferences alloc] init];
 	[prefs1 loadPrefs];

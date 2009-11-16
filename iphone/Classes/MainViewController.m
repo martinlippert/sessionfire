@@ -16,7 +16,6 @@
 
 NSInteger numberofkeyframes;
 S5URL* s5url;
-UIInterfaceOrientation selectedInterfaceOrientation;
 UIAlertView* progressAlert;
 UIProgressView* progressView;
 
@@ -29,7 +28,7 @@ UIProgressView* progressView;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
-    return interfaceOrientation == UIInterfaceOrientationLandscapeLeft;
+    return interfaceOrientation == UIDeviceOrientationPortrait;
 }
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller showingAlertView: (UIAlertView*) alertView{
@@ -48,15 +47,10 @@ UIProgressView* progressView;
 	[ip2 retain];
 	port = controller.port.text;
 	[port retain];
-	if([controller.orientation selectedSegmentIndex] == 0) {//horizental
-		selectedInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
-	} else {//vertical
-		selectedInterfaceOrientation = UIInterfaceOrientationPortrait;
-	}
 	s5url = [[S5URL alloc] initWithIp:controller.ip.text andPort:controller.port.text];
 	[self dismissModalViewControllerAnimated:YES];
 
-	[(FlowCoverView*)self.view setOrientation:[controller.orientation selectedSegmentIndex]];
+	//[(FlowCoverView*)self.view setOrientation:[controller.orientation selectedSegmentIndex]];
 	[(FlowCoverView*)self.view resetCache];
 	
 
@@ -73,12 +67,6 @@ UIProgressView* progressView;
 	[self presentModalViewController:controller animated:YES];
 	[controller.port setText:[self port]];
 	[controller.ip setText:[self ip2]];
-	if(selectedInterfaceOrientation == UIInterfaceOrientationLandscapeLeft) {//horizental
-		[controller.orientation setSelectedSegmentIndex:0];
-	} else {//vertical
-		[controller.orientation setSelectedSegmentIndex:1];
-	}
-	
 	[controller release];
 }
 

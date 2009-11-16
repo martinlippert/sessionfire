@@ -48,7 +48,7 @@ woody@chaosinmotion.com. Chaos In Motion is at http://www.chaosinmotion.com
 
 #define TEXTURESIZE			256		// width and height of texture; power of 2, 256 max
 #define MAXTILES			48		// maximum allocated 256x256 tiles in cache
-#define VISTILES			24		// # tiles left and right of center tile visible on screen
+#define VISTILES			5		// # tiles left and right of center tile visible on screen
 
 /*
  *	Parameters to tweak layout and animation behaviors
@@ -78,15 +78,6 @@ const GLshort GTextures[] = {
 	0, 1,
 	1, 1,
 };
-
-/************************************************************************/
-/*																		*/
-/*	Orientation MDL														*/
-/*																		*/
-/************************************************************************/
-
-#define ORIENTATION_HORIZENTAL			orientation == 0 
-#define ORIENTATION_VERTICAL			orientation == 1 
 
 /************************************************************************/
 /*																		*/
@@ -127,7 +118,6 @@ const GLshort GTextures[] = {
 @implementation FlowCoverView
 BOOL zoomedIn = NO;
 CGPoint zoominAt;
-NSInteger orientation;
 
 @synthesize delegate;
 
@@ -385,7 +375,6 @@ static void *GData = NULL;
 		/*
 		 *	Object at index doesn't exist. Create a new texture
 		 */
-		
 		GLuint texture = [self imageToTexture:[self tileImage:index]];
 		fcr = [[[FlowCoverRecord alloc] initWithTexture:texture] autorelease];
 		[cache setObject:fcr forKey:num];
@@ -411,34 +400,28 @@ static void *GData = NULL;
 	FlowCoverRecord *fcr = [self getTileAtIndex:index];
 	
 	//identy matrix
+	/*
 	GLfloat m[16];
 	memset(m,0,sizeof(m));
 	m[0] = 1;
 	m[5] = 1;
 	m[10] = 1;
 	m[15] = 1;
-	
-	double spreadimage;
-	double flankspread;
-	if(ORIENTATION_HORIZENTAL) spreadimage = 0.1;
-	if(ORIENTATION_HORIZENTAL) flankspread = 0.4;
-	if(ORIENTATION_VERTICAL) spreadimage = 0.2;
-	if(ORIENTATION_VERTICAL) flankspread = 0.1;
+	*/
+	double spreadimage = 0.22;
+	double flankspread = 0.12;
 	
 	double f = off * flankspread;
-	if(ORIENTATION_HORIZENTAL){
-		if (f < -flankspread) {
-			f = -flankspread;
-		} else if (f > flankspread) {
+	/*
 			f = flankspread;
-		}
-	}
+	}*/
 
+	/*
 	m[0] = 1-fabs(f);
-	if(ORIENTATION_VERTICAL) m[11] = -f; 
-	if(ORIENTATION_HORIZENTAL) m[3] = -f;
+	m[11] = -f; 
+	*/
 	
-	double sc = 0.65 * (1 - fabs(f)); 	//Scale. orig: double sc = 0.45 * (1 - fabs(f));
+	double sc = (1 - fabs(f)); 	//Scale. orig: double sc = 0.45 * (1 - fabs(f));
 
 	/*
 	if(zoomedIn && offset == index){
@@ -451,7 +434,7 @@ static void *GData = NULL;
 	double trans = off * spreadimage;
 	trans += f * 1;
 
-	double color = (1 - fabs(trans * 1)) ;
+	double color = (1 - fabs(trans * 1) + 0.4) ;
 	glColor4f(color,color,color,color);
 
 	glPushMatrix();
@@ -459,9 +442,9 @@ static void *GData = NULL;
 	glBindTexture(GL_TEXTURE_2D, fcr.texture);
 	
 	//multiply the current matrix by a ... matrix
-	glTranslatef(trans, 0, 0); //verschiebung
+	glTranslatef(0, trans, 0); //verschiebung
 	glScalef(sc, sc, 1.0); //generelle skalierung
-	if(ORIENTATION_VERTICAL) glRotatef(-90.0, 0.0, 0.0, 1.0); //rotation
+	//glRotatef(0.0, 0.0, 0.0, 1.0); //rotation
 	//glMultMatrixf(m); //einfaches multiply relative skalierung  (!?)
 	if(zoomedIn && offset == index){
 		//(GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar);
@@ -479,13 +462,11 @@ static void *GData = NULL;
 	
 	// reflect
 	/*
-	if(ORIENTATION_HORIZENTAL) {
 		glTranslatef(0,-2,0);
 		glScalef(1,-1,1);
 		glColor4f(0.5,0.5,0.5,0.5);
 		glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 		glColor4f(1,1,1,1);
-	}
 	 */
 	
 	glPopMatrix();
@@ -658,7 +639,7 @@ static void *GData = NULL;
 	CGRect r = self.bounds;
 	UITouch *t = [touches anyObject];
 	CGPoint where = [t locationInView:self];
-	startPos = (where.x / r.size.width) * 10 - 5;
+	startPos = (where.y / r.size.height) * -10 - 5;
 	startOff = offset;
 	
 	touchFlag = YES;
@@ -676,7 +657,7 @@ static void *GData = NULL;
 	CGRect r = self.bounds;
 	UITouch *t = [touches anyObject];
 	CGPoint where = [t locationInView:self];
-	double pos = (where.x / r.size.width) * 10 - 5;
+	double pos = (where.y / r.size.height) * -10 - 5;
 	
 	if (touchFlag == YES) {
 		// Touched location; only accept on touching inner 256x256 area
@@ -688,13 +669,13 @@ static void *GData = NULL;
 		if (CGRectContainsPoint(r, where)) {
 			[self touchAtIndex:(int)floor(offset + 0.01) withTouch:t];	// make sure .99 is 1
 		} else {
-			if( where.x < r.origin.x) {
+			if( where.y > r.origin.y) {
 				startOff -=0.6;
 				offset = 0;
 				double speed = 1;
 				[self startAnimation:speed];
 
-			} else if( where.x > (r.origin.x +256) ) {
+			} else if( where.y < (r.origin.y +256) ) {
 				startOff +=0.6;
 				offset = 0;
 				double speed = 1;			
@@ -721,7 +702,7 @@ static void *GData = NULL;
 	CGRect r = self.bounds;
 	UITouch *t = [touches anyObject];
 	CGPoint where = [t locationInView:self];
-	double pos = (where.x / r.size.width) * 10 - 5;
+	double pos = (where.y / r.size.height) * -10 - 5;
 
 	if (touchFlag) {
 		// determine if the user is dragging or not
@@ -745,15 +726,16 @@ static void *GData = NULL;
 	}
 }
 
-- (void) setOrientation:(NSInteger) index
-{
-	orientation = index;
-}
 
 - (void) resetCache
 {
 	[cache release];
 	cache = [[DataCache alloc] initWithCapacity:MAXTILES];
+	int nrimages = [delegate flowCoverNumberImages:self];
+	for (int i = -1; i < nrimages; i++) {
+		[self getTileAtIndex: i];
+	}
+	
 }
 
 @end

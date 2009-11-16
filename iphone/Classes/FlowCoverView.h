@@ -81,8 +81,6 @@ woody@chaosinmotion.com. Chaos In Motion is at http://www.chaosinmotion.com
     GLuint viewRenderbuffer, viewFramebuffer;
     GLuint depthRenderbuffer;
 }
-- (void) setOrientation:(NSInteger) index;
-
 
 @property (assign) id<FlowCoverViewDelegate> delegate;
 
