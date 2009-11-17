@@ -19,7 +19,6 @@ public class Activator implements BundleActivator {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				System.out.println("update");
 				AnimationController animationController = SessionFiveApplication.getInstance()
 						.getAnimationController();
 				String randomTweet = sfTwitter.getRandomTweet();
