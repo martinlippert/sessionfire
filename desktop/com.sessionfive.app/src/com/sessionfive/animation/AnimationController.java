@@ -4,7 +4,7 @@ import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
-import com.sessionfive.core.FadeInAnimation;
+import com.sessionfive.core.FadeAnimation;
 import com.sessionfive.core.Presentation;
 
 public class AnimationController {
@@ -20,7 +20,7 @@ public class AnimationController {
 		this.display = display;
 		this.currentAnimationNo = -1;
 	}
-	
+
 	public int getCurrentAnimationNo() {
 		return currentAnimationNo;
 	}
@@ -33,7 +33,7 @@ public class AnimationController {
 		currentAnimationNo++;
 		Animation animation = presentation.getAnimation(currentAnimationNo);
 		Animator animator = animation.getForwardAnimation(display);
-		
+
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.stop();
 		}
@@ -43,12 +43,13 @@ public class AnimationController {
 	}
 
 	public void backward() {
-		if (currentAnimationNo < 0) return;
+		if (currentAnimationNo < 0)
+			return;
 
 		Animation animation = presentation.getAnimation(currentAnimationNo);
 		Animator animator = animation.getBackwardAnimation(display);
 		currentAnimationNo--;
-		
+
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.stop();
 		}
@@ -56,13 +57,14 @@ public class AnimationController {
 		currentAnimator = animator;
 		currentAnimator.start();
 	}
-	
+
 	public int getNumberOfKeyFrames() {
 		return presentation.getAnimationCount();
 	}
 
 	public void goTo(int parsedNumber) {
-		if (parsedNumber < -1 || parsedNumber >= presentation.getAnimationCount() || parsedNumber == currentAnimationNo) {
+		if (parsedNumber < -1 || parsedNumber >= presentation.getAnimationCount()
+				|| parsedNumber == currentAnimationNo) {
 			return;
 		}
 		resetTo(parsedNumber);
@@ -71,32 +73,35 @@ public class AnimationController {
 	public void resetTo(int animationNo) {
 		if (presentation.getAnimationCount() > 0) {
 			currentAnimationNo = animationNo;
-			
+
 			Animation animation = null;
 			Animator animator = null;
-	
+
 			if (animationNo == -1) {
 				animation = presentation.getAnimation(0);
 				animator = animation.getBackwardAnimation(display);
-			}
-			else {
+			} else {
 				animation = presentation.getAnimation(currentAnimationNo);
 				animator = animation.getForwardAnimation(display);
 			}
-			
+
 			if (currentAnimator != null && currentAnimator.isRunning()) {
 				currentAnimator.stop();
 			}
-	
+
 			currentAnimator = animator;
 			currentAnimator.start();
 		}
 	}
-	
-	public void animateText(String text){
-		presentation.setLayerText(text);
-		new FadeInAnimation().startAnimation(display);
-	}
 
+	public void animateText(final String text) {
+		new FadeAnimation().doFadeOutAnimation(display, new Runnable() {
+			@Override
+			public void run() {
+				presentation.setLayerText(text);
+				new FadeAnimation().doFadeInAnimation(display, null);
+			}
+		});
+	}
 
 }

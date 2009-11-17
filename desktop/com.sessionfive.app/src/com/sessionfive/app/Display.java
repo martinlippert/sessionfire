@@ -7,8 +7,6 @@ import static javax.media.opengl.GL.GL_MODELVIEW;
 import static javax.media.opengl.GL.GL_PROJECTION;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +20,6 @@ import javax.media.opengl.glu.GLU;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sun.opengl.util.j2d.TextRenderer;
 
 public class Display implements GLEventListener {
 
@@ -30,37 +27,28 @@ public class Display implements GLEventListener {
 
 	private final Presentation presentation;
 	private Camera camera;
-	private TextRenderer textRenderer;
-	private Color color = Color.BLACK;
+	private TextShape2 textshape;
 
 	private FutureTask<byte[]> futureTask;
 	private List<DisplayChangedListener> changeListeners;
-
 
 	public Display(Presentation presentation) {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
 		this.changeListeners = new LinkedList<DisplayChangedListener>();
-
-		Font font = new Font("SansSerif", Font.BOLD, 24);
-		textRenderer = new TextRenderer(font, true, false);
+		this.textshape = new TextShape2();
 	}
 
 	public Camera getCamera() {
 		return camera;
 	}
 
-	public void setCamera(Camera camera) {
-		this.camera = camera;
-		fireDisplayChangedEvent();
-	}
-	
-	public Color getColor() {
-		return color;
+	public TextShape2 getTextshape() {
+		return textshape;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 		fireDisplayChangedEvent();
 	}
 
@@ -85,15 +73,9 @@ public class Display implements GLEventListener {
 
 		String layerText = this.presentation.getLayerText();
 		if (layerText != null && layerText.length() > 0) {
-
-			Rectangle2D bounds = textRenderer.getBounds(layerText);
-			int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
-			int y = drawable.getHeight() - 23;
-
-			textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
-			textRenderer.setColor(color);
-			textRenderer.draw(layerText, x, y);
-			textRenderer.endRendering();
+			textshape.setText(layerText);
+			textshape.display(drawable);
+			fireDisplayChangedEvent();
 		}
 
 		// try {
@@ -168,6 +150,5 @@ public class Display implements GLEventListener {
 			listeners.next().displayChanged(event);
 		}
 	}
-	
 
 }
