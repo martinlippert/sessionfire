@@ -96,7 +96,6 @@ public class AnimationController {
 
 	public void animateText(final String text) {
 		new FadeAnimation().doFadeOutAnimation(display, new Runnable() {
-			@Override
 			public void run() {
 				presentation.setLayerText(text);
 				new FadeAnimation().doFadeInAnimation(display, null);

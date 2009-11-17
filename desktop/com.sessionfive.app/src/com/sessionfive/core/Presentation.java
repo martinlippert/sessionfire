@@ -56,7 +56,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public void removeAllShapes() {
 		Iterator<Shape> allShapes = shapes.iterator();
 		while (allShapes.hasNext()) {
-			allShapes.next().removeShapeChangedListener(this);
+			Shape shape = allShapes.next();
+			shape.removeShapeChangedListener(this);
 		}
 		shapes.clear();
 		

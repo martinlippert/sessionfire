@@ -18,6 +18,8 @@ public interface Shape extends Focusable {
 	public void setRotation(float angleX, float angleY, float angleZ);
 	
 	public void initialize(GLContext context) throws Exception;
+	public void release(GLContext context) throws Exception;
+
 	public void display(GL gl);
 	
 	public void addShapeChangedListener(ShapeChangedListener listener);

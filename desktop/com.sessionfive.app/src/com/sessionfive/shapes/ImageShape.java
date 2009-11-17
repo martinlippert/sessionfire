@@ -140,6 +140,21 @@ public class ImageShape extends AbstractShape {
 			}
 		});
 	}
+	
+	@Override
+	public void release(final GLContext context) throws Exception {
+		super.release(context);
+		
+		if (t != null) {
+			Threading.invokeOnOpenGLThread(new Runnable() {
+				public void run() {
+					context.makeCurrent();
+					t.dispose();
+					t = null;
+				}
+			});
+		}
+	}
 
 	public File getFile() {
 		return this.file;

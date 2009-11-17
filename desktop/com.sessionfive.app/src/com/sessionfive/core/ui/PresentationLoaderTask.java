@@ -1,6 +1,8 @@
 package com.sessionfive.core.ui;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLContext;
@@ -37,6 +39,12 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
         setProgress(0);
 		int numberOfFiles= files.length;
 
+		List<Shape> shapes = presentation.getShapes();
+		Iterator<Shape> shapesIter = shapes.iterator();
+		while (shapesIter.hasNext()) {
+			shapesIter.next().release(canvas.getContext());
+		}
+		
 		presentation.removeAllShapes();
 		presentation.removeAllAnimations();
 		

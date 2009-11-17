@@ -120,6 +120,9 @@ public abstract class AbstractShape implements Shape {
 	public void initialize(GLContext context) throws Exception {
 	}
 	
+	public void release(GLContext context) throws Exception {
+	}
+	
 	public void addShapeChangedListener(ShapeChangedListener listener) {
 		changeListeners.add(listener);
 	}
