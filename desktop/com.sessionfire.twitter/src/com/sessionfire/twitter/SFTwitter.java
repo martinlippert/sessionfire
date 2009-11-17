@@ -1,5 +1,6 @@
 package com.sessionfire.twitter;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +32,7 @@ public class SFTwitter {
 		final Query query = new Query(queryString);
 
 		Timer timer = new Timer();
+		int period = 30 * 1000; // alle 30 sek, 120 requests/h (150 is limit)
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				if (tweets.size() > 0) {
@@ -49,10 +51,14 @@ public class SFTwitter {
 						tweets.removeAll(tomuch);
 					}
 				} catch (TwitterException e) {
-					e.printStackTrace();
+					if (e.getCause() instanceof UnknownHostException) {
+						System.out.println("Can't connect to " + e.getLocalizedMessage());
+					} else {
+						e.printStackTrace();
+					}
 				}
 			}
-		}, 0, 30000); // alle 30 sekunden, 120 requests per hour, 150 ist limit
+		}, 0, period);
 
 	}
 
