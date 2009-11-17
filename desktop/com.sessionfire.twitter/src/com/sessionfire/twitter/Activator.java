@@ -13,7 +13,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		final SFTwitter sfTwitter = new SFTwitter("sessionfire");
+		final SFTwitter sfTwitter = new SFTwitter("lady");
 		sfTwitter.update();
 
 		Timer timer = new Timer();
@@ -24,7 +24,7 @@ public class Activator implements BundleActivator {
 				String randomTweet = sfTwitter.getRandomTweet();
 				animationController.animateText(randomTweet);
 			}
-		}, 5000, 5000);
+		}, 5000, 10000);
 
 	}
 
