@@ -3,7 +3,9 @@ package com.sessionfive.app;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 
 import com.sun.opengl.util.j2d.TextRenderer;
@@ -34,35 +36,40 @@ public class TextShape2 {
 	}
 
 	public void display(GLAutoDrawable drawable) {
-
+		GL gl = drawable.getGL();
+		
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
+	    gl.glBegin(GL.GL_POLYGON);
+	    gl.glVertex3f(0.25f, 0.25f, 0.0f);
+	    gl.glVertex3f(0.75f, 0.25f, 0.0f);
+	    gl.glVertex3f(0.75f, 0.75f, 0.0f);
+	    gl.glVertex3f(0.25f, 0.75f, 0.0f);
+	    gl.glEnd();
+	    
 		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
 		textRenderer.setColor(color);
-
-		int endindex1 = layerText.length() >= 60 ? 60 : layerText.length();
-		String row1 = layerText.substring(0, endindex1);
-		Rectangle2D bounds = textRenderer.getBounds(row1);
+		List<String> rows = RowMaker.makeRows(layerText, 60);
+		
+		Rectangle2D bounds = textRenderer.getBounds(rows.get(0));
 		int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 		int y = drawable.getHeight() - 20;
-		textRenderer.draw(row1, x, y);
-
-		if (layerText.length() > 60) {
-			int endindex2 = layerText.length() >= 120 ? 120 : layerText.length();
-			String row2 = layerText.substring(60, endindex2);
-			bounds = textRenderer.getBounds(row1);
+		textRenderer.draw(rows.get(0), x, y);
+		
+		if(rows.size() > 1){
+			bounds = textRenderer.getBounds(rows.get(1));
 			x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 			y = drawable.getHeight() - 40;
-			textRenderer.draw(row2, x, y);
+			textRenderer.draw(rows.get(1), x, y);		
 		}
-
-		if (layerText.length() > 120) {
-			int endindex2 = layerText.length() >= 180 ? 180 : layerText.length();
-			String row3 = layerText.substring(120, endindex2);
-			bounds = textRenderer.getBounds(row1);
+		if(rows.size() > 2){
+			bounds = textRenderer.getBounds(rows.get(1));
 			x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 			y = drawable.getHeight() - 60;
-			textRenderer.draw(row3, x, y);
+			textRenderer.draw(rows.get(2), x, y);		
 		}
 
 		textRenderer.endRendering();
 	}
+	
+		
 }

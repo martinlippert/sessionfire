@@ -4,15 +4,17 @@ import java.awt.Color;
 import java.util.List;
 
 import javax.media.opengl.GLCanvas;
+import javax.swing.JPanel;
 
 import com.sessionfive.animation.AnimationController;
+import com.sessionfive.app.SessionfivePanel;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
 public class CentralControlPalette {
-	
+
 	private final Presentation presentation;
 	private final AnimationController animationController;
 
@@ -20,14 +22,15 @@ public class CentralControlPalette {
 		this.presentation = presentation;
 		this.animationController = animationController;
 	}
-	
+
 	public void show() {
 	}
 
-	public void choosePresentation(GLCanvas canvas, Layouter layouter, AnimationFactory animationFactory) {
+	public void choosePresentation(GLCanvas canvas, Layouter layouter,
+			AnimationFactory animationFactory) {
 		PresentationLoader loader = new PresentationLoader();
 		loader.loadPresentation(presentation, canvas, layouter, animationFactory);
-		
+
 		canvas.requestFocus();
 	}
 
@@ -39,7 +42,7 @@ public class CentralControlPalette {
 	public void changeAnimation(AnimationFactory animationFactory) {
 		Focusable startShape = presentation;
 		presentation.removeAllAnimations();
-		
+
 		List<Shape> shapes = presentation.getShapes();
 		for (Shape shape : shapes) {
 			Animation animation = animationFactory.createAnimation(startShape, shape);
@@ -55,17 +58,19 @@ public class CentralControlPalette {
 	public Color getBackgroundColor() {
 		return this.presentation.getBackgroundColor();
 	}
-	
+
 	public Layouter[] getLayouter() {
-		return new Layouter[] {new LineLayouter(), new TileLayouter(), new CircleLayouter()};
+		return new Layouter[] { new LineLayouter(), new TileLayouter(), new CircleLayouter() };
 	}
-	
+
 	public AnimationFactory[] getAnimators() {
-		return new AnimationFactory[] {new ZoomInZoomOutAnimationFactory(), new MoveToAnimationFactory()};
+		return new AnimationFactory[] { new ZoomInZoomOutAnimationFactory(),
+				new MoveToAnimationFactory() };
 	}
 
 	public void setLayerText(String text) {
-		this.presentation.setLayerText(text);
+		// this.presentation.setLayerText(text);
+		this.animationController.animateText(text);
 	}
 
 	public String getLayerText() {
@@ -77,6 +82,11 @@ public class CentralControlPalette {
 		for (Shape shape : shapes) {
 			shape.setRotation(x, y, z);
 		}
+	}
+
+	public JPanel getExtensionPanel() {
+		JPanel panel = new PanelExtensionLoader().laodExtension(animationController, presentation);
+		return panel;
 	}
 
 }

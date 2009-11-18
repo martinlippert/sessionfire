@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.sessionfive.app.panel">
+      <panel
+            class="com.sessionfire.twitter.core.ui.TwitterPanel">
+      </panel>
+   </extension>
+
+</plugin>

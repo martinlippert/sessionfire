@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="shapes" name="shapes" schema="schema/shapes.exsd"/>
+   <extension-point id="panel" name="panel" schema="schema/panel.exsd"/>
    <extension
          id="startup"
          point="org.eclipse.core.runtime.applications">

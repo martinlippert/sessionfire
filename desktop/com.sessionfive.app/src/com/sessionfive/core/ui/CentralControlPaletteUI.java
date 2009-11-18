@@ -22,6 +22,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+
 public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
@@ -158,6 +159,12 @@ public class CentralControlPaletteUI {
 		xRotationSlider.addChangeListener(rotationSliderListener);
 		yRotationSlider.addChangeListener(rotationSliderListener);
 		zRotationSlider.addChangeListener(rotationSliderListener);
+		
+		JPanel panel = centralControlPalette.getExtensionPanel();
+		if(panel != null){
+			contentPane.add(panel, BorderLayout.SOUTH);
+		}
+		
 	}
 
 	protected void chooseBackground() {
