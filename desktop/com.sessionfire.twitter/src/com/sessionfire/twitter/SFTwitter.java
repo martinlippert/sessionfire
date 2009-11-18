@@ -1,6 +1,7 @@
 package com.sessionfire.twitter;
 
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,7 +37,6 @@ public class SFTwitter {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				if (tweets.size() > 0) {
-					System.out.println("Getting since: " + lastId);
 					query.setSinceId(lastId);
 				}
 				try {
@@ -65,10 +65,38 @@ public class SFTwitter {
 	public String getRandomTweet() {
 		int index = (int) (Math.random() * tweets.size());
 		if (tweets.size() > 0) {
-			return tweets.get(index).getText();
+			Tweet tweet = tweets.get(index);
+			String since = getSince(tweet);
+			return tweet.getFromUser() + ": " + tweet.getText() + " (" + since + ")";
 		} else {
 			return null;
 		}
+	}
+
+	private String getSince(Tweet tweet) {
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		calendar1.setTime(tweet.getCreatedAt());
+		long milliseconds1 = calendar1.getTimeInMillis();
+		long milliseconds2 = calendar2.getTimeInMillis();
+		long diff = milliseconds2 - milliseconds1;
+		long diffSeconds = diff / 1000;
+		long diffMinutes = diff / (60 * 1000);
+		long diffHours = diff / (60 * 60 * 1000);
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+		if (diffSeconds < 10) {
+			return "just now";
+		}
+		if (diffSeconds < 119) {
+			return diffSeconds + " seconds ago";
+		}
+		if (diffMinutes < 119) {
+			return diffMinutes + " minutes ago";
+		}
+		if (diffHours < 49) {
+			return diffHours + " hours ago";
+		}
+		return diffDays + " days ago";
 	}
 
 }
