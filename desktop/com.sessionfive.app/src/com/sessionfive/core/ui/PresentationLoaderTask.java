@@ -59,6 +59,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				
 				Animation animation = animationFactory.createAnimation(animationStart, newShape);
 				presentation.addAnimation(animation);
+				animationStart = newShape;
 				
 				layouter.layout(presentation);
 				SessionFiveApplication.getInstance().getAnimationController().resetTo(-1);
