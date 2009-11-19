@@ -9,14 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.sessionfive.shapes.TitleShape;
+
 public class Presentation implements Focusable, ShapeChangedListener {
 
 	private Camera startCamera;
 	private List<Animation> animations;
 	private Map<LayerType, Layer> layers;
 	private Color backgroundColor;
-	private String layerText = "Sessionfire";
 	private List<PresentationChangedListener> changeListeners;
+	private TitleShape titleShape;
 
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
@@ -26,6 +28,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		layers.put(LayerType.CAMERA_ANIMATED, new Layer());
 		layers.put(LayerType.FIXED_POSTION, new Layer());
 		changeListeners = new LinkedList<PresentationChangedListener>();
+		titleShape = new TitleShape();
+		addShape(titleShape, LayerType.FIXED_POSTION);
 	}
 
 	public Camera getStartCamera() {
@@ -94,11 +98,11 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public String getLayerText() {
-		return layerText;
+		return titleShape.getText();
 	}
 
 	public void setLayerText(String layerText) {
-		this.layerText = layerText;
+		titleShape.setText(layerText);
 		firePresentationChanged();
 	}
 
