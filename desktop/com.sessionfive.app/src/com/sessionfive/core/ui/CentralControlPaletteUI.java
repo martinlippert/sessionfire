@@ -160,8 +160,17 @@ public class CentralControlPaletteUI {
 		yRotationSlider.addChangeListener(rotationSliderListener);
 		zRotationSlider.addChangeListener(rotationSliderListener);
 		
-		JPanel panel = centralControlPalette.getExtensionPanel();
-		if(panel != null){
+		PanelExtension[] extensions = centralControlPalette.getExtensionPanels();
+		if(extensions.length > 0) {
+			JPanel panel = new JPanel();
+			panel.setLayout(new GridLayout(0, 1));
+			
+			for (PanelExtension panelExtension : extensions) {
+				if (panelExtension.getPanel() != null) {
+					panel.add(panelExtension.getPanel());
+				}
+			}
+			
 			contentPane.add(panel, BorderLayout.SOUTH);
 		}
 		

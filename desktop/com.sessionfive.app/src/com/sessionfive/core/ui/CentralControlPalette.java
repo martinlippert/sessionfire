@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.List;
 
 import javax.media.opengl.GLCanvas;
-import javax.swing.JPanel;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Animation;
@@ -84,9 +83,8 @@ public class CentralControlPalette {
 		}
 	}
 
-	public JPanel getExtensionPanel() {
-		JPanel panel = new PanelExtensionLoader().laodExtension(animationController, presentation);
-		return panel;
+	public PanelExtension[] getExtensionPanels() {
+		return new PanelExtensionLoader().loadExtensions(animationController, presentation);
 	}
 
 }

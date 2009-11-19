@@ -1,5 +1,8 @@
 package com.sessionfive.core.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JPanel;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -9,33 +12,34 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.app.SessionfivePanel;
 import com.sessionfive.core.Presentation;
 
 public class PanelExtensionLoader {
 
-	public JPanel laodExtension(AnimationController animationController, Presentation presentation) {
+	public PanelExtension[] loadExtensions(AnimationController animationController, Presentation presentation) {
+		List<PanelExtension> result = new ArrayList<PanelExtension>();
+		
 		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 		IExtensionPoint extensionPoint = extensionRegistry
 				.getExtensionPoint("com.sessionfive.app.panel");
 		IExtension[] extensions = extensionPoint.getExtensions();
-		if (extensions.length == 0) {
-			return null;
-		}
-		IExtension firstExtensions = extensions[0];
-		IConfigurationElement[] configurationElements = firstExtensions.getConfigurationElements();
-		try {
-			Object createExecutableExtension = configurationElements[0]
-					.createExecutableExtension("class");
-			SessionfivePanel panel = (SessionfivePanel) createExecutableExtension;
-			//panel.setAnimationController(animationController);
-			//panel.setPresentation(presentation);
-			return (JPanel) panel;
 
-		} catch (Throwable e) {
-			e.printStackTrace();
+		for (IExtension extension : extensions) {
+			IConfigurationElement[] configurationElements = extension.getConfigurationElements();
+			for (IConfigurationElement iConfigurationElement : configurationElements) {
+				if (iConfigurationElement.getName().equals("panel")) {
+					try {
+						JPanel panel = (JPanel) iConfigurationElement
+								.createExecutableExtension("class");
+						String name = iConfigurationElement.getAttribute("name");
+						result.add(new PanelExtension(name, panel));
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
-		return null;
+		return result.toArray(new PanelExtension[result.size()]);
 	}
 
 }

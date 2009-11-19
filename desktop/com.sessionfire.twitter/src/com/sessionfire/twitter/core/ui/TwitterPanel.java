@@ -70,18 +70,21 @@ public class TwitterPanel extends JPanel implements SessionfivePanel {
 			}
 		});
 		twitterkeyword.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				boolean editable = !twitterkeyword.getText().isEmpty()
 						&& !twitterkeyword.getText().equals(TWITTER_KEYWORD_DEFAULT);
 				twitterEnabled.setEnabled(editable);
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				boolean editable = !twitterkeyword.getText().isEmpty()
 						&& !twitterkeyword.getText().equals(TWITTER_KEYWORD_DEFAULT);
 				twitterEnabled.setEnabled(editable);
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				boolean editable = !twitterkeyword.getText().isEmpty()
 						&& !twitterkeyword.getText().equals(TWITTER_KEYWORD_DEFAULT);
