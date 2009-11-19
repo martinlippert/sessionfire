@@ -38,9 +38,9 @@ public class TwitterShape extends AbstractShape implements Shape {
 	public void setText(final String layerText) {
 		new FadeAnimation().doFadeOutAnimation(this, new Runnable() {
 			public void run() {
-				if(layerText != null){
+				if (layerText != null) {
 					TwitterShape.this.layerText = layerText;
-					new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);					
+					new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);
 				}
 			}
 		});
@@ -49,25 +49,32 @@ public class TwitterShape extends AbstractShape implements Shape {
 	public void display(GLAutoDrawable drawable) {
 		List<String> rows = RowMaker.makeRows(layerText, 60);
 		Rectangle2D bounds = textRenderer.getBounds(rows.get(0));
+		if(rows.size() > 1){
+			Rectangle2D bounds2 = textRenderer.getBounds(rows.get(1));
+			bounds = bounds.getWidth() > bounds2.getWidth() ? bounds : bounds2;			
+		}
+		if(rows.size() > 2){
+			Rectangle2D bounds3 = textRenderer.getBounds(rows.get(2));
+			bounds = bounds.getWidth() > bounds3.getWidth() ? bounds : bounds3;			
+		}
+
 
 		drawBackgroundRectangle(drawable, bounds.getWidth());
 
 		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
 		textRenderer.setColor(color);
 
-		int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
+		int x = (int) (drawable.getWidth() - (bounds.getWidth() + 15));
 		int y = drawable.getHeight() - 20;
 		textRenderer.draw(rows.get(0), x, y);
 
 		if (rows.size() > 1) {
 			// bounds = textRenderer.getBounds(rows.get(1));
-			x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 			y = drawable.getHeight() - 40;
 			textRenderer.draw(rows.get(1), x, y);
 		}
 		if (rows.size() > 2) {
 			// bounds = textRenderer.getBounds(rows.get(1));
-			x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));
 			y = drawable.getHeight() - 60;
 			textRenderer.draw(rows.get(2), x, y);
 		}
@@ -95,13 +102,14 @@ public class TwitterShape extends AbstractShape implements Shape {
 		int x1 = (int) (drawable.getWidth() - (width + 20));
 		int x2 = drawable.getWidth() - 5;
 		int y1 = drawable.getHeight() - 5;
-		int y2 = drawable.getHeight() - 60;
+		int y2 = drawable.getHeight() - 70;
 		gl.glVertex3f(x1, y1, 0.0f);
 		gl.glVertex3f(x2, y1, 0.0f);
 		gl.glVertex3f(x2, y2, 0.0f);
 		gl.glVertex3f(x1, y2, 0.0f);
 		gl.glEnd();
 		gl.glFlush();
+		gl.glDisable(GL.GL_BLEND);
 
 		gl.glMatrixMode(GL.GL_PROJECTION);
 		gl.glPopMatrix();

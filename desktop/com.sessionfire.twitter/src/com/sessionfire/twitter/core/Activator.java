@@ -7,6 +7,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import com.sessionfive.app.SessionFiveApplication;
+import com.sessionfive.core.LayerType;
 
 public class Activator implements BundleActivator {
 	private static Activator activator;
@@ -29,13 +30,13 @@ public class Activator implements BundleActivator {
 		sfTwitter.start();
 		animationtimer = new Timer();
 
-		SessionFiveApplication.getInstance().getPresentation().addShape(texShape2);
+		SessionFiveApplication.getInstance().getPresentation().addShape(texShape2,
+				LayerType.FIXED_POSTION);
 
 		animationtimer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				String randomTweet = sfTwitter.getRandomTweet();
-				// randomTweet =
-				// "luebken: Dies ist ein schöner Tweet und ich erzähle hier mal was.";
+				//randomTweet = "luebken: Dies ist ein schöner Tweet und ich erzähle hier mal was.";
 				System.out.println("Get random Tweet: " + randomTweet);
 				texShape2.setText(randomTweet);
 			}

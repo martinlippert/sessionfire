@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -42,7 +43,7 @@ public class CentralControlPalette {
 		Focusable startShape = presentation;
 		presentation.removeAllAnimations();
 
-		List<Shape> shapes = presentation.getShapes();
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
 			Animation animation = animationFactory.createAnimation(startShape, shape);
 			presentation.addAnimation(animation);
@@ -77,7 +78,7 @@ public class CentralControlPalette {
 	}
 
 	public void setRotation(int x, int y, int z) {
-		List<Shape> shapes = presentation.getShapes();
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
 			shape.setRotation(x, y, z);
 		}

@@ -1,27 +1,30 @@
 package com.sessionfive.core;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Presentation implements Focusable, ShapeChangedListener {
 
 	private Camera startCamera;
-	private List<Shape> shapes;
 	private List<Animation> animations;
-
+	private Map<LayerType, Layer> layers;
 	private Color backgroundColor;
 	private String layerText = "Sessionfire";
 	private List<PresentationChangedListener> changeListeners;
 
 	public Presentation() {
-		shapes = new CopyOnWriteArrayList<Shape>();
 		animations = new CopyOnWriteArrayList<Animation>();
 		startCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		backgroundColor = Color.BLACK;
-
+		layers = new HashMap<LayerType, Layer>();
+		layers.put(LayerType.CAMERA_ANIMATED, new Layer());
+		layers.put(LayerType.FIXED_POSTION, new Layer());
 		changeListeners = new LinkedList<PresentationChangedListener>();
 	}
 
@@ -34,35 +37,28 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		firePresentationChanged();
 	}
 
-	public List<Shape> getShapes() {
-		return shapes;
-	}
-
-	public void addShape(Shape shape) {
+	public void addShape(Shape shape, LayerType layer) {
 		shape.addShapeChangedListener(this);
-		shapes.add(shape);
-
+		this.layers.get(layer).add(shape);
 		firePresentationChanged();
 	}
 
-	public void removeShape(Shape shape) {
+	public void removeShape(Shape shape, LayerType layer) {
 		shape.removeShapeChangedListener(this);
-		shapes.remove(shape);
-
+		this.layers.get(layer).remove(shape);
 		firePresentationChanged();
 	}
 
-	public void removeAllShapes() {
-		Iterator<Shape> allShapes = shapes.iterator();
+	public void removeAllShapes(LayerType layer) {
+		Iterator<Shape> allShapes = this.layers.get(layer).getShapes().iterator();
 		while (allShapes.hasNext()) {
 			Shape shape = allShapes.next();
 			shape.removeShapeChangedListener(this);
 		}
-		shapes.clear();
+		this.layers.get(layer).getShapes().clear();
 
 		firePresentationChanged();
 	}
-
 
 	public int getAnimationCount() {
 		return animations.size();
@@ -125,6 +121,18 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		while (listeners.hasNext()) {
 			listeners.next().presentationChanged(event);
 		}
+	}
+
+	public List<Shape> getShapes(LayerType layertype) {
+		return layers.get(layertype).getShapes();
+	}
+
+	public List<Shape> getAllShapes() {
+		List<Shape> allshapes = new ArrayList<Shape>();
+		for (Layer layer : this.layers.values()) {
+			allshapes.addAll(layer.getShapes());
+		}
+		return allshapes;
 	}
 
 }

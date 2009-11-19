@@ -23,7 +23,7 @@ public class FadeAnimation {
 
 	private void doAnimation(TwitterShape textshape, final Runnable endCallback,
 			Evaluator<Color> evaluator) {
-		KeyValues<Color> values = KeyValues.create(evaluator, Color.DARK_GRAY, Color.DARK_GRAY);
+		KeyValues<Color> values = KeyValues.create(evaluator, Color.LIGHT_GRAY, Color.LIGHT_GRAY);
 		KeyTimes times = new KeyTimes(0f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);
 		PropertySetter ps = new PropertySetter(textshape, "color", frames);

@@ -1,6 +1,7 @@
 package com.sessionfive.core.ui;
 
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -21,7 +22,7 @@ public class LineLayouter implements Layouter {
 		float x = -40f;
 		float z = 0f;
 		
-		for (Shape shape: presentation.getShapes()) {
+		for (Shape shape: presentation.getShapes(LayerType.CAMERA_ANIMATED)) {
 			shape.setPosition(x, -20f, z);
 			x += 50f;
 			z += 0.01f;

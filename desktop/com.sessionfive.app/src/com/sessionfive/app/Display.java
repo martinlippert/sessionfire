@@ -60,7 +60,7 @@ public class Display implements GLEventListener {
 
 		camera.setTo(gl, glu);
 
-		List<Shape> shapes = presentation.getShapes();
+		List<Shape> shapes = presentation.getAllShapes();
 		for (Shape shape : shapes) {
 			shape.display(gl);
 			shape.display(drawable);

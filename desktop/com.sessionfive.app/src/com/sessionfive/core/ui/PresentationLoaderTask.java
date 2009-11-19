@@ -11,6 +11,7 @@ import javax.swing.SwingWorker;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -39,13 +40,13 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
         setProgress(0);
 		int numberOfFiles= files.length;
 
-		List<Shape> shapes = presentation.getShapes();
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		Iterator<Shape> shapesIter = shapes.iterator();
 		while (shapesIter.hasNext()) {
 			shapesIter.next().release(canvas.getContext());
 		}
 		
-		presentation.removeAllShapes();
+		presentation.removeAllShapes(LayerType.CAMERA_ANIMATED);
 		presentation.removeAllAnimations();
 		
 		Focusable animationStart = presentation;
@@ -55,7 +56,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 			Shape newShape = creator.createShape(files[i]);
 			if (newShape != null) {
 				newShape.initialize(context);
-				presentation.addShape(newShape);
+				presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 				
 				Animation animation = animationFactory.createAnimation(animationStart, newShape);
 				presentation.addAnimation(animation);
