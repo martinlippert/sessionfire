@@ -126,6 +126,11 @@ public class SessionFiveApplication implements IApplication {
 						|| e.getKeyChar() == 'f') {
 					switchFullScreen();
 				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					if(fullScreenFrame != null) {						
+						switchFullScreen();
+					}
+				}
 
 				if (e.getKeyCode() >= KeyEvent.VK_0
 						&& e.getKeyCode() <= KeyEvent.VK_9) {
