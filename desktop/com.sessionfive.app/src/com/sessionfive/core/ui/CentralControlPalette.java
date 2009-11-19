@@ -7,7 +7,6 @@ import javax.media.opengl.GLCanvas;
 import javax.swing.JPanel;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.app.SessionfivePanel;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
@@ -69,8 +68,8 @@ public class CentralControlPalette {
 	}
 
 	public void setLayerText(String text) {
-		// this.presentation.setLayerText(text);
-		this.animationController.animateText(text);
+		 this.presentation.setLayerText(text);
+//		this.animationController.animateText(text);
 	}
 
 	public String getLayerText() {

@@ -31,7 +31,6 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	
 	public void setStartCamera(Camera startCamera) {
 		this.startCamera = startCamera;
-		
 		firePresentationChanged();
 	}
 	
@@ -94,7 +93,6 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public void setBackgroundColor(Color newColor) {
 		backgroundColor = newColor;
-		
 		firePresentationChanged();
 	}
 
@@ -104,11 +102,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public void setLayerText(String layerText) {
 		this.layerText = layerText;
-		
 		firePresentationChanged();
 	}
-	
-	
 
 	public void shapeChanged(ShapeChangedEvent event) {
 		firePresentationChanged();

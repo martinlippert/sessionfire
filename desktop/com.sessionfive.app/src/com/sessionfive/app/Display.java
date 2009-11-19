@@ -75,7 +75,7 @@ public class Display implements GLEventListener {
 		if (layerText != null && layerText.length() > 0) {
 			textshape.setText(layerText);
 			textshape.display(drawable);
-			fireDisplayChangedEvent();
+//			fireDisplayChangedEvent();
 		}
 
 		// try {
