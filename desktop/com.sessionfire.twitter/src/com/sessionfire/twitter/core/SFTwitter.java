@@ -7,8 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.sessionfive.app.SessionFiveApplication;
-
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Tweet;

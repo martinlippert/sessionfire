@@ -1,4 +1,4 @@
-package com.sessionfive.app;
+package com.sessionfire.twitter.core;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,22 +9,21 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
+import com.sessionfive.app.RowMaker;
+import com.sessionfive.core.AbstractShape;
+import com.sessionfive.core.Shape;
 import com.sun.opengl.util.j2d.TextRenderer;
 
-public class TextShape2 {
+public class TwitterShape extends AbstractShape implements Shape {
 	private Color color = Color.WHITE;
 
 	private TextRenderer textRenderer;
 
-	private String layerText;
+	private String layerText = "";
 
-	//Bšse referenz
-	private final Display display;
-
-	public TextShape2(Display display) {
+	public TwitterShape() {
 		Font font = new Font("SansSerif", Font.BOLD, 14);
 		textRenderer = new TextRenderer(font, true, false);
-		this.display = display;
 	}
 
 	public Color getColor() {
@@ -33,12 +32,18 @@ public class TextShape2 {
 
 	public void setColor(Color color) {
 		this.color = color;
-		display.fireDisplayChangedEvent();
+		fireShapeChangedEvent();
 	}
 
-	public void setText(String layerText) {
-		this.layerText = layerText;
-		display.fireDisplayChangedEvent();
+	public void setText(final String layerText) {
+		new FadeAnimation().doFadeOutAnimation(this, new Runnable() {
+			public void run() {
+				if(layerText != null){
+					TwitterShape.this.layerText = layerText;
+					new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);					
+				}
+			}
+		});
 	}
 
 	public void display(GLAutoDrawable drawable) {
@@ -104,9 +109,18 @@ public class TextShape2 {
 		gl.glPopMatrix();
 	}
 
-	public DisplayChangedListener getDisplayChangedListener() {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public void display(GL gl) {
+	}
+
+	@Override
+	public float getHeight() {
+		return 0;
+	}
+
+	@Override
+	public float getWidth() {
+		return 0;
 	}
 
 }

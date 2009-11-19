@@ -27,7 +27,6 @@ public class Display implements GLEventListener {
 
 	private final Presentation presentation;
 	private Camera camera;
-	private TextShape2 textshape;
 
 	private FutureTask<byte[]> futureTask;
 	private List<DisplayChangedListener> changeListeners;
@@ -36,15 +35,10 @@ public class Display implements GLEventListener {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
 		this.changeListeners = new LinkedList<DisplayChangedListener>();
-		this.textshape = new TextShape2(this);
 	}
 
 	public Camera getCamera() {
 		return camera;
-	}
-
-	public TextShape2 getTextshape() {
-		return textshape;
 	}
 
 	public void setCamera(Camera camera) {
@@ -69,15 +63,9 @@ public class Display implements GLEventListener {
 		List<Shape> shapes = presentation.getShapes();
 		for (Shape shape : shapes) {
 			shape.display(gl);
+			shape.display(drawable);
 		}
-
-		String layerText = this.presentation.getLayerText();
-		if (layerText != null && layerText.length() > 0) {
-			textshape.setText(layerText);
-			textshape.display(drawable);
-//			fireDisplayChangedEvent();
-		}
-
+		
 		// try {
 		// long timestamp = System.currentTimeMillis();
 		// Screenshot.writeToFile(new File("shot" + timestamp + ".jpg"), 400,

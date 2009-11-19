@@ -1,4 +1,4 @@
-package com.sessionfive.core;
+package com.sessionfire.twitter.core;
 
 import java.awt.Color;
 
@@ -10,23 +10,23 @@ import org.jdesktop.animation.timing.interpolation.KeyTimes;
 import org.jdesktop.animation.timing.interpolation.KeyValues;
 import org.jdesktop.animation.timing.interpolation.PropertySetter;
 
-import com.sessionfive.app.Display;
 
 public class FadeAnimation {
 
-	public void doFadeOutAnimation(Display display, final Runnable optionalEndCallback) {
-		doAnimation(display, optionalEndCallback, new EvaluatorColorFadeout());
+	public void doFadeOutAnimation(TwitterShape textshape, final Runnable optionalEndCallback) {
+		doAnimation(textshape, optionalEndCallback, new EvaluatorColorFadeout());
 	}
 
-	public void doFadeInAnimation(Display display, final Runnable optionalEndCallback) {
-		doAnimation(display, optionalEndCallback, new EvaluatorColorFadein());
+	public void doFadeInAnimation(TwitterShape textshape, final Runnable optionalEndCallback) {
+		doAnimation(textshape, optionalEndCallback, new EvaluatorColorFadein());
 	}
 
-	private void doAnimation(Display display, final Runnable endCallback, Evaluator<Color> evaluator) {
+	private void doAnimation(TwitterShape textshape, final Runnable endCallback,
+			Evaluator<Color> evaluator) {
 		KeyValues<Color> values = KeyValues.create(evaluator, Color.DARK_GRAY, Color.DARK_GRAY);
 		KeyTimes times = new KeyTimes(0f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);
-		PropertySetter ps = new PropertySetter(display.getTextshape(), "color", frames);
+		PropertySetter ps = new PropertySetter(textshape, "color", frames);
 
 		Animator animator = new Animator(1500, ps);
 		// animator.setStartDirection(Direction.FORWARD);

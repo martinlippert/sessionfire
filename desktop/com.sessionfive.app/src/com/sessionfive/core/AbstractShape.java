@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
 public abstract class AbstractShape implements Shape {
@@ -21,6 +22,11 @@ public abstract class AbstractShape implements Shape {
 		this.changeListeners = new LinkedList<ShapeChangedListener>();
 	}
 
+	@Override
+	public void display(GLAutoDrawable drawable) {
+		
+	}
+	
 	public float getX() {
 		return x;
 	}

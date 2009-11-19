@@ -17,11 +17,11 @@ public class RowMaker {
 			String next = stringTokenizer.nextToken();
 			if (currentLine.length() + next.length() > column) {
 				if (next.length() < 15) {
-					//withou leading whitespace
-					if(currentLine.toString().subSequence(0, 1).equals(" ")){
+					// withou leading whitespace
+					if (currentLine.toString().subSequence(0, 1).equals(" ")) {
 						list.add(currentLine.toString().substring(1));
 					} else {
-						list.add(currentLine.toString());			
+						list.add(currentLine.toString());
 					}
 					currentLine = new StringBuffer(next);
 				} else {
@@ -47,13 +47,13 @@ public class RowMaker {
 				currentLine.append(next);
 			}
 		}
-		//withou leading whitespace
-		if(currentLine.toString().subSequence(0, 1).equals(" ")){
+		// withou leading whitespace
+		if (currentLine.length() > 0 && currentLine.toString().subSequence(0, 1).equals(" ")) {
 			list.add(currentLine.toString().substring(1));
 		} else {
-			list.add(currentLine.toString());			
+			list.add(currentLine.toString());
 		}
-		
+
 		return list;
 	}
 
@@ -74,6 +74,10 @@ public class RowMaker {
 		}
 		makeRows = makeRows(
 				"ein-tweet-mit-vielen-kleinen-worten-z.b.,mit,mit,und,ohne,ohne,ach,ja", 20);
+		for (String string : makeRows) {
+			System.out.println(string);
+		}
+		makeRows = makeRows("", 20);
 		for (String string : makeRows) {
 			System.out.println(string);
 		}

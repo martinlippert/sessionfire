@@ -4,7 +4,6 @@ import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.Animation;
-import com.sessionfive.core.FadeAnimation;
 import com.sessionfive.core.Presentation;
 
 public class AnimationController {
@@ -94,13 +93,5 @@ public class AnimationController {
 		}
 	}
 
-	public void animateText(final String text) {
-		new FadeAnimation().doFadeOutAnimation(display, new Runnable() {
-			public void run() {
-				presentation.setLayerText(text);
-				new FadeAnimation().doFadeInAnimation(display, null);
-			}
-		});
-	}
 
 }
