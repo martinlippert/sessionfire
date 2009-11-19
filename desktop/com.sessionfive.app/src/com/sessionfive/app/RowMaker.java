@@ -17,7 +17,12 @@ public class RowMaker {
 			String next = stringTokenizer.nextToken();
 			if (currentLine.length() + next.length() > column) {
 				if (next.length() < 15) {
-					list.add(currentLine.toString());
+					//withou leading whitespace
+					if(currentLine.toString().subSequence(0, 1).equals(" ")){
+						list.add(currentLine.toString().substring(1));
+					} else {
+						list.add(currentLine.toString());			
+					}
 					currentLine = new StringBuffer(next);
 				} else {
 					while (next.length() > 0) {
@@ -38,11 +43,17 @@ public class RowMaker {
 					}
 				}
 			} else {
-				//leading whitespace
+
 				currentLine.append(next);
 			}
 		}
-		list.add(currentLine.toString());
+		//withou leading whitespace
+		if(currentLine.toString().subSequence(0, 1).equals(" ")){
+			list.add(currentLine.toString().substring(1));
+		} else {
+			list.add(currentLine.toString());			
+		}
+		
 		return list;
 	}
 
