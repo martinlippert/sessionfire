@@ -32,9 +32,11 @@ public class Activator implements BundleActivator {
 				AnimationController animationController = SessionFiveApplication.getInstance()
 						.getAnimationController();
 				String randomTweet = sfTwitter.getRandomTweet();
+				//randomTweet = "luebken: Dies ist ein schöner Tweet und ich erzähle hier mal was.";
+				System.out.println("Get random Tweet: " + randomTweet);
 				animationController.animateText(randomTweet);
 			}
-		}, 0, 10000);
+		}, 1000, 5000);
 	}
 
 	public void stopTwitterPoll() {

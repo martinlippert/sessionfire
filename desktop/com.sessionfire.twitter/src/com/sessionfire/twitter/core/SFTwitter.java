@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.sessionfive.app.SessionFiveApplication;
+
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Tweet;
@@ -33,6 +35,7 @@ public class SFTwitter {
 		int period = 30 * 1000; // alle 30 sek, 120 requests/h (150 is limit)
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
+				System.out.println("Polling Twitter");
 				if (tweets.size() > 0) {
 					query.setSinceId(lastId);
 				}
@@ -72,6 +75,7 @@ public class SFTwitter {
 		int index = (int) (Math.random() * tweets.size());
 		if (tweets.size() > 0) {
 			Tweet tweet = tweets.get(index);
+			tweets.remove(index);
 			String since = getSince(tweet);
 			return tweet.getFromUser() + ": " + tweet.getText() + " (" + since + ")";
 		} else {

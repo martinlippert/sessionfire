@@ -36,7 +36,7 @@ public class Display implements GLEventListener {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
 		this.changeListeners = new LinkedList<DisplayChangedListener>();
-		this.textshape = new TextShape2();
+		this.textshape = new TextShape2(this);
 	}
 
 	public Camera getCamera() {
