@@ -1,6 +1,5 @@
 package com.sessionfive.core;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
@@ -8,6 +7,7 @@ public interface Shape extends Focusable {
 	
 	public float getX();
 	public float getY();
+	public float getZ();
 	public float getWidth();
 	public float getHeight();
 
@@ -20,8 +20,7 @@ public interface Shape extends Focusable {
 	
 	public void initialize(GLContext context) throws Exception;
 	public void release(GLContext context) throws Exception;
-
-	public void display(GL gl);
+	
 	public void display(GLAutoDrawable drawable);
 
 	public void addShapeChangedListener(ShapeChangedListener listener);

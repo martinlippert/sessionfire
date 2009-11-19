@@ -46,6 +46,7 @@ public class TwitterShape extends AbstractShape implements Shape {
 		});
 	}
 
+	@Override
 	public void display(GLAutoDrawable drawable) {
 		List<String> rows = RowMaker.makeRows(layerText, 60);
 		Rectangle2D bounds = textRenderer.getBounds(rows.get(0));
@@ -115,10 +116,6 @@ public class TwitterShape extends AbstractShape implements Shape {
 		gl.glPopMatrix();
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glPopMatrix();
-	}
-
-	@Override
-	public void display(GL gl) {
 	}
 
 	@Override

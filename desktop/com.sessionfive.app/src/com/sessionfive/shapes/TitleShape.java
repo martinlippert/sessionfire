@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 
 import com.sessionfive.core.AbstractShape;
@@ -12,10 +11,9 @@ import com.sessionfive.core.Shape;
 import com.sun.opengl.util.j2d.TextRenderer;
 
 public class TitleShape extends AbstractShape implements Shape {
+	
 	private Color color = Color.DARK_GRAY;
-
 	private TextRenderer textRenderer;
-
 	private String text = "Sessionfire";
 
 	public TitleShape() {
@@ -31,6 +29,7 @@ public class TitleShape extends AbstractShape implements Shape {
 		this.text = text;
 	}
 
+	@Override
 	public void display(GLAutoDrawable drawable) {
 		if (text != null && text.length() > 0) {
 			Rectangle2D bounds = textRenderer.getBounds(text);
@@ -41,10 +40,6 @@ public class TitleShape extends AbstractShape implements Shape {
 			textRenderer.draw(text, x, y);
 			textRenderer.endRendering();
 		}
-	}
-
-	@Override
-	public void display(GL gl) {
 	}
 
 	@Override

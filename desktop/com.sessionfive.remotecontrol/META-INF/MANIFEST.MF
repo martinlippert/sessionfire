@@ -13,4 +13,4 @@ Import-Package: com.sessionfive.animation,
 Bundle-Activator: com.sessionfive.remotecontrol.Activator
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.equinox.http.registry;bundle-version="1.0.200"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

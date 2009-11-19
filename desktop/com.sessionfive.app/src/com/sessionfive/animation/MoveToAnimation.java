@@ -22,6 +22,7 @@ public class MoveToAnimation implements Animation {
 		this.endShape = endShape;
 	}
 
+	@Override
 	public Animator getForwardAnimation(Display display) {
 		Camera startSetting = display.getCamera();
 		Camera cameraEnd = endShape.getFocussedCamera();
@@ -42,6 +43,7 @@ public class MoveToAnimation implements Animation {
 		return animator;
 	}
 
+	@Override
 	public Animator getBackwardAnimation(Display display) {
 		if (startShape == null)
 			return null;
@@ -65,6 +67,7 @@ public class MoveToAnimation implements Animation {
 		return animator;
 	}
 
+	@Override
 	public void directlyGoTo(Display display) {
 		Camera cameraEnd = endShape.getFocussedCamera();
 		display.setCamera(cameraEnd);

@@ -84,6 +84,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		animations.clear();
 	}
 
+	@Override
 	public Camera getFocussedCamera() {
 		return startCamera;
 	}
@@ -106,6 +107,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		firePresentationChanged();
 	}
 
+	@Override
 	public void shapeChanged(ShapeChangedEvent event) {
 		firePresentationChanged();
 	}

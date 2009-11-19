@@ -62,7 +62,6 @@ public class Display implements GLEventListener {
 
 		List<Shape> shapes = presentation.getAllShapes();
 		for (Shape shape : shapes) {
-			shape.display(gl);
 			shape.display(drawable);
 		}
 		

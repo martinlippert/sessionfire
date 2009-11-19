@@ -18,6 +18,7 @@ public class DisplayRepaintManager {
 		this.display = display;
 		this.presentation = presentation;
 		displayListener = new DisplayChangedListener() {
+			@Override
 			public void displayChanged(DisplayChangedEvent e) {
 				canvas.repaint();
 			}
@@ -25,6 +26,7 @@ public class DisplayRepaintManager {
 		display.addDisplayChangedListener(displayListener);
 		
 		presentationListener = new PresentationChangedListener() {
+			@Override
 			public void presentationChanged(PresentationChangedEvent event) {
 				canvas.repaint();
 			}

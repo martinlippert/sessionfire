@@ -9,10 +9,12 @@ import com.sessionfive.core.Shape;
 
 public class TileLayouter implements Layouter {
 
+	@Override
 	public String getName() {
 		return "Tiling";
 	}
 
+	@Override
 	public void layout(Presentation presentation) {
 		final Camera startCamera = new Camera(-80f, -40f,
 				120f, 20f, -40f, 0f, 0f, 1f, 0f);

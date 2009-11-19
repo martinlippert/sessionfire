@@ -10,10 +10,12 @@ public class LineLayouter implements Layouter {
 	public LineLayouter() {
 	}
 
+	@Override
 	public String getName() {
 		return "Line";
 	}
 
+	@Override
 	public void layout(Presentation presentation) {
 		final Camera startCamera = new Camera(-80f, -3.1f,
 				90f, -20f, -3.1f, 0f, 0f, 1f, 0f);

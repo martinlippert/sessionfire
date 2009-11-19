@@ -10,10 +10,12 @@ public class CircleLayouter implements Layouter {
 	public CircleLayouter() {
 	}
 
+	@Override
 	public String getName() {
 		return "Circle";
 	}
 
+	@Override
 	public void layout(Presentation presentation) {
 		int size = presentation.getShapes(LayerType.CAMERA_ANIMATED).size();
 		final Camera startCamera = new Camera(-80f, -3.1f,

@@ -13,6 +13,7 @@ import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 import java.io.File;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.GLException;
 import javax.media.opengl.Threading;
@@ -34,6 +35,7 @@ public class ImageShape extends AbstractShape {
 		this.file = file;
 	}
 
+	@Override
 	public float getWidth() {
 		return width;
 	}
@@ -44,11 +46,13 @@ public class ImageShape extends AbstractShape {
 		fireShapeChangedEvent();
 	}
 
+	@Override
 	public float getHeight() {
 		return getWidth() * imageRatio;
 	}
 
-	public void display(GL gl) {
+	@Override
+	public void display(GLAutoDrawable drawable) {
 		if (t == null) return;
 		
 		Texture tex = t;
@@ -57,6 +61,8 @@ public class ImageShape extends AbstractShape {
 		float ty1 = tc.top();
 		float tx2 = tc.right();
 		float ty2 = tc.bottom();
+		
+		GL gl = drawable.getGL();
 
 		// Enable blending, using the SrcOver rule
 		gl.glEnable(GL_BLEND);

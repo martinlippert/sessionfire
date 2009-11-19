@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
 public abstract class AbstractShape implements Shape {
@@ -23,22 +22,21 @@ public abstract class AbstractShape implements Shape {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
-		
-	}
-	
 	public float getX() {
 		return x;
 	}
 
+	@Override
 	public float getY() {
 		return y;
 	}
 
+	@Override
 	public float getZ() {
 		return z;
 	}
 
+	@Override
 	public void setPosition(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
@@ -47,18 +45,22 @@ public abstract class AbstractShape implements Shape {
 		fireShapeChangedEvent();
 	}
 
+	@Override
 	public float getRotationAngleX() {
 		return angleX;
 	}
 	
+	@Override
 	public float getRotationAngleY() {
 		return angleY;
 	}
 	
+	@Override
 	public float getRotationAngleZ() {
 		return angleZ;
 	}
 
+	@Override
 	public void setRotation(float angleX, float angleY, float angleZ) {
 		this.angleX = angleX;
 		this.angleY = angleY;
@@ -67,6 +69,7 @@ public abstract class AbstractShape implements Shape {
 		fireShapeChangedEvent();
 	}
 	
+	@Override
 	public Camera getFocussedCamera() {
 		float shapeX = this.getX();
 		float shapeY = this.getY();
@@ -123,16 +126,20 @@ public abstract class AbstractShape implements Shape {
 		return cameraSetting;
 	}
 	
+	@Override
 	public void initialize(GLContext context) throws Exception {
 	}
 	
+	@Override
 	public void release(GLContext context) throws Exception {
 	}
 	
+	@Override
 	public void addShapeChangedListener(ShapeChangedListener listener) {
 		changeListeners.add(listener);
 	}
 	
+	@Override
 	public void removeShapeChangedListener(ShapeChangedListener listener) {
 		changeListeners.remove(listener);
 	}
