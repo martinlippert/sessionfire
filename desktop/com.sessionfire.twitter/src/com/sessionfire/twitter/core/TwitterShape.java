@@ -42,9 +42,9 @@ public class TwitterShape extends AbstractShape implements Shape {
 			public void run() {
 				if (layerText != null) {
 					TwitterShape.this.layerText = layerText;
-					if (layerText.length() > 0) {
+					//if (layerText.length() > 0) {
 						new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);
-					}
+					//}
 				}
 			}
 		});
@@ -63,7 +63,8 @@ public class TwitterShape extends AbstractShape implements Shape {
 			bounds = bounds.getWidth() > bounds3.getWidth() ? bounds : bounds3;
 		}
 
-		drawBackgroundRectangle(drawable, bounds.getWidth());
+		if (layerText.length() > 0)
+			drawBackgroundRectangle(drawable, bounds.getWidth(), rows.size());
 
 		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
 		textRenderer.setColor(color);
@@ -85,7 +86,7 @@ public class TwitterShape extends AbstractShape implements Shape {
 		textRenderer.endRendering();
 	}
 
-	private void drawBackgroundRectangle(GLAutoDrawable drawable, double width) {
+	private void drawBackgroundRectangle(GLAutoDrawable drawable, double width, int rows) {
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
 		gl.glMatrixMode(GL.GL_PROJECTION);
@@ -101,12 +102,12 @@ public class TwitterShape extends AbstractShape implements Shape {
 		float alpha = ((float) color.getAlpha() / 255f) - 0.08f;
 		// System.out.println("TextShape2.drawBackgroundRectangle()"+alpha);
 
-		int lineheight = (int) (70 * size);
+		int lineheight = (int) (23 * rows * size);
 		int x1 = (int) (drawable.getWidth() - (width + 20));
 		int x2 = drawable.getWidth() - 5;
 		int y1 = drawable.getHeight() - 5;
 		int y2 = drawable.getHeight() - lineheight;
-		
+
 		gl.glColor4f(0f, 0f, 0f, alpha);
 		gl.glBegin(GL.GL_POLYGON);
 		gl.glVertex3f(x1, y1, 0.0f);
@@ -114,15 +115,15 @@ public class TwitterShape extends AbstractShape implements Shape {
 		gl.glVertex3f(x2, y2, 0.0f);
 		gl.glVertex3f(x1, y2, 0.0f);
 		gl.glEnd();
-		
+
 		gl.glColor4f(0.5f, 0.5f, 0.5f, alpha);
 		gl.glBegin(GL.GL_LINE_LOOP);
-		gl.glVertex3f(x1-2, y1+2, 0.0f);
-		gl.glVertex3f(x2+2, y1+2, 0.0f);
-		gl.glVertex3f(x2+2, y2-2, 0.0f);
-		gl.glVertex3f(x1-2, y2-2, 0.0f);
+		gl.glVertex3f(x1 - 2, y1 + 2, 0.0f);
+		gl.glVertex3f(x2 + 2, y1 + 2, 0.0f);
+		gl.glVertex3f(x2 + 2, y2 - 2, 0.0f);
+		gl.glVertex3f(x1 - 2, y2 - 2, 0.0f);
 		gl.glEnd();
-		
+
 		gl.glFlush();
 		gl.glDisable(GL.GL_BLEND);
 
