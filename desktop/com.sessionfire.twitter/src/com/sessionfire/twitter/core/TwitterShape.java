@@ -100,18 +100,29 @@ public class TwitterShape extends AbstractShape implements Shape {
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA); // define
 		float alpha = ((float) color.getAlpha() / 255f) - 0.08f;
 		// System.out.println("TextShape2.drawBackgroundRectangle()"+alpha);
-		gl.glColor4f(0f, 0f, 0f, alpha);
-		gl.glBegin(GL.GL_POLYGON);
+
 		int lineheight = (int) (70 * size);
 		int x1 = (int) (drawable.getWidth() - (width + 20));
 		int x2 = drawable.getWidth() - 5;
 		int y1 = drawable.getHeight() - 5;
 		int y2 = drawable.getHeight() - lineheight;
+		
+		gl.glColor4f(0f, 0f, 0f, alpha);
+		gl.glBegin(GL.GL_POLYGON);
 		gl.glVertex3f(x1, y1, 0.0f);
 		gl.glVertex3f(x2, y1, 0.0f);
 		gl.glVertex3f(x2, y2, 0.0f);
 		gl.glVertex3f(x1, y2, 0.0f);
 		gl.glEnd();
+		
+		gl.glColor4f(0.5f, 0.5f, 0.5f, alpha);
+		gl.glBegin(GL.GL_LINE_LOOP);
+		gl.glVertex3f(x1-2, y1+2, 0.0f);
+		gl.glVertex3f(x2+2, y1+2, 0.0f);
+		gl.glVertex3f(x2+2, y2-2, 0.0f);
+		gl.glVertex3f(x1-2, y2-2, 0.0f);
+		gl.glEnd();
+		
 		gl.glFlush();
 		gl.glDisable(GL.GL_BLEND);
 
