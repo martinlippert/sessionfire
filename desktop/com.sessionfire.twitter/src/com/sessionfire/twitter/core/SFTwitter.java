@@ -67,6 +67,8 @@ public class SFTwitter {
 	public synchronized void stop() {
 		if (timer != null)
 			timer.cancel();
+		tweets.clear();
+		lastId = 0;
 	}
 
 	public synchronized String getRandomTweet() {

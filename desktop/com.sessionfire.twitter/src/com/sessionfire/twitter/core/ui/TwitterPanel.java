@@ -1,8 +1,6 @@
 package com.sessionfire.twitter.core.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -10,8 +8,12 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -24,6 +26,7 @@ public class TwitterPanel extends JPanel implements SessionfivePanel {
 	private static String TWITTER_KEYWORD_DEFAULT = "<Twitter Search>";
 
 	public TwitterPanel() {
+		final Activator activator = Activator.getActivator();
 		setBorder(new EmptyBorder(15, 15, 15, 15));
 		setLayout(new BorderLayout());
 		setOpaque(false);
@@ -33,20 +36,21 @@ public class TwitterPanel extends JPanel implements SessionfivePanel {
 		final JCheckBox twitterEnabled = new JCheckBox("");
 		twitterEnabled.setEnabled(false);
 
-		twitterEnabled.addActionListener(new ActionListener() {
+		twitterEnabled.addChangeListener(new ChangeListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void stateChanged(ChangeEvent e) {
 				if (twitterEnabled.isSelected()) {
-					Activator.getActivator().startNewTwitterPoll(twitterkeyword.getText());
+					activator.startNewTwitterPoll(twitterkeyword.getText());
 					twitterkeyword.setEditable(false);
 				} else {
-					Activator.getActivator().stopTwitterPoll();
+					activator.stopTwitterPoll();
 					twitterkeyword.setEditable(true);
 				}
-
+				
 			}
 		});
-
+		
 		twitterkeyword.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -91,11 +95,20 @@ public class TwitterPanel extends JPanel implements SessionfivePanel {
 				twitterEnabled.setEnabled(editable);
 			}
 		});
+		
+		final JSlider sizeSlider = new JSlider(SwingConstants.HORIZONTAL, 100, 200, 100);
+		sizeSlider.addChangeListener( new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				activator.getTexShape2().setSize(sizeSlider.getValue());
+			}
+		});
+
 
 		// add(twitterUser);
 		// add(twitterPass);
 		add(twitterkeyword, BorderLayout.CENTER);
 		add(twitterEnabled, BorderLayout.EAST);
+		add(sizeSlider, BorderLayout.SOUTH);
 	}
 
 	private static final long serialVersionUID = 1L;

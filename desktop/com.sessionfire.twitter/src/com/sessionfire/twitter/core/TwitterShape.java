@@ -21,6 +21,8 @@ public class TwitterShape extends AbstractShape implements Shape {
 
 	private String layerText = "";
 
+	private float size = 1;
+
 	public TwitterShape() {
 		Font font = new Font("SansSerif", Font.BOLD, 14);
 		textRenderer = new TextRenderer(font, true, false);
@@ -40,7 +42,9 @@ public class TwitterShape extends AbstractShape implements Shape {
 			public void run() {
 				if (layerText != null) {
 					TwitterShape.this.layerText = layerText;
-					new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);
+					if (layerText.length() > 0) {
+						new FadeAnimation().doFadeInAnimation(TwitterShape.this, null);
+					}
 				}
 			}
 		});
@@ -50,15 +54,14 @@ public class TwitterShape extends AbstractShape implements Shape {
 	public void display(GLAutoDrawable drawable) {
 		List<String> rows = RowMaker.makeRows(layerText, 60);
 		Rectangle2D bounds = textRenderer.getBounds(rows.get(0));
-		if(rows.size() > 1){
+		if (rows.size() > 1) {
 			Rectangle2D bounds2 = textRenderer.getBounds(rows.get(1));
-			bounds = bounds.getWidth() > bounds2.getWidth() ? bounds : bounds2;			
+			bounds = bounds.getWidth() > bounds2.getWidth() ? bounds : bounds2;
 		}
-		if(rows.size() > 2){
+		if (rows.size() > 2) {
 			Rectangle2D bounds3 = textRenderer.getBounds(rows.get(2));
-			bounds = bounds.getWidth() > bounds3.getWidth() ? bounds : bounds3;			
+			bounds = bounds.getWidth() > bounds3.getWidth() ? bounds : bounds3;
 		}
-
 
 		drawBackgroundRectangle(drawable, bounds.getWidth());
 
@@ -66,17 +69,16 @@ public class TwitterShape extends AbstractShape implements Shape {
 		textRenderer.setColor(color);
 
 		int x = (int) (drawable.getWidth() - (bounds.getWidth() + 15));
-		int y = drawable.getHeight() - 20;
+		int lineheight = (int) (20 * size);
+		int y = drawable.getHeight() - lineheight;
 		textRenderer.draw(rows.get(0), x, y);
 
 		if (rows.size() > 1) {
-			// bounds = textRenderer.getBounds(rows.get(1));
-			y = drawable.getHeight() - 40;
+			y = y - lineheight;
 			textRenderer.draw(rows.get(1), x, y);
 		}
 		if (rows.size() > 2) {
-			// bounds = textRenderer.getBounds(rows.get(1));
-			y = drawable.getHeight() - 60;
+			y = y - lineheight;
 			textRenderer.draw(rows.get(2), x, y);
 		}
 
@@ -100,10 +102,11 @@ public class TwitterShape extends AbstractShape implements Shape {
 		// System.out.println("TextShape2.drawBackgroundRectangle()"+alpha);
 		gl.glColor4f(0f, 0f, 0f, alpha);
 		gl.glBegin(GL.GL_POLYGON);
+		int lineheight = (int) (70 * size);
 		int x1 = (int) (drawable.getWidth() - (width + 20));
 		int x2 = drawable.getWidth() - 5;
 		int y1 = drawable.getHeight() - 5;
-		int y2 = drawable.getHeight() - 70;
+		int y2 = drawable.getHeight() - lineheight;
 		gl.glVertex3f(x1, y1, 0.0f);
 		gl.glVertex3f(x2, y1, 0.0f);
 		gl.glVertex3f(x2, y2, 0.0f);
@@ -126,6 +129,17 @@ public class TwitterShape extends AbstractShape implements Shape {
 	@Override
 	public float getWidth() {
 		return 0;
+	}
+
+	public void setSize(int value) {
+		this.size = (float) value / 100;
+		int fontsize = (int) (14 * size);
+
+		Font font = new Font("SansSerif", Font.BOLD, fontsize);
+		textRenderer = new TextRenderer(font, true, false);
+
+		fireShapeChangedEvent();
+
 	}
 
 }

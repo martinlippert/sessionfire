@@ -36,7 +36,8 @@ public class Activator implements BundleActivator {
 		animationtimer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				String randomTweet = sfTwitter.getRandomTweet();
-				//randomTweet = "luebken: Dies ist ein schöner Tweet und ich erzähle hier mal was.";
+				// randomTweet =
+				// "luebken: Dies ist ein schöner Tweet und ich erzähle hier mal was.";
 				System.out.println("Get random Tweet: " + randomTweet);
 				texShape2.setText(randomTweet);
 			}
@@ -46,6 +47,11 @@ public class Activator implements BundleActivator {
 	public void stopTwitterPoll() {
 		animationtimer.cancel();
 		sfTwitter.stop();
+		texShape2.setText("");
+
+
+		SessionFiveApplication.getInstance().getPresentation().removeShape(texShape2,
+				LayerType.FIXED_POSTION);
 	}
 
 	@Override
@@ -55,6 +61,10 @@ public class Activator implements BundleActivator {
 
 	public static Activator getActivator() {
 		return activator;
+	}
+
+	public TwitterShape getTexShape2() {
+		return texShape2;
 	}
 
 }
