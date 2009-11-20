@@ -1,6 +1,7 @@
 package com.sessionfire.twitter.core.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -30,6 +31,8 @@ public class TwitterPanel extends JPanel implements SessionfivePanel {
 		setBorder(new EmptyBorder(15, 15, 15, 15));
 		setLayout(new BorderLayout());
 		setOpaque(false);
+		setDoubleBuffered(false);
+		setBackground(new Color(0, 0, 0, 0));
 		// final JTextField twitterUser = new JTextField(TWITTER_USER_DEFAULT);
 		// JTextField twitterPass = new JTextField(TWITTER_PASSWORD_DEFAULT);
 		final JTextField twitterkeyword = new JTextField(TWITTER_KEYWORD_DEFAULT);

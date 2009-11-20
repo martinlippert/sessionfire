@@ -163,6 +163,10 @@ public class CentralControlPaletteUI {
 		PanelExtension[] extensions = centralControlPalette.getExtensionPanels();
 		if(extensions.length > 0) {
 			JPanel panel = new JPanel();
+			panel.setOpaque(false);
+			panel.setDoubleBuffered(false);
+			panel.setBackground(new Color(0, 0, 0, 0));
+
 			panel.setLayout(new GridLayout(0, 1));
 			
 			for (PanelExtension panelExtension : extensions) {
