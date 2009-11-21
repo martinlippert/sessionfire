@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.media.opengl.GLCanvas;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -167,7 +168,7 @@ public class CentralControlPaletteUI {
 			panel.setDoubleBuffered(false);
 			panel.setBackground(new Color(0, 0, 0, 0));
 
-			panel.setLayout(new GridLayout(0, 1));
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 			
 			for (PanelExtension panelExtension : extensions) {
 				if (panelExtension.getPanel() != null) {

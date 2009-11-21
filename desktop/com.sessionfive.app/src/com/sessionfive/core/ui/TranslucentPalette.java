@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.LinearGradientPaint;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -267,11 +268,11 @@ public class TranslucentPalette extends JWindow {
 				g2.setComposite(AlphaComposite.getInstance(
 						AlphaComposite.SRC_OVER, 0.75f));
 
-//				LinearGradientPaint paint = new LinearGradientPaint(0, 0, 0,
-//						getHeight(), new float[] { .0f, .499f, .5f, 1.0f },
-//						new Color[] { new Color(0x858585), new Color(0x3c3c3c),
-//								new Color(0x2c2c2c), new Color(0x333334) });
-//				g2.setPaint(paint);
+				LinearGradientPaint paint = new LinearGradientPaint(0, 0, 0,
+						getHeight(), new float[] { .0f, .499f, .5f, 1.0f },
+						new Color[] { new Color(0x858585), new Color(0x3c3c3c),
+								new Color(0x2c2c2c), new Color(0x333334) });
+				g2.setPaint(paint);
 				Shape shape = new RoundRectangle2D.Float(0, 0, getWidth(),
 						getHeight(), 16, 16);
 				g2.fill(shape);
