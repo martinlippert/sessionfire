@@ -19,9 +19,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.sessionfire.twitter.core.Activator;
-import com.sessionfive.app.SessionfivePanel;
 
-public class TwitterPanel extends JPanel implements SessionfivePanel {
+public class TwitterPanel extends JPanel {
 	// private static String TWITTER_USER_DEFAULT = "<Twitter User>";
 	// private static String TWITTER_PASSWORD_DEFAULT = "<Twitter Password>";
 	private static String TWITTER_KEYWORD_DEFAULT = "<Twitter Search>";
