@@ -1,6 +1,10 @@
 package com.sessionfire.timer;
 
 import java.awt.BorderLayout;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,18 +25,40 @@ public class TimerUI extends JPanel {
 		time.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
+				updateTimeSetting(time.getText());
 			}
 			
 			@Override
 			public void insertUpdate(DocumentEvent e) {
+				updateTimeSetting(time.getText());
 			}
 			
 			@Override
 			public void changedUpdate(DocumentEvent e) {
+				updateTimeSetting(time.getText());
 			}
 		});
 
 		add(time, BorderLayout.CENTER);
+	}
+	
+	public void updateTimeSetting(String newValue) {
+		SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+		try {
+			Date parsed = format.parse(newValue);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(parsed);
+			int minutes = cal.get(Calendar.MINUTE);
+			int seconds = cal.get(Calendar.SECOND);
+			
+			System.out.println(minutes + "/" + seconds);
+			
+			int totalSeconds = (minutes * 60) + seconds;
+			Activator.getInstance().getTimerController().setTime(totalSeconds * 1000);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
