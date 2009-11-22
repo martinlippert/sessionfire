@@ -8,5 +8,11 @@
             name="com.sessionfire.timer.panel1">
       </panel>
    </extension>
+   <extension
+         point="com.sessionfive.app.keylistener">
+      <keylistener
+            class="com.sessionfire.timer.TimerKeyListener">
+      </keylistener>
+   </extension>
 
 </plugin>

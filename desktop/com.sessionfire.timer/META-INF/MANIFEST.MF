@@ -5,4 +5,9 @@ Bundle-SymbolicName: com.sessionfire.timer;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SESSIONFIRE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.sessionfive.core
+Import-Package: com.sessionfive.animation,
+ com.sessionfive.app,
+ com.sessionfive.core,
+ org.osgi.framework;version="1.5.0"
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.sessionfire.timer.Activator
