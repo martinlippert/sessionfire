@@ -42,11 +42,11 @@ public class PresentationLoader implements PropertyChangeListener {
 	private File[] sortImageFiles(File[] files) {
 		Arrays.sort(files, new Comparator<File>() {
 			public int compare(File o1, File o2) {
-				Integer no1 = extractNumber(o1.getName());
-				Integer no2 = extractNumber(o2.getName());
+				Long no1 = extractNumber(o1.getName());
+				Long no2 = extractNumber(o2.getName());
 
 				if (no1 != null && no2 != null) {
-					return no1.intValue() - no2.intValue();
+					return (int) (no1.longValue() - no2.longValue());
 				}
 				return (int) (o1.lastModified() - o2.lastModified());
 			}
@@ -67,15 +67,22 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private Integer extractNumber(String name) {
+	private Long extractNumber(String name) {
 		StringBuilder digits = new StringBuilder();
 		for (int i = 0; i < name.length(); i++) {
 			if (Character.isDigit(name.charAt(i))) {
 				digits.append(name.charAt(i));
 			}
 		}
+
 		if (digits.length() > 0) {
-			return Integer.parseInt(digits.toString());
+			try {
+				long parsed = Long.parseLong(digits.toString());
+				return parsed;
+			}
+			catch (NumberFormatException e) {
+				return null;
+			}
 		} else {
 			return null;
 		}
