@@ -41,7 +41,7 @@ public class SessionFiveApplication implements IApplication {
 	private GLCapabilities caps;
 	private GLCanvas canvas;
 
-	private KeyListener keyListener;
+	private MultiplexingKeyListener keyListener;
 	private Display display;
 	private Frame frame;
 
@@ -56,7 +56,6 @@ public class SessionFiveApplication implements IApplication {
 	private StringBuffer goToKeyframeDirectlyBuffer;
 
 	private DisplayRepaintManager displayRepaintManager;
-
 	private DisplayRepaintManager fullScreenDisplayRepaintManager;
 
 	public SessionFiveApplication() {
@@ -76,7 +75,23 @@ public class SessionFiveApplication implements IApplication {
 		return presentation;
 	}
 
-	public Object start(IApplicationContext context) throws Exception {
+	public Object start(final IApplicationContext context) throws Exception {
+		final org.eclipse.swt.widgets.Display swtDisplay = new org.eclipse.swt.widgets.Display();
+		swtDisplay.asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				start(swtDisplay);
+				context.applicationRunning();
+			}
+		});
+		while (!swtDisplay.isDisposed()) {
+			if (!swtDisplay.readAndDispatch ()) swtDisplay.sleep ();
+		}
+		
+		return EXIT_OK;
+	}
+	
+	public Object start(final org.eclipse.swt.widgets.Display swtDisplay) {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
 		frame.setIconImage(new ImageIcon(this.getClass()
 				.getResource("sf16.png")).getImage());
@@ -95,7 +110,10 @@ public class SessionFiveApplication implements IApplication {
 
 		canvas.addGLEventListener(display);
 
-		keyListener = new KeyListener() {
+		keyListener = new MultiplexingKeyListener();
+		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
+
+		keyListener.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
 			}
 
@@ -140,7 +158,7 @@ public class SessionFiveApplication implements IApplication {
 							goToKeyframeDirectlyBuffer.length());
 				}
 			}
-		};
+		});
 
 		canvas.addKeyListener(keyListener);
 		frame.addKeyListener(keyListener);
@@ -155,7 +173,12 @@ public class SessionFiveApplication implements IApplication {
 				new Thread(new Runnable() {
 					public void run() {
 						displayRepaintManager.dispose();
-						System.exit(0);
+						swtDisplay.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								swtDisplay.dispose();
+							}
+						});
 					}
 				}).start();
 			}
