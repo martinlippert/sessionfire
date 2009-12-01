@@ -5,7 +5,7 @@
          point="com.sessionfive.app.panel">
       <panel
             class="com.sessionfire.timer.TimerUI"
-            name="com.sessionfire.timer.panel1">
+            name="Timer">
       </panel>
    </extension>
    <extension
