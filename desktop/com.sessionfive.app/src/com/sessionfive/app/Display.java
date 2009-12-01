@@ -105,7 +105,7 @@ public class Display implements GLEventListener {
 		gl.glMatrixMode(GL_PROJECTION);
 		gl.glLoadIdentity();
 		double aspectRatio = (double) width / (double) height;
-		glu.gluPerspective(45.0, aspectRatio, 1.0, 400.0);
+		glu.gluPerspective(45.0, aspectRatio, 1.0, 3000.0);
 
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();

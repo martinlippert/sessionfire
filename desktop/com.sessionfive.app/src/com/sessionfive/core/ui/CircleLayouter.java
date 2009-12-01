@@ -18,8 +18,11 @@ public class CircleLayouter implements Layouter {
 	@Override
 	public void layout(Presentation presentation) {
 		int size = presentation.getShapes(LayerType.CAMERA_ANIMATED).size();
-		final Camera startCamera = new Camera(-80f, -3.1f,
-				size * 12f, -20f, -3.1f, 0f, 0f, 1f, 0f);
+		final Camera startCamera = new Camera(
+				-80f, 0f, size * 25f,
+				1f, 1f, 0f, 
+				0f, 1f, 0f
+				);
 		presentation.setStartCamera(startCamera);
 		
 		float z = 0f;
