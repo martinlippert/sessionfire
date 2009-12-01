@@ -71,7 +71,7 @@ public class CentralControlPalette {
 
 	public AnimationFactory[] getAnimators() {
 		return new AnimationFactory[] { new ZoomInZoomOutAnimationFactory(),
-				new MoveToAnimationFactory() };
+				new MoveToAnimationFactory(), new GoToAnimationFactory() };
 	}
 
 	public void setLayerText(String text) {
