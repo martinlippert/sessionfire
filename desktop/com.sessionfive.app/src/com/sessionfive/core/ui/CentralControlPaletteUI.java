@@ -3,11 +3,13 @@ package com.sessionfive.core.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GLCanvas;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -23,7 +25,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
@@ -36,10 +37,10 @@ public class CentralControlPaletteUI {
 	private final GLCanvas canvas;
 
 	private JSlider xRotationSlider;
-
 	private JSlider yRotationSlider;
-
 	private JSlider zRotationSlider;
+
+	private List<TranslucentPalette> extensionPalettes;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
 			GLCanvas canvas) {
@@ -50,10 +51,22 @@ public class CentralControlPaletteUI {
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
+
+		initExtensions();
 	}
 
 	public void show() {
 		window.showPalette();
+
+		TranslucentPalette previousWindow = window;
+		for (TranslucentPalette palette : extensionPalettes) {
+			palette.setLocation(previousWindow.getLocationOnScreen().x,
+					previousWindow.getLocationOnScreen().y
+							+ previousWindow.getSize().height);
+			palette.setSize(previousWindow.getSize().width, palette.getSize().height);
+			palette.showPalette();
+			previousWindow = palette;
+		}
 	}
 
 	public void setStatus(String status) {
@@ -160,25 +173,30 @@ public class CentralControlPaletteUI {
 		xRotationSlider.addChangeListener(rotationSliderListener);
 		yRotationSlider.addChangeListener(rotationSliderListener);
 		zRotationSlider.addChangeListener(rotationSliderListener);
-		
-		PanelExtension[] extensions = centralControlPalette.getExtensionPanels();
-		if(extensions.length > 0) {
-			JPanel panel = new JPanel();
-			panel.setOpaque(false);
-			panel.setDoubleBuffered(false);
-			panel.setBackground(new Color(0, 0, 0, 0));
+	}
 
-			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			
-			for (PanelExtension panelExtension : extensions) {
-				if (panelExtension.getPanel() != null) {
-					panel.add(panelExtension.getPanel());
-				}
-			}
-			
-			contentPane.add(panel, BorderLayout.SOUTH);
-		}
+	protected void initExtensions() {
+		extensionPalettes = new ArrayList<TranslucentPalette>();
 		
+		PanelExtension[] extensions = centralControlPalette
+				.getExtensionPanels();
+
+		for (PanelExtension panelExtension : extensions) {
+			JPanel panelToEmbed = panelExtension.getPanel();
+			if (panelToEmbed != null) {
+				TranslucentPalette palette = new TranslucentPalette(
+						panelExtension.getName(), false, (Window) window
+								.getParent());
+				JComponent contentPane = (JComponent) palette
+						.getEmbeddedContentPane();
+				contentPane.setLayout(new BorderLayout());
+
+				contentPane.add(panelToEmbed, BorderLayout.NORTH);
+
+				palette.pack();
+				extensionPalettes.add(palette);
+			}
+		}
 	}
 
 	protected void chooseBackground() {

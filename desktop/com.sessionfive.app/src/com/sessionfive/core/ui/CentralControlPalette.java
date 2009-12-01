@@ -68,8 +68,7 @@ public class CentralControlPalette {
 	}
 
 	public void setLayerText(String text) {
-		 this.presentation.setLayerText(text);
-//		this.animationController.animateText(text);
+		this.presentation.setLayerText(text);
 	}
 
 	public String getLayerText() {
