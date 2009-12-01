@@ -6,6 +6,7 @@ import java.util.List;
 import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
+import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.LayerType;
@@ -31,6 +32,12 @@ public class CentralControlPalette {
 		loader.loadPresentation(presentation, canvas, layouter, animationFactory);
 
 		canvas.requestFocus();
+	}
+
+	public void startPresentation() {
+		if (!SessionFiveApplication.getInstance().isFullScreenShowing()) {
+			SessionFiveApplication.getInstance().switchFullScreen();
+		}
 	}
 
 	public void changeLayout(Layouter layouter) {

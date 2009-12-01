@@ -85,12 +85,13 @@ public class SessionFiveApplication implements IApplication {
 			}
 		});
 		while (!swtDisplay.isDisposed()) {
-			if (!swtDisplay.readAndDispatch ()) swtDisplay.sleep ();
+			if (!swtDisplay.readAndDispatch())
+				swtDisplay.sleep();
 		}
-		
+
 		return EXIT_OK;
 	}
-	
+
 	public Object start(final org.eclipse.swt.widgets.Display swtDisplay) {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
 		frame.setIconImage(new ImageIcon(this.getClass()
@@ -105,13 +106,15 @@ public class SessionFiveApplication implements IApplication {
 		presentation = new Presentation();
 		display = new Display(presentation);
 		animationController = new AnimationController();
-		
-		displayRepaintManager = new DisplayRepaintManager(display, presentation, canvas);
+
+		displayRepaintManager = new DisplayRepaintManager(display,
+				presentation, canvas);
 
 		canvas.addGLEventListener(display);
 
 		keyListener = new MultiplexingKeyListener();
-		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
+		new KeyListenerExtensionReader()
+				.addKeyListenerExtensionsTo(keyListener);
 
 		keyListener.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
@@ -126,8 +129,8 @@ public class SessionFiveApplication implements IApplication {
 								.getModifiers() & KeyEvent.META_MASK) != 0)) {
 					animationController.goTo(0);
 				} else if (e.getKeyCode() == KeyEvent.VK_END
-					|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e
-							.getModifiers() & KeyEvent.META_MASK) != 0)) {
+						|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e
+								.getModifiers() & KeyEvent.META_MASK) != 0)) {
 					animationController.goTo(animationController
 							.getNumberOfKeyFrames() - 1);
 				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -143,9 +146,8 @@ public class SessionFiveApplication implements IApplication {
 				} else if (e.getKeyCode() == KeyEvent.VK_F11
 						|| e.getKeyChar() == 'f') {
 					switchFullScreen();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					if(fullScreenFrame != null) {						
+				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					if (isFullScreenShowing()) {
 						switchFullScreen();
 					}
 				}
@@ -225,7 +227,8 @@ public class SessionFiveApplication implements IApplication {
 					.getContext(), null);
 			fullScreenCanvas.addGLEventListener(display);
 			fullScreenCanvas.setFocusable(true);
-			fullScreenDisplayRepaintManager = new DisplayRepaintManager(display, presentation, fullScreenCanvas);
+			fullScreenDisplayRepaintManager = new DisplayRepaintManager(
+					display, presentation, fullScreenCanvas);
 			fullScreenFrame.add(fullScreenCanvas, BorderLayout.CENTER);
 
 			fullScreenFrame.addKeyListener(keyListener);
@@ -247,7 +250,7 @@ public class SessionFiveApplication implements IApplication {
 			fullScreenFrame.setVisible(false);
 			fullScreenFrame.dispose();
 			fullScreenFrame = null;
-			
+
 			fullScreenDisplayRepaintManager.dispose();
 			fullScreenDisplayRepaintManager = null;
 			frame.toFront();
@@ -263,6 +266,14 @@ public class SessionFiveApplication implements IApplication {
 		if (instance != null) {
 			instance.centralControlPaletteUI.setStatus(status);
 		}
+	}
+
+	public GLContext getGLContext() {
+		return canvas.getContext();
+	}
+
+	public boolean isFullScreenShowing() {
+		return fullScreenFrame != null;
 	}
 
 	public byte[] getKeyFrame(int parsedNumber) {
@@ -343,10 +354,6 @@ public class SessionFiveApplication implements IApplication {
 			return null;
 		}
 
-	}
-
-	public GLContext getGLContext() {
-		return canvas.getContext();
 	}
 
 }

@@ -31,6 +31,7 @@ public class CentralControlPaletteUI {
 
 	private TranslucentPalette window;
 	private JButton choosePresentationButton;
+	private JButton startPresentationButton;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
 	private JTextField layerText;
@@ -74,6 +75,16 @@ public class CentralControlPaletteUI {
 	}
 
 	private void initComponents() {
+		JComponent contentPane = (JComponent) window.getEmbeddedContentPane();
+		contentPane.setLayout(new BorderLayout());
+
+		JPanel subContentPane = new JPanel();
+		subContentPane.setOpaque(false);
+		contentPane.add(subContentPane, BorderLayout.NORTH);
+
+		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+		subContentPane.setLayout(new GridLayout(9, 1, 15, 15));
+		
 		choosePresentationButton = new JButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,17 +96,15 @@ public class CentralControlPaletteUI {
 						yRotationSlider.getValue(), zRotationSlider.getValue());
 			}
 		});
-
-		JComponent contentPane = (JComponent) window.getEmbeddedContentPane();
-		contentPane.setLayout(new BorderLayout());
-
-		JPanel subContentPane = new JPanel();
-		subContentPane.setOpaque(false);
-		contentPane.add(subContentPane, BorderLayout.NORTH);
-
-		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-		subContentPane.setLayout(new GridLayout(8, 1, 15, 15));
 		subContentPane.add(choosePresentationButton);
+
+		startPresentationButton = new JButton("Start Presentation");
+		startPresentationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				centralControlPalette.startPresentation();
+			}
+		});
+		subContentPane.add(startPresentationButton);
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();
