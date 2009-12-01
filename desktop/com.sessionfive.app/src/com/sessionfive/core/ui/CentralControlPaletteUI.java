@@ -83,7 +83,7 @@ public class CentralControlPaletteUI {
 		contentPane.add(subContentPane, BorderLayout.NORTH);
 
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-		subContentPane.setLayout(new GridLayout(9, 1, 15, 15));
+		subContentPane.setLayout(new GridLayout(10, 1));
 		
 		choosePresentationButton = new JButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
@@ -105,6 +105,7 @@ public class CentralControlPaletteUI {
 			}
 		});
 		subContentPane.add(startPresentationButton);
+		subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"));
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();

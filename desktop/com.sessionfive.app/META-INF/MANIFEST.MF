@@ -13,6 +13,7 @@ Import-Package: org.jdesktop.animation.timing,
 Export-Package: com.sessionfive.animation,
  com.sessionfive.app,
  com.sessionfive.core,
+ com.sessionfive.core.ui,
  com.sessionfive.shapes
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: sessionfireapp.jar

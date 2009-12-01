@@ -1,6 +1,6 @@
 package com.sessionfire.timer;
 
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,13 +12,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.sessionfive.core.ui.HelpLabelFactory;
+
 public class TimerUI extends JPanel {
 
 	private static final long serialVersionUID = -430613350613330878L;
 	
 	public TimerUI() {
 		setBorder(new EmptyBorder(15, 15, 15, 15));
-		setLayout(new BorderLayout());
+		setLayout(new GridLayout(2, 1));
 		setOpaque(false);
 
 		final JTextField time = new JTextField("0:20");
@@ -39,7 +41,8 @@ public class TimerUI extends JPanel {
 			}
 		});
 
-		add(time, BorderLayout.CENTER);
+		add(time);
+		add(HelpLabelFactory.createHelpLabel("Press <p> to start"));
 	}
 	
 	public void updateTimeSetting(String newValue) {
