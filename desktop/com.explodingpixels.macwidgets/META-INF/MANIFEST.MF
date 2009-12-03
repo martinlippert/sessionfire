@@ -2,7 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Macwidgets
 Bundle-SymbolicName: com.explodingpixels.macwidgets
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: EXPLODINGPIXELS
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: forms-1.2.1.jar,
+ .
 Export-Package: com.explodingpixels.border,
  com.explodingpixels.data,
  com.explodingpixels.macwidgets,
@@ -17,4 +23,3 @@ Export-Package: com.explodingpixels.border,
  com.jgoodies.forms.factories,
  com.jgoodies.forms.layout,
  com.jgoodies.forms.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
