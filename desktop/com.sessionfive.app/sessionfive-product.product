@@ -37,6 +37,7 @@ true</programArgsMac>
    </vm>
 
    <plugins>
+      <plugin id="com.explodingpixels.macwidgets"/>
       <plugin id="com.sessionfive.app"/>
       <plugin id="com.sessionfive.remotecontrol"/>
       <plugin id="javax.media.opengl"/>
