@@ -1,5 +1,6 @@
 package com.sessionfire.timer;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,13 +18,16 @@ import com.sessionfive.core.ui.HelpLabelFactory;
 public class TimerUI extends JPanel {
 
 	private static final long serialVersionUID = -430613350613330878L;
+	private JTextField time;
+	private Color defaultForeground;
 	
 	public TimerUI() {
 		setBorder(new EmptyBorder(15, 15, 15, 15));
 		setLayout(new GridLayout(2, 1));
 		setOpaque(false);
 
-		final JTextField time = new JTextField("0:20");
+		time = new JTextField("0:20");
+		defaultForeground = time.getForeground();
 		time.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -42,7 +46,7 @@ public class TimerUI extends JPanel {
 		});
 
 		add(time);
-		add(HelpLabelFactory.createHelpLabel("Press <p> to start"));
+		add(HelpLabelFactory.createHelpLabel("Press T to start, ESC to stop"));
 	}
 	
 	public void updateTimeSetting(String newValue) {
@@ -55,12 +59,16 @@ public class TimerUI extends JPanel {
 			int minutes = cal.get(Calendar.MINUTE);
 			int seconds = cal.get(Calendar.SECOND);
 			
-			System.out.println(minutes + "/" + seconds);
-			
 			int totalSeconds = (minutes * 60) + seconds;
-			Activator.getInstance().getTimerController().setTime(totalSeconds * 1000);
+			if (totalSeconds > 0) {
+				time.setForeground(defaultForeground);
+				Activator.getInstance().getTimerController().setTime(totalSeconds * 1000);
+			}
+			else {
+				time.setForeground(Color.RED);
+			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			time.setForeground(Color.RED);
 		}
 	}
 

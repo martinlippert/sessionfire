@@ -39,5 +39,11 @@ public class TimerController {
 		
 		timer.start();
 	}
+
+	public void stopTimer() {
+		if (timer.isRunning()) {
+			timer.stop();
+		}
+	}
 	
 }
