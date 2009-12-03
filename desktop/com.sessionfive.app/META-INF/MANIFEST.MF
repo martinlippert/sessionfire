@@ -6,10 +6,12 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SESSION_FIVE
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
  javax.media.opengl;bundle-version="1.1.1",
- org.eclipse.swt;bundle-version="3.6.0"
-Import-Package: org.jdesktop.animation.timing,
- org.jdesktop.animation.timing.interpolation,
- javax.swing
+ org.eclipse.swt
+Import-Package: com.explodingpixels.macwidgets,
+ com.jgoodies.forms.layout,
+ javax.swing,
+ org.jdesktop.animation.timing,
+ org.jdesktop.animation.timing.interpolation
 Export-Package: com.sessionfive.animation,
  com.sessionfive.app,
  com.sessionfive.core,

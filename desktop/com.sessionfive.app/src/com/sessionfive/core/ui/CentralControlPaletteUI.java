@@ -2,7 +2,7 @@ package com.sessionfive.core.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +25,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.explodingpixels.macwidgets.HudWidgetFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
@@ -43,12 +47,11 @@ public class CentralControlPaletteUI {
 
 	private List<TranslucentPalette> extensionPalettes;
 
-	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
-			GLCanvas canvas) {
+	public CentralControlPaletteUI(CentralControlPalette centralControlPalette, GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
-		window = new TranslucentPalette("Sessionfire - Central Control", false,
-				SwingUtilities.getWindowAncestor(canvas));
+		window = new TranslucentPalette("Sessionfire - Central Control", false, SwingUtilities
+				.getWindowAncestor(canvas));
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
@@ -61,9 +64,9 @@ public class CentralControlPaletteUI {
 
 		TranslucentPalette previousWindow = window;
 		for (TranslucentPalette palette : extensionPalettes) {
-			palette.setLocation(previousWindow.getLocationOnScreen().x,
-					previousWindow.getLocationOnScreen().y
-							+ previousWindow.getSize().height);
+			palette.setLocation(previousWindow.getLocationOnScreen().x, previousWindow
+					.getLocationOnScreen().y
+					+ previousWindow.getSize().height);
 			palette.setSize(previousWindow.getSize().width, palette.getSize().height);
 			palette.showPalette();
 			previousWindow = palette;
@@ -78,80 +81,83 @@ public class CentralControlPaletteUI {
 		JComponent contentPane = (JComponent) window.getEmbeddedContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		JPanel subContentPane = new JPanel();
+		FormLayout layout = new FormLayout(
+				"fill:pref:grow", // columns
+				"pref, 3dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
+
+		CellConstraints cc = new CellConstraints();
+		JPanel subContentPane = new JPanel(layout);
 		subContentPane.setOpaque(false);
-		contentPane.add(subContentPane, BorderLayout.NORTH);
 
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-		subContentPane.setLayout(new GridLayout(10, 1));
-		
-		choosePresentationButton = new JButton("Choose Presentation...");
+		contentPane.add(subContentPane, BorderLayout.NORTH);
+
+		choosePresentationButton = HudWidgetFactory.createHudButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.choosePresentation(canvas,
-						(Layouter) layoutChoice.getSelectedItem(),
-						(AnimationFactory) animationChoice.getSelectedItem());
+				centralControlPalette.choosePresentation(canvas, (Layouter) layoutChoice
+						.getSelectedItem(), (AnimationFactory) animationChoice.getSelectedItem());
 
-				centralControlPalette.setRotation(xRotationSlider.getValue(),
-						yRotationSlider.getValue(), zRotationSlider.getValue());
+				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
+						.getValue(), zRotationSlider.getValue());
 			}
 		});
-		subContentPane.add(choosePresentationButton);
+		subContentPane.add(choosePresentationButton, cc.xy(1, 1));
 
-		startPresentationButton = new JButton("Start Presentation");
+		startPresentationButton = HudWidgetFactory.createHudButton("Start Presentation");
+
 		startPresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.startPresentation();
 			}
 		});
-		subContentPane.add(startPresentationButton);
-		subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"));
+		subContentPane.add(startPresentationButton, cc.xy(1, 3));
+		subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"), cc
+				.xy(1, 5));
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();
 		for (Layouter layouter : allLayouter) {
 			layoutModel.addElement(layouter);
 		}
-		layoutChoice = new JComboBox(layoutModel);
+		layoutChoice = HudWidgetFactory.createHudComboBox(layoutModel);
 		layoutChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedLayouter = layoutChoice.getSelectedItem();
 				if (selectedLayouter != null) {
-					centralControlPalette
-							.changeLayout((Layouter) selectedLayouter);
+					centralControlPalette.changeLayout((Layouter) selectedLayouter);
 				}
 			}
 		});
-		subContentPane.add(layoutChoice);
+		subContentPane.add(layoutChoice, cc.xy(1, 7));
 
 		DefaultComboBoxModel animationModel = new DefaultComboBoxModel();
-		AnimationFactory[] animationFactories = centralControlPalette
-				.getAnimators();
+		AnimationFactory[] animationFactories = centralControlPalette.getAnimators();
 		for (AnimationFactory animationFactory : animationFactories) {
 			animationModel.addElement(animationFactory);
 		}
-		animationChoice = new JComboBox(animationModel);
+		animationChoice = HudWidgetFactory.createHudComboBox(animationModel);
 		animationChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedAnimation = animationChoice.getSelectedItem();
 				if (selectedAnimation != null) {
-					centralControlPalette
-							.changeAnimation((AnimationFactory) selectedAnimation);
+					centralControlPalette.changeAnimation((AnimationFactory) selectedAnimation);
 				}
 			}
 		});
-		subContentPane.add(animationChoice);
+		subContentPane.add(animationChoice, cc.xy(1, 9));
 
-		JButton backgroundChooser = new JButton("Choose Background Color...");
-		subContentPane.add(backgroundChooser);
+		JButton backgroundChooser = HudWidgetFactory.createHudButton("Choose Background Color...");
+		backgroundChooser.setMaximumSize(new Dimension(10, 5));
+		subContentPane.add(backgroundChooser, cc.xy(1, 11));
 		backgroundChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
 			}
 		});
 
-		layerText = new JTextField(centralControlPalette.getLayerText());
-		subContentPane.add(layerText);
+		layerText = HudWidgetFactory.createHudTextField(centralControlPalette.getLayerText());
+		subContentPane.add(layerText, cc.xy(1, 13));
 		layerText.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
 				centralControlPalette.setLayerText(layerText.getText());
@@ -169,14 +175,14 @@ public class CentralControlPaletteUI {
 		xRotationSlider = new JSlider(0, 360, 0);
 		yRotationSlider = new JSlider(0, 360, 0);
 		zRotationSlider = new JSlider(0, 360, 0);
-		subContentPane.add(xRotationSlider);
-		subContentPane.add(yRotationSlider);
-		subContentPane.add(zRotationSlider);
+		subContentPane.add(xRotationSlider, cc.xy(1, 15));
+		subContentPane.add(yRotationSlider, cc.xy(1, 17));
+		subContentPane.add(zRotationSlider, cc.xy(1, 19));
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				centralControlPalette.setRotation(xRotationSlider.getValue(),
-						yRotationSlider.getValue(), zRotationSlider.getValue());
+				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
+						.getValue(), zRotationSlider.getValue());
 			}
 		};
 
@@ -187,18 +193,15 @@ public class CentralControlPaletteUI {
 
 	protected void initExtensions() {
 		extensionPalettes = new ArrayList<TranslucentPalette>();
-		
-		PanelExtension[] extensions = centralControlPalette
-				.getExtensionPanels();
+
+		PanelExtension[] extensions = centralControlPalette.getExtensionPanels();
 
 		for (PanelExtension panelExtension : extensions) {
 			JPanel panelToEmbed = panelExtension.getPanel();
 			if (panelToEmbed != null) {
-				TranslucentPalette palette = new TranslucentPalette(
-						panelExtension.getName(), false, (Window) window
-								.getParent());
-				JComponent contentPane = (JComponent) palette
-						.getEmbeddedContentPane();
+				TranslucentPalette palette = new TranslucentPalette(panelExtension.getName(),
+						false, (Window) window.getParent());
+				JComponent contentPane = (JComponent) palette.getEmbeddedContentPane();
 				contentPane.setLayout(new BorderLayout());
 
 				contentPane.add(panelToEmbed, BorderLayout.NORTH);
@@ -210,9 +213,8 @@ public class CentralControlPaletteUI {
 	}
 
 	protected void chooseBackground() {
-		Color newColor = JColorChooser.showDialog(window,
-				"Choose Background Color", centralControlPalette
-						.getBackgroundColor());
+		Color newColor = JColorChooser.showDialog(window, "Choose Background Color",
+				centralControlPalette.getBackgroundColor());
 
 		if (newColor != null) {
 			centralControlPalette.setBackgroundColor(newColor);
