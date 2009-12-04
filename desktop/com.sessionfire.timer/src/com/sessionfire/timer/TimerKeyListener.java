@@ -10,8 +10,10 @@ public class TimerKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_P) {
+		if (e.getKeyCode() == KeyEvent.VK_T) {
 			Activator.getInstance().getTimerController().startTimer();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			Activator.getInstance().getTimerController().stopTimer();
 		}
 	}
 
