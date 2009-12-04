@@ -1,12 +1,21 @@
 package com.sessionfive.core.ui;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.media.opengl.GLCanvas;
@@ -36,6 +45,7 @@ public class CentralControlPaletteUI {
 	private TranslucentPalette window;
 	private JButton choosePresentationButton;
 	private JButton startPresentationButton;
+	private JButton helpButton;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
 	private JTextField layerText;
@@ -47,16 +57,23 @@ public class CentralControlPaletteUI {
 
 	private List<TranslucentPalette> extensionPalettes;
 
+	private JPanel subContentPane;
+
+	boolean helpshown = false;
+
+	private Collection<HelpWindow> helpWindows;
+
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette, GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.canvas = canvas;
-		window = new TranslucentPalette("Sessionfire - Central Control", false, SwingUtilities
-				.getWindowAncestor(canvas));
+		Window windowAncestor = SwingUtilities.getWindowAncestor(canvas);
+		window = new TranslucentPalette("Sessionfire - Central Control", false, windowAncestor);
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
-
 		initExtensions();
+
+		helpWindows = new HashSet<HelpWindow>();
 	}
 
 	public void show() {
@@ -83,10 +100,10 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"fill:pref:grow", // columns
-				"pref, 3dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
+				"pref, 3dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
-		JPanel subContentPane = new JPanel(layout);
+		subContentPane = new JPanel(layout);
 		subContentPane.setOpaque(false);
 
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -112,8 +129,7 @@ public class CentralControlPaletteUI {
 			}
 		});
 		subContentPane.add(startPresentationButton, cc.xy(1, 3));
-		subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"), cc
-				.xy(1, 5));
+		//subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"), cc.xy(1, 5));
 
 		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();
@@ -142,6 +158,16 @@ public class CentralControlPaletteUI {
 				Object selectedAnimation = animationChoice.getSelectedItem();
 				if (selectedAnimation != null) {
 					centralControlPalette.changeAnimation((AnimationFactory) selectedAnimation);
+				}
+			}
+		});
+		// Workaround to prevent Classcast Exception in apple laf
+		animationChoice.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char keyChar = e.getKeyChar();
+				if (keyChar == ' ') {
+					e.consume();
 				}
 			}
 		});
@@ -189,6 +215,34 @@ public class CentralControlPaletteUI {
 		xRotationSlider.addChangeListener(rotationSliderListener);
 		yRotationSlider.addChangeListener(rotationSliderListener);
 		zRotationSlider.addChangeListener(rotationSliderListener);
+
+		helpButton = HudWidgetFactory.createHudButton("?");
+		subContentPane.add(helpButton, cc.xy(1, 21));
+
+		helpButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!helpshown) {
+					e.consume();
+					showhelp();
+				}
+			}
+		});
+
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				if (event instanceof MouseEvent) {
+					MouseEvent mevent = (MouseEvent) event;
+					if (mevent.getClickCount() > 0 && helpshown) {
+						hidehelp();
+					}
+
+				}
+			}
+		}, AWTEvent.MOUSE_EVENT_MASK);
+
 	}
 
 	protected void initExtensions() {
@@ -212,13 +266,40 @@ public class CentralControlPaletteUI {
 		}
 	}
 
+	private void showhelp() {
+		System.out.println("CentralControlPaletteUI.showhelp()");
+		helpWindows.add(new HelpWindow(choosePresentationButton, HelpWindowPosition.ABOVE,
+				"Select your presentation as an set", "or an folder of images."));
+		helpWindows.add(new HelpWindow(startPresentationButton, HelpWindowPosition.BELOW,
+				"Press to start your presentation", "and press ESC or F11 to switch back."));
+		helpWindows.add(new HelpWindow(animationChoice, HelpWindowPosition.ABOVE,
+				"Use these controls to select an animation", "and an layout of your shapes."));
+		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
+				"Use these sliders to control", "the X,Y and Z axis of your shapes."));
+		helpshown = true;
+		// helpWindow.showHoverWindow();
+
+	}
+
+	private void hidehelp() {
+		System.out.println("CentralControlPaletteUI.hidehelp()");
+
+		helpshown = false;
+		for (HelpWindow window : helpWindows) {
+			window.hideHoverWindow();
+			window = null;
+		}
+	}
+
 	protected void chooseBackground() {
+
 		Color newColor = JColorChooser.showDialog(window, "Choose Background Color",
 				centralControlPalette.getBackgroundColor());
 
 		if (newColor != null) {
 			centralControlPalette.setBackgroundColor(newColor);
 		}
+
 	}
 
 }
