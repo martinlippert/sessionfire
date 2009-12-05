@@ -269,13 +269,13 @@ public class CentralControlPaletteUI {
 	private void showhelp() {
 		System.out.println("CentralControlPaletteUI.showhelp()");
 		helpWindows.add(new HelpWindow(choosePresentationButton, HelpWindowPosition.ABOVE,
-				"Select your presentation as an set", "or an folder of images."));
+				"Select your presentation as a set", "or a folder of images."));
 		helpWindows.add(new HelpWindow(startPresentationButton, HelpWindowPosition.BELOW,
 				"Press to start your presentation", "and press ESC or F11 to switch back."));
 		helpWindows.add(new HelpWindow(animationChoice, HelpWindowPosition.ABOVE,
-				"Use these controls to select an animation", "and an layout of your shapes."));
+				"Use these controls to select an animation", "and a layout of your shapes."));
 		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
-				"Use these sliders to control", "the X,Y and Z axis of your shapes."));
+				"Use these sliders to control", "the X,Y and Z rotation of your shapes."));
 		helpshown = true;
 		// helpWindow.showHoverWindow();
 
