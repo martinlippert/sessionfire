@@ -1,4 +1,4 @@
-package com.sessionfive.app;
+package com.sessionfire.twitter.core;
 
 import java.util.ArrayList;
 import java.util.List;
