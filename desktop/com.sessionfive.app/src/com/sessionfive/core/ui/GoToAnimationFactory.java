@@ -14,12 +14,18 @@ public class GoToAnimationFactory implements AnimationFactory {
 
 	@Override
 	public String getName() {
-		return "Go To";
+		return GoToAnimation.NAME;
 	}
 	
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GoToAnimationFactory)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }

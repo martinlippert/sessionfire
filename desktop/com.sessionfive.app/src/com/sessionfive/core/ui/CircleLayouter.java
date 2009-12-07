@@ -7,12 +7,14 @@ import com.sessionfive.core.Shape;
 
 public class CircleLayouter implements Layouter {
 	
+	public static final String NAME = "Circle";
+
 	public CircleLayouter() {
 	}
 
 	@Override
 	public String getName() {
-		return "Circle";
+		return NAME;
 	}
 
 	@Override
@@ -43,6 +45,12 @@ public class CircleLayouter implements Layouter {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CircleLayouter)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }

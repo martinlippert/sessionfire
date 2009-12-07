@@ -37,7 +37,6 @@ public class HelpWindow extends JWindow {
 		setFocusableWindowState(false);
 		setBackground(new Color(0, 0, 0, 0));
 
-
 		JPanel contentPanel = getContentPanel();
 		setContentPane(contentPanel);
 
@@ -127,7 +126,6 @@ public class HelpWindow extends JWindow {
 		return contentPanel;
 	}
 
-	@SuppressWarnings("restriction")
 	public void showHoverWindow() {
 
 		if (this.fadeInTimer != null && this.fadeInTimer.isRunning()) {
@@ -189,7 +187,6 @@ public class HelpWindow extends JWindow {
 
 			// start fading out
 			this.fadeOutTimer = new Timer(100, new ActionListener() {
-				@SuppressWarnings("restriction")
 				public void actionPerformed(ActionEvent e) {
 					currOpacity -= 18;
 					if (currOpacity >= 0) {

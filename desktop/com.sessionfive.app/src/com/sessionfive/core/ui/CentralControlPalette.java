@@ -18,7 +18,8 @@ public class CentralControlPalette {
 	private final Presentation presentation;
 	private final AnimationController animationController;
 
-	public CentralControlPalette(Presentation presentation, AnimationController animationController) {
+	public CentralControlPalette(Presentation presentation,
+			AnimationController animationController) {
 		this.presentation = presentation;
 		this.animationController = animationController;
 	}
@@ -29,9 +30,17 @@ public class CentralControlPalette {
 	public void choosePresentation(GLCanvas canvas, Layouter layouter,
 			AnimationFactory animationFactory) {
 		PresentationLoader loader = new PresentationLoader();
-		loader.loadPresentation(presentation, canvas, layouter, animationFactory);
+		loader.loadPresentation(presentation, canvas, layouter,
+				animationFactory);
 
 		canvas.requestFocus();
+	}
+
+	public void savePresentation(Layouter layouter,
+			AnimationFactory animationFactory) {
+		PresentationLoader loader = new PresentationLoader();
+		loader.savePresentation(presentation, layouter.getName(),
+				animationFactory.getName());
 	}
 
 	public void startPresentation() {
@@ -42,7 +51,9 @@ public class CentralControlPalette {
 
 	public void changeLayout(Layouter layouter) {
 		layouter.layout(presentation);
-		animationController.resetTo(animationController.getCurrentAnimationNo());
+		presentation.setDefaultLayouter(layouter);
+		animationController
+				.resetTo(animationController.getCurrentAnimationNo());
 	}
 
 	public void changeAnimation(AnimationFactory animationFactory) {
@@ -51,10 +62,12 @@ public class CentralControlPalette {
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
-			Animation animation = animationFactory.createAnimation(startShape, shape);
+			Animation animation = animationFactory.createAnimation(startShape,
+					shape);
 			presentation.addAnimation(animation);
 			startShape = shape;
 		}
+		presentation.setDefaultAnimation(animationFactory);
 	}
 
 	public void setBackgroundColor(Color newColor) {
@@ -66,7 +79,8 @@ public class CentralControlPalette {
 	}
 
 	public Layouter[] getLayouter() {
-		return new Layouter[] { new LineLayouter(), new TileLayouter(), new CircleLayouter() };
+		return new Layouter[] { new LineLayouter(), new TileLayouter(),
+				new CircleLayouter() };
 	}
 
 	public AnimationFactory[] getAnimators() {
@@ -78,10 +92,6 @@ public class CentralControlPalette {
 		this.presentation.setLayerText(text);
 	}
 
-	public String getLayerText() {
-		return this.presentation.getLayerText();
-	}
-
 	public void setRotation(int x, int y, int z) {
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
@@ -90,7 +100,8 @@ public class CentralControlPalette {
 	}
 
 	public PanelExtension[] getExtensionPanels() {
-		return new PanelExtensionLoader().loadExtensions(animationController, presentation);
+		return new PanelExtensionLoader().loadExtensions(animationController,
+				presentation);
 	}
 
 }

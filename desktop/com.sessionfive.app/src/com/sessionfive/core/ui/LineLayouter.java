@@ -7,12 +7,14 @@ import com.sessionfive.core.Shape;
 
 public class LineLayouter implements Layouter {
 	
+	public static final String NAME = "Line";
+
 	public LineLayouter() {
 	}
 
 	@Override
 	public String getName() {
-		return "Line";
+		return NAME;
 	}
 
 	@Override
@@ -34,6 +36,12 @@ public class LineLayouter implements Layouter {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof LineLayouter)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }

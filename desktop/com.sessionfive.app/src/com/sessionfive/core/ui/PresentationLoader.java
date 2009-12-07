@@ -34,6 +34,7 @@ public class PresentationLoader implements PropertyChangeListener {
 			files = sortImageFiles(files);
 
 			if (files.length > 0) {
+				presentation.setPath(getPresentationPath(chooser));
 				readFiles(presentation, files, canvas, layouter, animationFactory);
 			}
 		}
@@ -64,6 +65,19 @@ public class PresentationLoader implements PropertyChangeListener {
 			}
 		} else {
 			return new File[0];
+		}
+	}
+	
+	private String getPresentationPath(JFileChooser chooser) {
+		File[] selectedFiles = chooser.getSelectedFiles();
+		if (selectedFiles != null) {
+			if (selectedFiles.length == 1 && selectedFiles[0].isDirectory()) {
+				return selectedFiles[0].getAbsolutePath();
+			} else {
+				return chooser.getCurrentDirectory().getAbsolutePath();
+			}
+		} else {
+			return "";
 		}
 	}
 
@@ -113,6 +127,9 @@ public class PresentationLoader implements PropertyChangeListener {
 				}
 			}
 		}
+	}
+
+	public void savePresentation(Presentation presentation, String layoutName, String animationName) {
 	}
 
 }

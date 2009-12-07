@@ -14,12 +14,18 @@ public class ZoomInZoomOutAnimationFactory implements AnimationFactory {
 
 	@Override
 	public String getName() {
-		return "Zoom Out - Zoom In";
+		return ZoomOutZoomInAnimation.NAME;
 	}
 	
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ZoomInZoomOutAnimationFactory)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }
