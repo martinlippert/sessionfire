@@ -104,7 +104,7 @@ public class CentralControlPaletteUI {
 		for (TranslucentPalette palette : extensionPalettes) {
 			palette.setLocation(previousWindow.getLocationOnScreen().x, previousWindow
 					.getLocationOnScreen().y
-					+ previousWindow.getSize().height);
+					+ previousWindow.getSize().height + 5);
 			palette.setSize(previousWindow.getSize().width, palette.getSize().height);
 			palette.showPalette();
 			previousWindow = palette;

@@ -5,10 +5,14 @@ Bundle-SymbolicName: com.sessionfire.timer;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SESSIONFIRE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.sessionfive.animation,
+Import-Package: com.jgoodies.forms.layout,
+ com.sessionfive.animation,
  com.sessionfive.app,
  com.sessionfive.core,
  com.sessionfive.core.ui,
- org.osgi.framework;version="1.5.0"
+ org.osgi.framework;version="1.5.0",
+ com.explodingpixels.macwidgets,
+ com.explodingpixels.widgets,
+ javax.swing
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.sessionfire.timer.Activator

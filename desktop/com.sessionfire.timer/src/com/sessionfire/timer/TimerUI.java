@@ -1,7 +1,7 @@
 package com.sessionfire.timer;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,7 +13,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.explodingpixels.macwidgets.HudWidgetFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import com.sessionfive.core.ui.HelpLabelFactory;
+
+
 
 public class TimerUI extends JPanel {
 
@@ -22,11 +28,20 @@ public class TimerUI extends JPanel {
 	private Color defaultForeground;
 	
 	public TimerUI() {
-		setBorder(new EmptyBorder(15, 15, 15, 15));
-		setLayout(new GridLayout(2, 1));
-		setOpaque(false);
+		FormLayout layout = new FormLayout(
+				"90dlu", // columns
+				"pref, pref"); // rows
 
-		time = new JTextField("0:20");
+		CellConstraints cc = new CellConstraints();
+		JPanel subContentPane = new JPanel(layout);
+		subContentPane.setOpaque(false);
+
+		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+		add(subContentPane, BorderLayout.CENTER);
+
+		setOpaque(false);
+		
+		time = HudWidgetFactory.createHudTextField("0:20");
 		defaultForeground = time.getForeground();
 		time.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -45,8 +60,8 @@ public class TimerUI extends JPanel {
 			}
 		});
 
-		add(time);
-		add(HelpLabelFactory.createHelpLabel("Press T to start, ESC to stop"));
+		subContentPane.add(time, cc.xy(1, 1));
+		subContentPane.add(HelpLabelFactory.createHelpLabel("Press T to start, ESC to stop"),  cc.xy(1, 2));
 	}
 	
 	public void updateTimeSetting(String newValue) {
