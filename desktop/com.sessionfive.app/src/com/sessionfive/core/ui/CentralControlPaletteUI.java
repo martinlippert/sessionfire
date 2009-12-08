@@ -223,20 +223,19 @@ public class CentralControlPaletteUI {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (!helpshown) {
-					e.consume();
 					showhelp();
 				}
 			}
 		});
 
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-
 			@Override
 			public void eventDispatched(AWTEvent event) {
 				if (event instanceof MouseEvent) {
 					MouseEvent mevent = (MouseEvent) event;
 					if (mevent.getClickCount() > 0 && helpshown) {
 						hidehelp();
+						mevent.consume();
 					}
 
 				}
@@ -267,32 +266,33 @@ public class CentralControlPaletteUI {
 	}
 
 	private void showhelp() {
-		System.out.println("CentralControlPaletteUI.showhelp()");
 		helpWindows.add(new HelpWindow(choosePresentationButton, HelpWindowPosition.ABOVE,
-				"Select your presentation as an set", "or an folder of images."));
+				"Select your presentation as an set", "or an folder of images"));
 		helpWindows.add(new HelpWindow(startPresentationButton, HelpWindowPosition.BELOW,
-				"Press to start your presentation", "and press ESC or F11 to switch back."));
+				"Press to start your presentation", "and press ESC or F11 to switch back"));
 		helpWindows.add(new HelpWindow(animationChoice, HelpWindowPosition.ABOVE,
-				"Use these controls to select an animation", "and an layout of your shapes."));
+				"Use these controls to select an animation", "and an layout of your shapes"));
 		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
-				"Use these sliders to control", "the X,Y and Z axis of your shapes."));
+				"Use these sliders to control", "the X,Y and Z axis of your shapes"));
+		helpWindows.add(new HelpWindow(helpButton, HelpWindowPosition.NO_ARROW,
+				"Navigation: Use the arrow ... png", "...png"));
 		helpshown = true;
-		// helpWindow.showHoverWindow();
-
 	}
 
 	private void hidehelp() {
-		System.out.println("CentralControlPaletteUI.hidehelp()");
-
-		helpshown = false;
 		for (HelpWindow window : helpWindows) {
-			window.hideHoverWindow();
+			window.hideHoverWindow(new Runnable() {
+				@Override
+				public void run() {	
+					helpshown = false;
+				}
+			});
 			window = null;
 		}
+		helpWindows = new HashSet<HelpWindow>();
 	}
 
 	protected void chooseBackground() {
-
 		Color newColor = JColorChooser.showDialog(window, "Choose Background Color",
 				centralControlPalette.getBackgroundColor());
 

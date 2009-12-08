@@ -173,7 +173,7 @@ public class HelpWindow extends JWindow {
 		}
 	}
 
-	public void hideHoverWindow() {
+	public void hideHoverWindow(final Runnable finishedCallback) {
 		if (this.fadeOutTimer != null && this.fadeOutTimer.isRunning()) {
 			return;
 		}
@@ -204,6 +204,8 @@ public class HelpWindow extends JWindow {
 
 						dispose();
 						currOpacity = 0;
+						
+						finishedCallback.run();
 					}
 				}
 			});
