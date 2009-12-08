@@ -40,20 +40,22 @@ public class HelpWindow extends JWindow {
 		JPanel contentPanel = getContentPanel();
 		setContentPane(contentPanel);
 
+		String spaces = position.withArrow() ? "    " : "  ";
 		for (String string : labels) {
-			JLabel line = new JLabel("    " + string);
+			JLabel line = new JLabel(spaces + string);
 			line.setForeground(Color.white);
 			contentPanel.add(line);
 		}
 
 		pack();
-		setSize(getWidth() + 5, getHeight() + 10);
+		int width = position.withArrow() ? getWidth() + 5 : getWidth() + 8;
+		setSize(width, getHeight() + 10);
 
 		Point pt = markedWidget.getLocationOnScreen();
 		Dimension widgetSize = markedWidget.getSize();
 		pt.x += widgetSize.width + 2;
 		if (pos == HelpWindowPosition.ABOVE) {
-			pt.y += widgetSize.height - 40;
+			pt.y += widgetSize.height - 36;
 		} else {
 			pt.y += widgetSize.height - 20;
 		}
@@ -93,23 +95,35 @@ public class HelpWindow extends JWindow {
 						RenderingHints.VALUE_ANTIALIAS_ON);
 
 				g2.setColor(backgroundColor);
-				g2.fillRoundRect(9, 0, width - 10, height - 10, 20, 20);
-				g2.setColor(borderColor);
-				g2.drawRoundRect(9, 0, width - 10, height - 10, 20, 20);
-
-				int xpoints[] = { 0, 9, 9 };
-				int ypoints[];
-				if (position == HelpWindowPosition.ABOVE) {
-					ypoints = new int[] { 24, 16, 24 };
+				int x;
+				if (position.withArrow()) {
+					x = 9;
 				} else {
-					ypoints = new int[] { 9, 9, 17 };
+					x = 4;
 				}
-				int npoints = 3;
+				g2.fillRoundRect(x, 0, width - 10, height - 10, 20, 20);
 				g2.setColor(borderColor);
-				g2.drawPolygon(xpoints, ypoints, npoints);
-				int xpoints2[] = { 1, 10, 10 };
-				g2.setColor(backgroundColor);
-				g2.fillPolygon(xpoints2, ypoints, npoints);
+				g2.drawRoundRect(x, 0, width - 10, height - 10, 20, 20);
+
+				// arrow
+				if (position.withArrow()) {
+					int xpoints[] = { 0, x, x };
+					int ypointsBackground[] = null;
+					int ypointsBorder[] = null;
+					if (position == HelpWindowPosition.ABOVE) {
+						ypointsBackground = new int[] { 24, 16, 24 };
+						ypointsBorder = new int[] { 24, 16, 24 };
+					} else if (position == HelpWindowPosition.BELOW) {
+						ypointsBackground = new int[] { 8, 8, 17 };
+						ypointsBorder = new int[] { 7, 7, 17 };
+					}
+					g2.setColor(borderColor);
+					g2.drawPolygon(xpoints, ypointsBorder, 3);
+
+					int xpoints2[] = { 1, 10, 10 };
+					g2.setColor(backgroundColor);
+					g2.fillPolygon(xpoints2, ypointsBackground, 3);
+				}
 
 				g2.dispose();
 
@@ -201,7 +215,7 @@ public class HelpWindow extends JWindow {
 
 						dispose();
 						currOpacity = 0;
-						
+
 						finishedCallback.run();
 					}
 				}
@@ -212,6 +226,5 @@ public class HelpWindow extends JWindow {
 			setVisible(false);
 		}
 	}
-
 
 }
