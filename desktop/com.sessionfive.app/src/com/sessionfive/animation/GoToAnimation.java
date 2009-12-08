@@ -14,6 +14,8 @@ import com.sessionfive.core.Shape;
 
 public class GoToAnimation implements Animation {
 
+	public static final String NAME = "Go To";
+
 	private final Shape endShape;
 	private final Focusable startShape;
 

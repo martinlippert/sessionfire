@@ -9,7 +9,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import com.sessionfive.app.RowMaker;
 import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.Shape;
 import com.sun.opengl.util.j2d.TextRenderer;

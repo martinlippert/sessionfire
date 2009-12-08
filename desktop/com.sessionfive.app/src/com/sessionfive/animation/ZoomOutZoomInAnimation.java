@@ -14,6 +14,8 @@ import com.sessionfive.core.Shape;
 
 public class ZoomOutZoomInAnimation implements Animation {
 
+	public static final String NAME = "Zoom Out - Zoom In";
+
 	private final Shape endShape;
 	private final Focusable startShape;
 

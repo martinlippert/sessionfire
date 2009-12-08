@@ -14,12 +14,18 @@ public class MoveToAnimationFactory implements AnimationFactory {
 
 	@Override
 	public String getName() {
-		return "Move To";
+		return MoveToAnimation.NAME;
 	}
 	
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MoveToAnimationFactory)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }

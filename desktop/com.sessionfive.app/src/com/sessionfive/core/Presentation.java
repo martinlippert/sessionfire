@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.sessionfive.core.ui.AnimationFactory;
+import com.sessionfive.core.ui.GoToAnimationFactory;
+import com.sessionfive.core.ui.Layouter;
+import com.sessionfive.core.ui.TileLayouter;
 import com.sessionfive.shapes.TitleShape;
 
 public class Presentation implements Focusable, ShapeChangedListener {
@@ -17,8 +21,13 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	private List<Animation> animations;
 	private Map<LayerType, Layer> layers;
 	private Color backgroundColor;
-	private List<PresentationChangedListener> changeListeners;
 	private TitleShape titleShape;
+	private String path;
+	
+	private Layouter defaultLayouter;
+	private AnimationFactory defaultAnimation;
+
+	private List<PresentationChangedListener> changeListeners;
 
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
@@ -29,6 +38,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		layers.put(LayerType.FIXED_POSTION, new Layer());
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
+		defaultLayouter = new TileLayouter();
+		defaultAnimation = new GoToAnimationFactory();
+		path = "";
+		
 		addShape(titleShape, LayerType.FIXED_POSTION);
 	}
 
@@ -37,8 +50,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void setStartCamera(Camera startCamera) {
-		this.startCamera = startCamera;
-		firePresentationChanged();
+		if (!this.startCamera.equals(startCamera)) {
+			this.startCamera = startCamera;
+			firePresentationChanged();
+		}
 	}
 
 	public void addShape(Shape shape, LayerType layer) {
@@ -94,8 +109,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void setBackgroundColor(Color newColor) {
-		backgroundColor = newColor;
-		firePresentationChanged();
+		if (!this.backgroundColor.equals(newColor)) {
+			backgroundColor = newColor;
+			firePresentationChanged();
+		}
 	}
 
 	public String getLayerText() {
@@ -103,8 +120,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void setLayerText(String layerText) {
-		titleShape.setText(layerText);
-		firePresentationChanged();
+		if (!titleShape.getText().equals(layerText)) {
+			titleShape.setText(layerText);
+			firePresentationChanged();
+		}
 	}
 
 	@Override
@@ -140,5 +159,38 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		}
 		return allshapes;
 	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public void setPath(String path) {
+		if (!this.path.equals(path)) {
+			this.path = path;
+			firePresentationChanged();
+		}
+	}
+	
+	public AnimationFactory getDefaultAnimation() {
+		return defaultAnimation;
+	}
+	
+	public void setDefaultAnimation(AnimationFactory defaultAnimation) {
+		if (!this.defaultAnimation.equals(defaultAnimation)) {
+			this.defaultAnimation = defaultAnimation;
+			firePresentationChanged();
+		}
+	}
+	
+	public Layouter getDefaultLayouter() {
+		return defaultLayouter;
+	}
 
+	public void setDefaultLayouter(Layouter defaultLayouter) {
+		if (this.defaultLayouter.equals(defaultLayouter)) {
+			this.defaultLayouter = defaultLayouter;
+			firePresentationChanged();
+		}
+	}
+	
 }

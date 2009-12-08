@@ -37,13 +37,18 @@ import javax.swing.event.DocumentListener;
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sessionfive.core.Presentation;
+import com.sessionfive.core.PresentationChangedEvent;
+import com.sessionfive.core.PresentationChangedListener;
 
 public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
+	private final Presentation presentation;
 
 	private TranslucentPalette window;
 	private JButton choosePresentationButton;
+	private JButton savePresentationButton;
 	private JButton startPresentationButton;
 	private JButton helpButton;
 	private JComboBox layoutChoice;
@@ -59,21 +64,38 @@ public class CentralControlPaletteUI {
 
 	private JPanel subContentPane;
 
-	boolean helpshown = false;
+	private boolean helpshown = false;
+	private boolean inChange;
 
 	private Collection<HelpWindow> helpWindows;
+	private DefaultComboBoxModel animationModel;
+	private DefaultComboBoxModel layoutModel;
 
-	public CentralControlPaletteUI(CentralControlPalette centralControlPalette, GLCanvas canvas) {
+	public CentralControlPaletteUI(CentralControlPalette centralControlPalette, Presentation presentation, 
+			GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
+		this.presentation = presentation;
 		this.canvas = canvas;
+
 		Window windowAncestor = SwingUtilities.getWindowAncestor(canvas);
-		window = new TranslucentPalette("Sessionfire - Central Control", false, windowAncestor);
+		window = new TranslucentPalette("Sessionfire - Central Control", false,
+				windowAncestor);
 		initComponents();
 		window.pack();
 		window.setLocation(100, 100);
 		initExtensions();
 
 		helpWindows = new HashSet<HelpWindow>();
+		presentation.addPresentationChangedListener(new PresentationChangedListener() {
+			@Override
+			public void presentationChanged(PresentationChangedEvent event) {
+				if (!inChange) {
+					updateControls();
+				}
+			}
+		});
+		
+		updateControls();
 	}
 
 	public void show() {
@@ -81,10 +103,11 @@ public class CentralControlPaletteUI {
 
 		TranslucentPalette previousWindow = window;
 		for (TranslucentPalette palette : extensionPalettes) {
-			palette.setLocation(previousWindow.getLocationOnScreen().x, previousWindow
-					.getLocationOnScreen().y
-					+ previousWindow.getSize().height);
-			palette.setSize(previousWindow.getSize().width, palette.getSize().height);
+			palette.setLocation(previousWindow.getLocationOnScreen().x,
+					previousWindow.getLocationOnScreen().y
+							+ previousWindow.getSize().height);
+			palette.setSize(previousWindow.getSize().width,
+					palette.getSize().height);
 			palette.showPalette();
 			previousWindow = palette;
 		}
@@ -100,7 +123,7 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"fill:pref:grow", // columns
-				"pref, 3dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -109,29 +132,44 @@ public class CentralControlPaletteUI {
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
 		contentPane.add(subContentPane, BorderLayout.NORTH);
 
-		choosePresentationButton = HudWidgetFactory.createHudButton("Choose Presentation...");
+		choosePresentationButton = HudWidgetFactory
+				.createHudButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.choosePresentation(canvas, (Layouter) layoutChoice
-						.getSelectedItem(), (AnimationFactory) animationChoice.getSelectedItem());
+				centralControlPalette.choosePresentation(canvas,
+						(Layouter) layoutChoice.getSelectedItem(),
+						(AnimationFactory) animationChoice.getSelectedItem());
 
-				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
-						.getValue(), zRotationSlider.getValue());
+				centralControlPalette.setRotation(xRotationSlider.getValue(),
+						yRotationSlider.getValue(), zRotationSlider.getValue());
 			}
 		});
 		subContentPane.add(choosePresentationButton, cc.xy(1, 1));
 
-		startPresentationButton = HudWidgetFactory.createHudButton("Start Presentation");
+		savePresentationButton = HudWidgetFactory
+				.createHudButton("Save Presentation");
+		savePresentationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				centralControlPalette.savePresentation((Layouter) layoutChoice
+						.getSelectedItem(), (AnimationFactory) animationChoice
+						.getSelectedItem());
+			}
+		});
+		savePresentationButton.setEnabled(false);
+		subContentPane.add(savePresentationButton, cc.xy(1, 3));
 
+		startPresentationButton = HudWidgetFactory
+				.createHudButton("Start Presentation");
 		startPresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.startPresentation();
 			}
 		});
-		subContentPane.add(startPresentationButton, cc.xy(1, 3));
-		//subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"), cc.xy(1, 5));
+		subContentPane.add(startPresentationButton, cc.xy(1, 5));
+		// subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"),
+		// cc.xy(1, 5));
 
-		DefaultComboBoxModel layoutModel = new DefaultComboBoxModel();
+		layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();
 		for (Layouter layouter : allLayouter) {
 			layoutModel.addElement(layouter);
@@ -141,14 +179,18 @@ public class CentralControlPaletteUI {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedLayouter = layoutChoice.getSelectedItem();
 				if (selectedLayouter != null) {
-					centralControlPalette.changeLayout((Layouter) selectedLayouter);
+					inChange = true;
+					centralControlPalette
+							.changeLayout((Layouter) selectedLayouter);
+					inChange = false;
 				}
 			}
 		});
-		subContentPane.add(layoutChoice, cc.xy(1, 7));
+		subContentPane.add(layoutChoice, cc.xy(1, 9));
 
-		DefaultComboBoxModel animationModel = new DefaultComboBoxModel();
-		AnimationFactory[] animationFactories = centralControlPalette.getAnimators();
+		animationModel = new DefaultComboBoxModel();
+		AnimationFactory[] animationFactories = centralControlPalette
+				.getAnimators();
 		for (AnimationFactory animationFactory : animationFactories) {
 			animationModel.addElement(animationFactory);
 		}
@@ -157,7 +199,10 @@ public class CentralControlPaletteUI {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedAnimation = animationChoice.getSelectedItem();
 				if (selectedAnimation != null) {
-					centralControlPalette.changeAnimation((AnimationFactory) selectedAnimation);
+					inChange = true;
+					centralControlPalette
+							.changeAnimation((AnimationFactory) selectedAnimation);
+					inChange = false;
 				}
 			}
 		});
@@ -171,44 +216,47 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(animationChoice, cc.xy(1, 9));
+		subContentPane.add(animationChoice, cc.xy(1, 11));
 
-		JButton backgroundChooser = HudWidgetFactory.createHudButton("Choose Background Color...");
+		JButton backgroundChooser = HudWidgetFactory
+				.createHudButton("Choose Background Color...");
 		backgroundChooser.setMaximumSize(new Dimension(10, 5));
-		subContentPane.add(backgroundChooser, cc.xy(1, 11));
+		subContentPane.add(backgroundChooser, cc.xy(1, 13));
 		backgroundChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
 			}
 		});
 
-		layerText = HudWidgetFactory.createHudTextField(centralControlPalette.getLayerText());
-		subContentPane.add(layerText, cc.xy(1, 13));
+		layerText = HudWidgetFactory.createHudTextField("");
+		subContentPane.add(layerText, cc.xy(1, 15));
 		layerText.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
-				centralControlPalette.setLayerText(layerText.getText());
+				setLayerText();
 			}
 
 			public void insertUpdate(DocumentEvent e) {
-				centralControlPalette.setLayerText(layerText.getText());
+				setLayerText();
 			}
 
 			public void changedUpdate(DocumentEvent e) {
-				centralControlPalette.setLayerText(layerText.getText());
+				setLayerText();
 			}
 		});
 
 		xRotationSlider = new JSlider(0, 360, 0);
 		yRotationSlider = new JSlider(0, 360, 0);
 		zRotationSlider = new JSlider(0, 360, 0);
-		subContentPane.add(xRotationSlider, cc.xy(1, 15));
-		subContentPane.add(yRotationSlider, cc.xy(1, 17));
-		subContentPane.add(zRotationSlider, cc.xy(1, 19));
+		subContentPane.add(xRotationSlider, cc.xy(1, 17));
+		subContentPane.add(yRotationSlider, cc.xy(1, 19));
+		subContentPane.add(zRotationSlider, cc.xy(1, 21));
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
-						.getValue(), zRotationSlider.getValue());
+				inChange = true;
+				centralControlPalette.setRotation(xRotationSlider.getValue(),
+						yRotationSlider.getValue(), zRotationSlider.getValue());
+				inChange = false;
 			}
 		};
 
@@ -217,7 +265,7 @@ public class CentralControlPaletteUI {
 		zRotationSlider.addChangeListener(rotationSliderListener);
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xy(1, 21));
+		subContentPane.add(helpButton, cc.xy(1, 23));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -243,18 +291,27 @@ public class CentralControlPaletteUI {
 		}, AWTEvent.MOUSE_EVENT_MASK);
 
 	}
+	
+	protected void setLayerText() {
+		inChange = true;
+		centralControlPalette.setLayerText(layerText.getText());
+		inChange = false;
+	}
 
 	protected void initExtensions() {
 		extensionPalettes = new ArrayList<TranslucentPalette>();
 
-		PanelExtension[] extensions = centralControlPalette.getExtensionPanels();
+		PanelExtension[] extensions = centralControlPalette
+				.getExtensionPanels();
 
 		for (PanelExtension panelExtension : extensions) {
 			JPanel panelToEmbed = panelExtension.getPanel();
 			if (panelToEmbed != null) {
-				TranslucentPalette palette = new TranslucentPalette(panelExtension.getName(),
-						false, (Window) window.getParent());
-				JComponent contentPane = (JComponent) palette.getEmbeddedContentPane();
+				TranslucentPalette palette = new TranslucentPalette(
+						panelExtension.getName(), false, (Window) window
+								.getParent());
+				JComponent contentPane = (JComponent) palette
+						.getEmbeddedContentPane();
 				contentPane.setLayout(new BorderLayout());
 
 				contentPane.add(panelToEmbed, BorderLayout.NORTH);
@@ -266,17 +323,21 @@ public class CentralControlPaletteUI {
 	}
 
 	private void showhelp() {
-		helpWindows.add(new HelpWindow(choosePresentationButton, HelpWindowPosition.ABOVE,
-				"Select your presentation as an set", "or an folder of images"));
-		helpWindows.add(new HelpWindow(startPresentationButton, HelpWindowPosition.BELOW,
-				"Press to start your presentation", "and press ESC or F11 to switch back"));
-		helpWindows.add(new HelpWindow(animationChoice, HelpWindowPosition.ABOVE,
-				"Use these controls to select an animation", "and an layout of your shapes"));
-		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
-				"Use these sliders to control", "the X,Y and Z axis of your shapes"));
-		helpWindows.add(new HelpWindow(helpButton, HelpWindowPosition.NO_ARROW,
-				"Navigation: Use the arrow ... png", "...png"));
+		helpWindows.add(new HelpWindow(choosePresentationButton,
+				HelpWindowPosition.ABOVE, "Select your presentation as a set",
+				"or a folder of images."));
+		helpWindows.add(new HelpWindow(startPresentationButton,
+				HelpWindowPosition.BELOW, "Press to start your presentation",
+				"and press ESC or F11 to switch back."));
+		helpWindows.add(new HelpWindow(animationChoice,
+				HelpWindowPosition.ABOVE,
+				"Use these controls to select an animation",
+				"and a layout of your shapes."));
+		helpWindows.add(new HelpWindow(yRotationSlider,
+				HelpWindowPosition.ABOVE, "Use these sliders to control",
+				"the X,Y and Z rotation of your shapes."));
 		helpshown = true;
+		// helpWindow.showHoverWindow();
 	}
 
 	private void hidehelp() {
@@ -293,13 +354,19 @@ public class CentralControlPaletteUI {
 	}
 
 	protected void chooseBackground() {
-		Color newColor = JColorChooser.showDialog(window, "Choose Background Color",
-				centralControlPalette.getBackgroundColor());
-
+		Color newColor = JColorChooser.showDialog(window,
+				"Choose Background Color", centralControlPalette
+						.getBackgroundColor());
 		if (newColor != null) {
 			centralControlPalette.setBackgroundColor(newColor);
 		}
-
+	}
+	
+	public void updateControls() {
+		layoutChoice.setSelectedItem(presentation.getDefaultLayouter());
+		animationChoice.setSelectedItem(presentation.getDefaultAnimation());
+		
+		layerText.setText(presentation.getLayerText());
 	}
 
 }

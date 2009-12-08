@@ -9,9 +9,11 @@ import com.sessionfive.core.Shape;
 
 public class TileLayouter implements Layouter {
 
+	public static final String NAME = "Tiling";
+
 	@Override
 	public String getName() {
-		return "Tiling";
+		return NAME;
 	}
 
 	@Override
@@ -52,6 +54,12 @@ public class TileLayouter implements Layouter {
 	@Override
 	public String toString() {
 		return getName();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TileLayouter)) return false;
+		return toString().equals(obj.toString());
 	}
 
 }
