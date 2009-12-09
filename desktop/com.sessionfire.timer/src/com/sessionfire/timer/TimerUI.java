@@ -90,10 +90,14 @@ public class TimerUI extends JPanel implements ShowsHelp {
 	public void showhelp() {
 		helpWindow = new HelpWindow(time, HelpWindowPosition.BELOW,
 				"This little widget lets you enter an intervall.",
-				"Sessionfire than automatically progresses to the", "next shape. Press T to start, ESC to stop.");
+				"Sessionfire than automatically progresses to the",
+				"next shape. Press T to start, ESC to stop.");
 	}
 
 	public void hidehelp() {
+		if (helpWindow == null) {
+			return;
+		}
 		helpWindow.hideHoverWindow(new Runnable() {
 			@Override
 			public void run() {
