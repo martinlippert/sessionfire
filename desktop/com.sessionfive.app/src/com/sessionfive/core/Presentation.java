@@ -17,6 +17,7 @@ import com.sessionfive.shapes.TitleShape;
 
 public class Presentation implements Focusable, ShapeChangedListener {
 
+	public static final int DEFAULT_SPACE = 25;
 	private Camera startCamera;
 	private List<Animation> animations;
 	private Map<LayerType, Layer> layers;
@@ -28,6 +29,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	private AnimationFactory defaultAnimation;
 
 	private List<PresentationChangedListener> changeListeners;
+	private float space = DEFAULT_SPACE;
 
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
@@ -192,5 +194,16 @@ public class Presentation implements Focusable, ShapeChangedListener {
 			firePresentationChanged();
 		}
 	}
+
+	public void setSpace(float space, Layouter layouter) {
+		this.space = space;	
+		layouter.layout(this);
+	}
+
+	public float getSpace() {
+		return space;
+	}
+	
+	
 	
 }
