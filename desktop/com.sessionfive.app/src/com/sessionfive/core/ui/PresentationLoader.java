@@ -3,14 +3,21 @@ package com.sessionfive.core.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
 
 import javax.media.opengl.GLCanvas;
 import javax.swing.JFileChooser;
 import javax.swing.ProgressMonitor;
 
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
+import com.sessionfive.core.Shape;
 
 public class PresentationLoader implements PropertyChangeListener {
 
@@ -130,6 +137,38 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	public void savePresentation(Presentation presentation, String layoutName, String animationName) {
+		List<Shape> shapes = presentation.getAllShapes();
+		if (shapes.size() > 0) {
+			File dir = new File(presentation.getPath());
+			if (dir.exists()) {
+				File presentationFile = new File(dir, "sessionfire.settings");
+				try {
+					Properties presentationSettings = createSettingsMap(presentation);
+					FileOutputStream fos = new FileOutputStream(presentationFile);
+					presentationSettings.store(fos, "sessionfire-settings");
+					fos.flush();
+					fos.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private Properties createSettingsMap(Presentation presentation) {
+		Properties result = new Properties();
+		
+		result.put("layout", presentation.getDefaultLayouter().getName());
+		result.put("animation", presentation.getDefaultAnimation().getName());
+		result.put("backgroundColor", Integer.toString(presentation.getBackgroundColor().getRGB()));
+		result.put("rotationX", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleX()));
+		result.put("rotationY", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleY()));
+		result.put("rotationZ", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleZ()));
+		result.put("layerText", presentation.getLayerText());
+		
+		return result;
 	}
 
 }

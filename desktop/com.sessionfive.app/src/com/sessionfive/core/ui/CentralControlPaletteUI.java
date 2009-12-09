@@ -38,6 +38,7 @@ import javax.swing.event.DocumentListener;
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.PresentationChangedEvent;
 import com.sessionfive.core.PresentationChangedListener;
@@ -380,6 +381,8 @@ public class CentralControlPaletteUI {
 		animationChoice.setSelectedItem(presentation.getDefaultAnimation());
 
 		layerText.setText(presentation.getLayerText());
+
+		savePresentationButton.setEnabled(presentation.getShapes(LayerType.CAMERA_ANIMATED).size() > 0);
 	}
 
 }
