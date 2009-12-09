@@ -27,6 +27,8 @@ public class CircleLayouter implements Layouter {
 				);
 		presentation.setStartCamera(startCamera);
 		
+		float space = presentation.getSpace() /  13f;
+
 		float z = 0f;
 		int i = 0;		
 		float centerx = 0f;
@@ -34,8 +36,8 @@ public class CircleLayouter implements Layouter {
 		float radius = size * 5f;
 		
 		for (Shape shape: presentation.getShapes(LayerType.CAMERA_ANIMATED)) {
-			float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / size)) * 1.5f;
-			float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / size)) * 1.5f;
+			float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / size)) * space;
+			float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / size)) * space;
 			z += 0.01f;
 			shape.setPosition(x, y, z);
 			i++;

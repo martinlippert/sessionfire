@@ -98,10 +98,16 @@ public class CentralControlPalette {
 			shape.setRotation(x, y, z);
 		}
 	}
+	
+	public void setSpace(float value, Layouter layouter) {
+		presentation.setSpace(value, layouter);		
+	}
 
 	public PanelExtension[] getExtensionPanels() {
 		return new PanelExtensionLoader().loadExtensions(animationController,
 				presentation);
 	}
+
+
 
 }

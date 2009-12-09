@@ -61,6 +61,8 @@ public class CentralControlPaletteUI {
 	private JSlider yRotationSlider;
 	private JSlider zRotationSlider;
 
+	private JSlider spaceRotationSlider;
+
 	private List<TranslucentPalette> extensionPalettes;
 
 	private JPanel subContentPane;
@@ -122,7 +124,7 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -237,9 +239,11 @@ public class CentralControlPaletteUI {
 		xRotationSlider = new JSlider(0, 360, 0);
 		yRotationSlider = new JSlider(0, 360, 0);
 		zRotationSlider = new JSlider(0, 360, 0);
+		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
 		subContentPane.add(xRotationSlider, cc.xy(1, 17));
 		subContentPane.add(yRotationSlider, cc.xy(1, 19));
 		subContentPane.add(zRotationSlider, cc.xy(1, 21));
+		subContentPane.add(spaceRotationSlider, cc.xy(1, 23));
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -253,9 +257,27 @@ public class CentralControlPaletteUI {
 		xRotationSlider.addChangeListener(rotationSliderListener);
 		yRotationSlider.addChangeListener(rotationSliderListener);
 		zRotationSlider.addChangeListener(rotationSliderListener);
+		spaceRotationSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				inChange = true;
+				Object selectedLayouter = layoutChoice.getSelectedItem();
+				assert selectedLayouter != null;
+				centralControlPalette.setSpace(spaceRotationSlider.getValue(),
+						(Layouter) selectedLayouter);
+				inChange = false;
+			}
+		});
+		spaceRotationSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					spaceRotationSlider.setValue(Presentation.DEFAULT_SPACE);
+				}
+			}
+		});
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xy(1, 23));
+		subContentPane.add(helpButton, cc.xy(1, 25));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override

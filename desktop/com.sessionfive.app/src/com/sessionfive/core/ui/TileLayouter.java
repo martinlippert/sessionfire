@@ -28,22 +28,24 @@ public class TileLayouter implements Layouter {
 		double sqrt = Math.sqrt(size);
 		long countPerLine = Math.round(sqrt + 1);
 		
-		float x = -40f;
-		float y = -20f;
 		float z = 0f;
+		
+		float space = presentation.getSpace() * 2f;
+		float x = -space;
+		float y = -space;
 		
 		int lineCounter = 0;
 
 		for (Shape shape: presentation.getShapes(LayerType.CAMERA_ANIMATED)) {
 			shape.setPosition(x, y, z);
 			
-			x += 50f;
+			x += space;
 			z += 0.01f;
 			
 			if (lineCounter == countPerLine) {
 				lineCounter = 0;
-				y -= 40;
-				x = -40f;
+				y -= space;
+				x = -space;
 			}
 			else {
 				lineCounter++;
