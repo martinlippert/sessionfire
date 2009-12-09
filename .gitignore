@@ -3,7 +3,7 @@
 
 # eclipse
 .metadata
-*bin/*
-
+desktop/*/bin*
+*.settings*
 # xcode
-*build/*
+*iphone/build/*
