@@ -123,7 +123,7 @@ public class CentralControlPaletteUI {
 		contentPane.setLayout(new BorderLayout());
 
 		FormLayout layout = new FormLayout(
-				"fill:pref:grow", // columns
+				"5dlu, fill:pref:grow", // columns
 				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
@@ -143,7 +143,7 @@ public class CentralControlPaletteUI {
 						.getValue(), zRotationSlider.getValue());
 			}
 		});
-		subContentPane.add(choosePresentationButton, cc.xy(1, 1));
+		subContentPane.add(choosePresentationButton, cc.xyw(1, 1, 2));
 
 		savePresentationButton = HudWidgetFactory.createHudButton("Save Presentation");
 		savePresentationButton.addActionListener(new ActionListener() {
@@ -153,7 +153,7 @@ public class CentralControlPaletteUI {
 			}
 		});
 		savePresentationButton.setEnabled(false);
-		subContentPane.add(savePresentationButton, cc.xy(1, 3));
+		subContentPane.add(savePresentationButton, cc.xyw(1, 3, 2));
 
 		startPresentationButton = HudWidgetFactory.createHudButton("Start Presentation");
 		startPresentationButton.addActionListener(new ActionListener() {
@@ -161,7 +161,7 @@ public class CentralControlPaletteUI {
 				centralControlPalette.startPresentation();
 			}
 		});
-		subContentPane.add(startPresentationButton, cc.xy(1, 5));
+		subContentPane.add(startPresentationButton, cc.xyw(1, 5, 2));
 		// subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"),
 		// cc.xy(1, 5));
 
@@ -181,7 +181,7 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(layoutChoice, cc.xy(1, 9));
+		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
 
 		animationModel = new DefaultComboBoxModel();
 		AnimationFactory[] animationFactories = centralControlPalette.getAnimators();
@@ -209,11 +209,11 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(animationChoice, cc.xy(1, 11));
+		subContentPane.add(animationChoice, cc.xyw(1, 11, 2));
 
 		JButton backgroundChooser = HudWidgetFactory.createHudButton("Choose Background Color...");
 		backgroundChooser.setMaximumSize(new Dimension(10, 5));
-		subContentPane.add(backgroundChooser, cc.xy(1, 13));
+		subContentPane.add(backgroundChooser, cc.xyw(1, 13,2));
 		backgroundChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
@@ -221,7 +221,7 @@ public class CentralControlPaletteUI {
 		});
 
 		layerText = HudWidgetFactory.createHudTextField("");
-		subContentPane.add(layerText, cc.xy(1, 15));
+		subContentPane.add(layerText, cc.xyw(1, 15, 2));
 		layerText.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
 				setLayerText();
@@ -240,10 +240,14 @@ public class CentralControlPaletteUI {
 		yRotationSlider = new JSlider(0, 360, 0);
 		zRotationSlider = new JSlider(0, 360, 0);
 		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
-		subContentPane.add(xRotationSlider, cc.xy(1, 17));
-		subContentPane.add(yRotationSlider, cc.xy(1, 19));
-		subContentPane.add(zRotationSlider, cc.xy(1, 21));
-		subContentPane.add(spaceRotationSlider, cc.xy(1, 23));
+		subContentPane.add(HudWidgetFactory.createHudLabel("X"), cc.xy(1, 17));
+		subContentPane.add(xRotationSlider, cc.xy(2, 17));
+		subContentPane.add(HudWidgetFactory.createHudLabel("Y"), cc.xy(1, 19));
+		subContentPane.add(yRotationSlider, cc.xy(2, 19));
+		subContentPane.add(HudWidgetFactory.createHudLabel("Z"), cc.xy(1, 21));
+		subContentPane.add(zRotationSlider, cc.xy(2, 21));
+		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 23));
+		subContentPane.add(spaceRotationSlider, cc.xy(2, 23));
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -277,7 +281,7 @@ public class CentralControlPaletteUI {
 		});
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xy(1, 25));
+		subContentPane.add(helpButton, cc.xyw(1, 25, 2));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -365,6 +369,8 @@ public class CentralControlPaletteUI {
 				"Change the layer text"));
 		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
 				"Use these sliders to control", "the X,Y and Z rotation of your shapes"));
+		helpWindows.add(new HelpWindow(spaceRotationSlider, HelpWindowPosition.ABOVE,
+				"Change the spacing between your shapes", "Double-Click returns to the default"));
 		helpWindows.add(new HelpWindow(helpButton, HelpWindowPosition.CENTER_NO_ARROW,
 				"Navigation while presenting:", "Next shape: Right-Arrow, Down-Arrow, Page-Down",
 				"Previous shape: Left-Arrow, Up-Arrow, Page-Up",
