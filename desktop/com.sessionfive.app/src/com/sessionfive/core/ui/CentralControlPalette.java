@@ -27,11 +27,10 @@ public class CentralControlPalette {
 	public void show() {
 	}
 
-	public void choosePresentation(GLCanvas canvas, Layouter layouter,
-			AnimationFactory animationFactory) {
+	public void choosePresentation(GLCanvas canvas) {
 		PresentationLoader loader = new PresentationLoader();
-		loader.loadPresentation(presentation, canvas, layouter,
-				animationFactory);
+		loader.loadPresentation(presentation, canvas, getLayouter(),
+				getAnimators());
 
 		canvas.requestFocus();
 	}
@@ -93,21 +92,20 @@ public class CentralControlPalette {
 	}
 
 	public void setRotation(int x, int y, int z) {
+		presentation.setDefaultRotation(x, y, z);
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
 			shape.setRotation(x, y, z);
 		}
 	}
-	
+
 	public void setSpace(float value, Layouter layouter) {
-		presentation.setSpace(value, layouter);		
+		presentation.setSpace(value, layouter);
 	}
 
 	public PanelExtension[] getExtensionPanels() {
 		return new PanelExtensionLoader().loadExtensions(animationController,
 				presentation);
 	}
-
-
 
 }

@@ -27,6 +27,9 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	
 	private Layouter defaultLayouter;
 	private AnimationFactory defaultAnimation;
+	private float defaultRotationX = 0.0f;
+	private float defaultRotationY = 0.0f;
+	private float defaultRotationZ = 0.0f;
 
 	private List<PresentationChangedListener> changeListeners;
 	private float space = DEFAULT_SPACE;
@@ -189,21 +192,45 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void setDefaultLayouter(Layouter defaultLayouter) {
-		if (this.defaultLayouter.equals(defaultLayouter)) {
+		if (!this.defaultLayouter.equals(defaultLayouter)) {
 			this.defaultLayouter = defaultLayouter;
 			firePresentationChanged();
 		}
-	}
-
-	public void setSpace(float space, Layouter layouter) {
-		this.space = space;	
-		layouter.layout(this);
 	}
 
 	public float getSpace() {
 		return space;
 	}
 	
+	public void setSpace(float space, Layouter layouter) {
+		if (this.space != space) {
+			this.space = space;	
+			layouter.layout(this);
+			firePresentationChanged();
+		}
+	}
+
+	public float getDefaultRotationX() {
+		return defaultRotationX;
+	}
 	
+	public float getDefaultRotationY() {
+		return defaultRotationY;
+	}
+	
+	public float getDefaultRotationZ() {
+		return defaultRotationZ;
+	}
+	
+	public void setDefaultRotation(float defaultRotationX, float defaultRotationY, float defaultRotationZ) {
+		if (this.defaultRotationX != defaultRotationX
+				|| this.defaultRotationY != defaultRotationY
+				|| this.defaultRotationZ != defaultRotationZ) {
+			this.defaultRotationX = defaultRotationX;
+			this.defaultRotationY = defaultRotationY;
+			this.defaultRotationZ = defaultRotationZ;
+			firePresentationChanged();
+		}
+	}
 	
 }

@@ -92,9 +92,7 @@ public class CentralControlPaletteUI {
 		presentation.addPresentationChangedListener(new PresentationChangedListener() {
 			@Override
 			public void presentationChanged(PresentationChangedEvent event) {
-				if (!inChange) {
-					updateControls();
-				}
+				updateControls();
 			}
 		});
 
@@ -137,11 +135,10 @@ public class CentralControlPaletteUI {
 		choosePresentationButton = HudWidgetFactory.createHudButton("Choose Presentation...");
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.choosePresentation(canvas, (Layouter) layoutChoice
-						.getSelectedItem(), (AnimationFactory) animationChoice.getSelectedItem());
+				centralControlPalette.choosePresentation(canvas);
 
-				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
-						.getValue(), zRotationSlider.getValue());
+//				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
+//						.getValue(), zRotationSlider.getValue());
 			}
 		});
 		subContentPane.add(choosePresentationButton, cc.xyw(1, 1, 2));
@@ -175,10 +172,8 @@ public class CentralControlPaletteUI {
 		layoutChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedLayouter = layoutChoice.getSelectedItem();
-				if (selectedLayouter != null) {
-					inChange = true;
+				if (selectedLayouter != null && !inChange) {
 					centralControlPalette.changeLayout((Layouter) selectedLayouter);
-					inChange = false;
 				}
 			}
 		});
@@ -193,10 +188,8 @@ public class CentralControlPaletteUI {
 		animationChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedAnimation = animationChoice.getSelectedItem();
-				if (selectedAnimation != null) {
-					inChange = true;
+				if (selectedAnimation != null && !inChange) {
 					centralControlPalette.changeAnimation((AnimationFactory) selectedAnimation);
-					inChange = false;
 				}
 			}
 		});
@@ -252,10 +245,10 @@ public class CentralControlPaletteUI {
 
 		ChangeListener rotationSliderListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				inChange = true;
-				centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
-						.getValue(), zRotationSlider.getValue());
-				inChange = false;
+				if (!inChange) {
+					centralControlPalette.setRotation(xRotationSlider.getValue(), yRotationSlider
+							.getValue(), zRotationSlider.getValue());
+				}
 			}
 		};
 
@@ -264,18 +257,18 @@ public class CentralControlPaletteUI {
 		zRotationSlider.addChangeListener(rotationSliderListener);
 		spaceRotationSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				inChange = true;
-				Object selectedLayouter = layoutChoice.getSelectedItem();
-				assert selectedLayouter != null;
-				centralControlPalette.setSpace(spaceRotationSlider.getValue(),
-						(Layouter) selectedLayouter);
-				inChange = false;
+				if (!inChange) {
+					Object selectedLayouter = layoutChoice.getSelectedItem();
+					assert selectedLayouter != null;
+					centralControlPalette.setSpace(spaceRotationSlider.getValue(),
+							(Layouter) selectedLayouter);
+				}
 			}
 		});
 		spaceRotationSlider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2 && !inChange) {
 					spaceRotationSlider.setValue(Presentation.DEFAULT_SPACE);
 				}
 			}
@@ -310,9 +303,9 @@ public class CentralControlPaletteUI {
 	}
 
 	protected void setLayerText() {
-		inChange = true;
-		centralControlPalette.setLayerText(layerText.getText());
-		inChange = false;
+		if (!inChange) {
+			centralControlPalette.setLayerText(layerText.getText());
+		}
 	}
 
 	protected void initExtensions() {
@@ -405,12 +398,19 @@ public class CentralControlPaletteUI {
 	}
 
 	public void updateControls() {
+		inChange = true;
 		layoutChoice.setSelectedItem(presentation.getDefaultLayouter());
 		animationChoice.setSelectedItem(presentation.getDefaultAnimation());
 
 		layerText.setText(presentation.getLayerText());
+		
+		xRotationSlider.setValue((int)presentation.getDefaultRotationX());
+		yRotationSlider.setValue((int)presentation.getDefaultRotationY());
+		zRotationSlider.setValue((int)presentation.getDefaultRotationZ());
+		spaceRotationSlider.setValue((int)presentation.getSpace());
 
 		savePresentationButton.setEnabled(presentation.getShapes(LayerType.CAMERA_ANIMATED).size() > 0);
+		inChange = false;
 	}
 
 }

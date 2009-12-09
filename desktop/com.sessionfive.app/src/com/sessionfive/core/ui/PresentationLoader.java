@@ -15,7 +15,6 @@ import javax.media.opengl.GLCanvas;
 import javax.swing.JFileChooser;
 import javax.swing.ProgressMonitor;
 
-import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -28,7 +27,7 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	public void loadPresentation(Presentation presentation, GLCanvas canvas,
-			Layouter layouter, AnimationFactory animationFactory) {
+			Layouter[] layouter, AnimationFactory[] animationFactories) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
@@ -42,7 +41,7 @@ public class PresentationLoader implements PropertyChangeListener {
 
 			if (files.length > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, files, canvas, layouter, animationFactory);
+				readFiles(presentation, files, canvas, layouter, animationFactories);
 			}
 		}
 	}
@@ -109,15 +108,14 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas,
-			Layouter layouter, AnimationFactory animationFactory) {
+	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas, Layouter[] layouter, AnimationFactory[] animationFactories) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreator();
 
 		progressMonitor = new ProgressMonitor(null, "Loading Presentation", "",
 				0, 100);
 		progressMonitor.setProgress(0);
 
-		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter, animationFactory);
+		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter, animationFactories);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
@@ -160,13 +158,14 @@ public class PresentationLoader implements PropertyChangeListener {
 	private Properties createSettingsMap(Presentation presentation) {
 		Properties result = new Properties();
 		
-		result.put("layout", presentation.getDefaultLayouter().getName());
-		result.put("animation", presentation.getDefaultAnimation().getName());
-		result.put("backgroundColor", Integer.toString(presentation.getBackgroundColor().getRGB()));
-		result.put("rotationX", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleX()));
-		result.put("rotationY", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleY()));
-		result.put("rotationZ", Float.toString(presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0).getRotationAngleZ()));
-		result.put("layerText", presentation.getLayerText());
+		result.setProperty("layout", presentation.getDefaultLayouter().getName());
+		result.setProperty("animation", presentation.getDefaultAnimation().getName());
+		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor().getRGB()));
+		result.setProperty("rotationX", Float.toString(presentation.getDefaultRotationX()));
+		result.setProperty("rotationY", Float.toString(presentation.getDefaultRotationY()));
+		result.setProperty("rotationZ", Float.toString(presentation.getDefaultRotationZ()));
+		result.setProperty("layerText", presentation.getLayerText());
+		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
 		
 		return result;
 	}
