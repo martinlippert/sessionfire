@@ -3,6 +3,7 @@ package com.sessionfive.core.ui;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -270,7 +271,7 @@ public class CentralControlPaletteUI {
 			public void eventDispatched(AWTEvent event) {
 				if (event instanceof MouseEvent) {
 					MouseEvent mevent = (MouseEvent) event;
-					if (mevent.getClickCount() > 0 && helpshown) {
+					if (mevent.getID() == MouseEvent.MOUSE_PRESSED && helpshown) {
 						hidehelp();
 						mevent.consume();
 					}
@@ -308,6 +309,26 @@ public class CentralControlPaletteUI {
 		}
 	}
 
+	private void showHelpInExtensions() {
+		for (TranslucentPalette panel : this.extensionPalettes) {
+			JComponent contentPane = panel.getEmbeddedContentPane();
+			Component component = contentPane.getComponent(0);
+			if (component instanceof ShowsHelp) {
+				((ShowsHelp) component).showhelp();
+			}
+		}
+	}
+
+	private void hideHelpInExtensions() {
+		for (TranslucentPalette panel : this.extensionPalettes) {
+			JComponent contentPane = panel.getEmbeddedContentPane();
+			Component component = contentPane.getComponent(0);
+			if (component instanceof ShowsHelp) {
+				((ShowsHelp) component).hidehelp();
+			}
+		}
+	}
+
 	private void showhelp() {
 		helpWindows.add(new HelpWindow(choosePresentationButton, HelpWindowPosition.ABOVE,
 				"Select your presentation as a set or a folder of images",
@@ -323,12 +344,12 @@ public class CentralControlPaletteUI {
 		helpWindows.add(new HelpWindow(yRotationSlider, HelpWindowPosition.ABOVE,
 				"Use these sliders to control", "the X,Y and Z rotation of your shapes"));
 		helpWindows.add(new HelpWindow(helpButton, HelpWindowPosition.CENTER_NO_ARROW,
-				"Navigation:", "Next shape: Right-Arrow, Down-Arrow, Page-Down",
+				"Navigation while presenting:", "Next shape: Right-Arrow, Down-Arrow, Page-Down",
 				"Previous shape: Left-Arrow, Up-Arrow, Page-Up",
-				"First shape: Meta-Home, Meta-Up-Arrow", 
-				"Last shape: Meta-End, Meta-Down-Arrow"));
+				"First shape: Meta-Home, Meta-Up-Arrow", "Last shape: Meta-End, Meta-Down-Arrow"));
+		showHelpInExtensions();
+
 		helpshown = true;
-		// helpWindow.showHoverWindow();
 	}
 
 	private void hidehelp() {
@@ -342,6 +363,8 @@ public class CentralControlPaletteUI {
 			window = null;
 		}
 		helpWindows = new HashSet<HelpWindow>();
+
+		hideHelpInExtensions();
 	}
 
 	protected void chooseBackground() {
