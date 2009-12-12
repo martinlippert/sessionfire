@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sessionfive.core.ui.AnimationFactory;
-import com.sessionfive.core.ui.GoToAnimationFactory;
 import com.sessionfive.core.ui.Layouter;
-import com.sessionfive.core.ui.TileLayouter;
+import com.sessionfive.core.ui.LineLayouter;
+import com.sessionfive.core.ui.ZoomInZoomOutAnimationFactory;
 import com.sessionfive.shapes.TitleShape;
 
 public class Presentation implements Focusable, ShapeChangedListener {
@@ -43,8 +43,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		layers.put(LayerType.FIXED_POSTION, new Layer());
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
-		defaultLayouter = new TileLayouter();
-		defaultAnimation = new GoToAnimationFactory();
+		defaultLayouter = new LineLayouter();
+		defaultAnimation = new ZoomInZoomOutAnimationFactory();
 		path = "";
 		
 		addShape(titleShape, LayerType.FIXED_POSTION);
