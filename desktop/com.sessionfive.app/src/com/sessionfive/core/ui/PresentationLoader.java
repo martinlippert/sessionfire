@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import javax.media.opengl.GLCanvas;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
 import com.sessionfive.core.Presentation;
@@ -146,6 +147,9 @@ public class PresentationLoader implements PropertyChangeListener {
 					presentationSettings.store(fos, "sessionfire-settings");
 					fos.flush();
 					fos.close();
+					
+					JOptionPane.showMessageDialog(null, "Presentation settings saved successfully to:\n" + presentationFile.getAbsolutePath(), "Presentation saved...", JOptionPane.INFORMATION_MESSAGE);
+					
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
