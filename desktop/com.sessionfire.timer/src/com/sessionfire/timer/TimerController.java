@@ -10,7 +10,7 @@ import com.sessionfive.app.SessionFiveApplication;
 
 public class TimerController {
 	
-	private int milliseconds = 2000;
+	private int milliseconds = 20000;
 	private int currentFrame = 0;
 	private Timer timer;
 
@@ -19,6 +19,8 @@ public class TimerController {
 	}
 
 	public void startTimer() {
+		if (timer != null && timer.isRunning()) return;
+		
 		final AnimationController animationController = SessionFiveApplication.getInstance().getAnimationController();
 		final int numberOfKeyFrames = animationController.getNumberOfKeyFrames();
 
@@ -28,7 +30,6 @@ public class TimerController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				currentFrame++;
-				System.out.println("goto: " + currentFrame);
 				animationController.goTo(currentFrame);
 				
 				if (currentFrame >= numberOfKeyFrames - 1) {

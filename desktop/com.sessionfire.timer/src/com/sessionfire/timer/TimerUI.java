@@ -16,7 +16,6 @@ import javax.swing.event.DocumentListener;
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sessionfive.core.ui.HelpLabelFactory;
 import com.sessionfive.core.ui.HelpWindow;
 import com.sessionfive.core.ui.HelpWindowPosition;
 import com.sessionfive.core.ui.ShowsHelp;
@@ -30,7 +29,7 @@ public class TimerUI extends JPanel implements ShowsHelp {
 
 	public TimerUI() {
 		FormLayout layout = new FormLayout("90dlu", // columns
-				"pref, pref"); // rows
+				"pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		JPanel subContentPane = new JPanel(layout);
@@ -61,8 +60,6 @@ public class TimerUI extends JPanel implements ShowsHelp {
 		});
 
 		subContentPane.add(time, cc.xy(1, 1));
-		subContentPane.add(HelpLabelFactory.createHelpLabel("Press T to start, ESC to stop"), cc
-				.xy(1, 2));
 	}
 
 	public void updateTimeSetting(String newValue) {
