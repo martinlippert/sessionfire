@@ -42,7 +42,7 @@ public class TimerController {
 	}
 
 	public void stopTimer() {
-		if (timer.isRunning()) {
+		if (timer != null && timer.isRunning()) {
 			timer.stop();
 		}
 	}
