@@ -402,7 +402,9 @@ public class CentralControlPaletteUI {
 		layoutChoice.setSelectedItem(presentation.getDefaultLayouter());
 		animationChoice.setSelectedItem(presentation.getDefaultAnimation());
 
-		layerText.setText(presentation.getLayerText());
+		if (!layerText.getText().equals(presentation.getLayerText())) {
+			layerText.setText(presentation.getLayerText());
+		}
 		
 		xRotationSlider.setValue((int)presentation.getDefaultRotationX());
 		yRotationSlider.setValue((int)presentation.getDefaultRotationY());
