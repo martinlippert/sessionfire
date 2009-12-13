@@ -126,7 +126,7 @@ public class TranslucentPalette extends JWindow {
 				"resize.png")));
 		resizeLabel.setBorder(new EmptyBorder(0, 0, 0, 5));
 		resizeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
-		statusLine = new JLabel();
+		statusLine = new JLabel(" ");
 		statusLine.setForeground(new Color(100, 100, 100));
 		statusLine.setBorder(new EmptyBorder(0, 15, 5, 0));
 		
