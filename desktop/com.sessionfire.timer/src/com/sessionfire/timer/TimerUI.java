@@ -2,11 +2,15 @@ package com.sessionfire.timer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -20,16 +24,19 @@ import com.sessionfive.core.ui.HelpWindow;
 import com.sessionfive.core.ui.HelpWindowPosition;
 import com.sessionfive.core.ui.ShowsHelp;
 
-public class TimerUI extends JPanel implements ShowsHelp {
+public class TimerUI extends JPanel implements ShowsHelp, TimerListener {
 
 	private static final long serialVersionUID = -430613350613330878L;
 	private JTextField time;
 	private Color defaultForeground;
 	private HelpWindow helpWindow;
+	private JButton startButton;
+	private JButton stopButton;
+	private JLabel runningTime;
 
 	public TimerUI() {
-		FormLayout layout = new FormLayout("90dlu", // columns
-				"pref"); // rows
+		FormLayout layout = new FormLayout("fill:pref:grow, 3dlu, fill:pref:grow, 6dlu, pref", // columns
+				"pref, 3dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		JPanel subContentPane = new JPanel(layout);
@@ -58,8 +65,32 @@ public class TimerUI extends JPanel implements ShowsHelp {
 				updateTimeSetting(time.getText());
 			}
 		});
+		subContentPane.add(time, cc.xyw(1, 1, 5));
+		
+		startButton = HudWidgetFactory.createHudButton("start");
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Activator.getInstance().getTimerController().startTimer();
+			}
+		});
+		subContentPane.add(startButton, cc.xy(1, 3));
+		
+		stopButton = HudWidgetFactory.createHudButton("stop");
+		stopButton.setEnabled(false);
+		stopButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Activator.getInstance().getTimerController().stopTimer();
+			}
+		});
+		subContentPane.add(stopButton, cc.xy(3, 3));
 
-		subContentPane.add(time, cc.xy(1, 1));
+		runningTime = HudWidgetFactory.createHudLabel("0:20");
+		runningTime.setEnabled(false);
+		subContentPane.add(runningTime, cc.xy(5, 3));
+		
+		Activator.getInstance().getTimerController().addTimerListener(this);
 	}
 
 	public void updateTimeSetting(String newValue) {
@@ -75,7 +106,8 @@ public class TimerUI extends JPanel implements ShowsHelp {
 			int totalSeconds = (minutes * 60) + seconds;
 			if (totalSeconds > 0) {
 				time.setForeground(defaultForeground);
-				Activator.getInstance().getTimerController().setTime(totalSeconds * 1000);
+				Activator.getInstance().getTimerController().setTime(totalSeconds);
+				runningTime.setText(convertToMMSS(totalSeconds));
 			} else {
 				time.setForeground(Color.RED);
 			}
@@ -101,6 +133,34 @@ public class TimerUI extends JPanel implements ShowsHelp {
 			}
 		});
 		helpWindow = null;
+	}
+
+	@Override
+	public void remainingTimeChanged(int remainingSeconds) {
+		runningTime.setText(convertToMMSS(remainingSeconds));
+	}
+
+	protected String convertToMMSS(int remainingSeconds) {
+		int fullMinutes = remainingSeconds / 60;
+		int fullSeconds = remainingSeconds - (fullMinutes * 60);
+		
+		return fullMinutes + ":" + (fullSeconds < 10 ? "0" + fullSeconds : fullSeconds);
+	}
+
+	@Override
+	public void timerStarted() {
+		startButton.setEnabled(false);
+		stopButton.setEnabled(true);
+		time.setEnabled(false);
+		runningTime.setEnabled(true);
+	}
+
+	@Override
+	public void timerStopped() {
+		startButton.setEnabled(true);
+		stopButton.setEnabled(false);
+		time.setEnabled(true);
+		runningTime.setEnabled(false);
 	}
 
 }
