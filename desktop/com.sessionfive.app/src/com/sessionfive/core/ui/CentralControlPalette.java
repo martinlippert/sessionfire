@@ -73,10 +73,6 @@ public class CentralControlPalette {
 		this.presentation.setBackgroundColor(newColor);
 	}
 
-	public Color getBackgroundColor() {
-		return this.presentation.getBackgroundColor();
-	}
-
 	public Layouter[] getLayouter() {
 		return new Layouter[] { new LineLayouter(), new TileLayouter(),
 				new CircleLayouter() };
@@ -101,6 +97,14 @@ public class CentralControlPalette {
 
 	public void setSpace(float value, Layouter layouter) {
 		presentation.setSpace(value, layouter);
+	}
+	
+	public void setReflectionEnabled(boolean reflectionEnabled) {
+		presentation.setDefaultReflectionEnabled(reflectionEnabled);
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
+		for (Shape shape : shapes) {
+			shape.setReflectionEnabled(reflectionEnabled);
+		}
 	}
 
 	public PanelExtension[] getExtensionPanels() {

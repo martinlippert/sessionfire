@@ -107,18 +107,20 @@ public class ImageShape extends AbstractShape {
 
 		y -= h;
 
-		// Render "reflected" image
-		a = 1f;
-		gl.glColor4f(a * 0.4f, a * 0.4f, a * 0.4f, a * 0.4f);
-		gl.glTexCoord2f(tx1, ty2);
-		gl.glVertex3f(x, y + h, z);
-		gl.glTexCoord2f(tx2, ty2);
-		gl.glVertex3f(x + w, y + h, z);
-		gl.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		gl.glTexCoord2f(tx2, ty1 + ((ty2 - ty1) / 3));
-		gl.glVertex3f(x + w, y + h / 3, z);
-		gl.glTexCoord2f(tx1, ty1 + ((ty2 - ty1) / 3));
-		gl.glVertex3f(x, y + h / 3, z);
+		if (isReflectionEnabled()) {
+			// Render "reflected" image
+			a = 1f;
+			gl.glColor4f(a * 0.4f, a * 0.4f, a * 0.4f, a * 0.4f);
+			gl.glTexCoord2f(tx1, ty2);
+			gl.glVertex3f(x, y + h, z);
+			gl.glTexCoord2f(tx2, ty2);
+			gl.glVertex3f(x + w, y + h, z);
+			gl.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+			gl.glTexCoord2f(tx2, ty1 + ((ty2 - ty1) / 3));
+			gl.glVertex3f(x + w, y + h / 3, z);
+			gl.glTexCoord2f(tx1, ty1 + ((ty2 - ty1) / 3));
+			gl.glVertex3f(x, y + h / 3, z);
+		}
 		gl.glEnd();
 		tex.disable();
 

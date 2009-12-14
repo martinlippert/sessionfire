@@ -67,6 +67,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				newShape.setRotation(presentation.getDefaultRotationX(),
 						presentation.getDefaultRotationY(), presentation
 								.getDefaultRotationZ());
+				newShape.setReflectionEnabled(presentation.isDefaultReflectionEnabled());
 				newShape.initialize(context);
 				presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 
@@ -134,6 +135,11 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				if (space != null) {
 					presentation.setSpace(Float.parseFloat(space), presentation
 							.getDefaultLayouter());
+				}
+				
+				String reflectionEnabled = settings.getProperty("reflection");
+				if (reflectionEnabled != null) {
+					presentation.setDefaultReflectionEnabled(Boolean.parseBoolean(reflectionEnabled));
 				}
 
 			} catch (FileNotFoundException e) {

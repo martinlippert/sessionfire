@@ -18,6 +18,9 @@ public interface Shape extends Focusable {
 	public void setPosition(float x, float y, float z);
 	public void setRotation(float angleX, float angleY, float angleZ);
 	
+	public boolean isReflectionEnabled();
+	public void setReflectionEnabled(boolean reflectionEnabled);
+	
 	public void initialize(GLContext context) throws Exception;
 	public void release(GLContext context) throws Exception;
 	

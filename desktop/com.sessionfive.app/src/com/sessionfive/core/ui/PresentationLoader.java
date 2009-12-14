@@ -170,6 +170,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("rotationZ", Float.toString(presentation.getDefaultRotationZ()));
 		result.setProperty("layerText", presentation.getLayerText());
 		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
+		result.setProperty("reflection", Boolean.toString(presentation.isDefaultReflectionEnabled()));
 		
 		return result;
 	}

@@ -27,6 +27,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	
 	private Layouter defaultLayouter;
 	private AnimationFactory defaultAnimation;
+	private boolean defaultReflectionEnabled;
 	private float defaultRotationX = 0.0f;
 	private float defaultRotationY = 0.0f;
 	private float defaultRotationZ = 0.0f;
@@ -45,6 +46,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		titleShape = new TitleShape();
 		defaultLayouter = new LineLayouter();
 		defaultAnimation = new ZoomInZoomOutAnimationFactory();
+		defaultReflectionEnabled = true;
 		path = "";
 		
 		addShape(titleShape, LayerType.FIXED_POSTION);
@@ -229,6 +231,17 @@ public class Presentation implements Focusable, ShapeChangedListener {
 			this.defaultRotationX = defaultRotationX;
 			this.defaultRotationY = defaultRotationY;
 			this.defaultRotationZ = defaultRotationZ;
+			firePresentationChanged();
+		}
+	}
+	
+	public boolean isDefaultReflectionEnabled() {
+		return defaultReflectionEnabled;
+	}
+	
+	public void setDefaultReflectionEnabled(boolean defaultReflectionEnabled) {
+		if (this.defaultReflectionEnabled != defaultReflectionEnabled) {
+			this.defaultReflectionEnabled = defaultReflectionEnabled;
 			firePresentationChanged();
 		}
 	}

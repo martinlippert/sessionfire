@@ -14,10 +14,13 @@ public abstract class AbstractShape implements Shape {
 	private float angleX;
 	private float angleY;
 	private float angleZ;
+	private boolean reflectionEnabled;
+	
 	private List<ShapeChangedListener> changeListeners;
 
 	public AbstractShape() {
 		super();
+		this.reflectionEnabled = true;
 		this.changeListeners = new LinkedList<ShapeChangedListener>();
 	}
 
@@ -67,6 +70,19 @@ public abstract class AbstractShape implements Shape {
 		this.angleZ = angleZ;
 		
 		fireShapeChangedEvent();
+	}
+	
+	@Override
+	public boolean isReflectionEnabled() {
+		return reflectionEnabled;
+	}
+	
+	@Override
+	public void setReflectionEnabled(boolean reflectionEnabled) {
+		if (this.reflectionEnabled != reflectionEnabled) {
+			this.reflectionEnabled = reflectionEnabled;
+			fireShapeChangedEvent();
+		}
 	}
 	
 	@Override
