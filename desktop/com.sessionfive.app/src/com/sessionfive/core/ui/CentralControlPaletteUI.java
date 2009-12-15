@@ -66,6 +66,7 @@ public class CentralControlPaletteUI {
 
 	private JSlider spaceRotationSlider;
 	private JCheckBox reflectionEnabledBox;
+	private JSlider focusScaleSlider;
 
 	private List<TranslucentPalette> extensionPalettes;
 
@@ -129,8 +130,8 @@ public class CentralControlPaletteUI {
 		contentPane.setLayout(new BorderLayout());
 
 		FormLayout layout = new FormLayout(
-				"5dlu, fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref"); // rows
+				"10dlu, fill:pref:grow", // columns
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -144,10 +145,6 @@ public class CentralControlPaletteUI {
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.choosePresentation(canvas);
-
-				// centralControlPalette.setRotation(xRotationSlider.getValue(),
-				// yRotationSlider
-				// .getValue(), zRotationSlider.getValue());
 			}
 		});
 		subContentPane.add(choosePresentationButton, cc.xyw(1, 1, 2));
@@ -305,8 +302,29 @@ public class CentralControlPaletteUI {
 		});
 		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 25, 2));
 
+		focusScaleSlider = new JSlider(1, 200, 100);
+		focusScaleSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (!inChange) {
+					centralControlPalette
+							.setFocusScale((float) (200 - focusScaleSlider
+									.getValue()) / 100);
+				}
+			}
+		});
+		focusScaleSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getClickCount() == 2 && !inChange) {
+					focusScaleSlider.setValue(200 - (int)(Presentation.DEFAULT_FOCUS_SCALE * 100));
+				}
+			}
+		});
+		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 27));
+		subContentPane.add(focusScaleSlider, cc.xy(2, 27));
+
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xyw(1, 27, 2));
+		subContentPane.add(helpButton, cc.xyw(1, 29, 2));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -406,7 +424,11 @@ public class CentralControlPaletteUI {
 		helpWindows.add(new HelpWindow(spaceRotationSlider,
 				HelpWindowPosition.ABOVE,
 				"Change the spacing between your shapes",
-				"Double-Click returns to the default"));
+				"Double click returns to the default"));
+		helpWindows.add(new HelpWindow(focusScaleSlider,
+				HelpWindowPosition.ABOVE,
+				"Change the scaling of focussed shapes",
+				"Double click returns to the default"));
 		helpWindows.add(new HelpWindow(helpButton,
 				HelpWindowPosition.CENTER_NO_ARROW,
 				"Navigation while presenting:",
@@ -455,7 +477,9 @@ public class CentralControlPaletteUI {
 		yRotationSlider.setValue((int) presentation.getDefaultRotationY());
 		zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
 		spaceRotationSlider.setValue((int) presentation.getSpace());
-		reflectionEnabledBox.setSelected(presentation.isDefaultReflectionEnabled());
+		reflectionEnabledBox.setSelected(presentation
+				.isDefaultReflectionEnabled());
+		focusScaleSlider.setValue(200 - (int) (presentation.getDefaultFocusScale() * 100));
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		savePresentationButton.setEnabled(shapes.size() > 0);

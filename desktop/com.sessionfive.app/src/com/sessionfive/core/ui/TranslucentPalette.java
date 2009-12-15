@@ -57,11 +57,12 @@ public class TranslucentPalette extends JWindow {
 	public TranslucentPalette(String title, boolean closeable, Window parent) {
 		super(parent);
 
-		final JPanel contentPane = new JPanel() {
+		final JComponent contentPane = new JComponent() {
 			private static final long serialVersionUID = -1505112600358149151L;
 
 			@Override
 			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g.create();
 
 				int height = TranslucentPalette.this.getSize().height;
@@ -93,6 +94,7 @@ public class TranslucentPalette extends JWindow {
 		contentPane.setOpaque(false);
 		contentPane.setLayout(new BorderLayout());
 		contentPane.setBackground(new Color(0, 0, 0, 0));
+		contentPane.setIgnoreRepaint(true);
 		this.setContentPane(contentPane);
 		this.setBackground(new Color(0, 0, 0, 0));
 		//Workaround for Mac:

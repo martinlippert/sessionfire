@@ -68,6 +68,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 						presentation.getDefaultRotationY(), presentation
 								.getDefaultRotationZ());
 				newShape.setReflectionEnabled(presentation.isDefaultReflectionEnabled());
+				newShape.setFocusScale(presentation.getDefaultFocusScale());
 				newShape.initialize(context);
 				presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 
@@ -142,6 +143,11 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					presentation.setDefaultReflectionEnabled(Boolean.parseBoolean(reflectionEnabled));
 				}
 
+				String focusscale = settings.getProperty("focusscale");
+				if (focusscale != null) {
+					presentation.setDefaultFocusScale(Float.parseFloat(focusscale));
+				}
+				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

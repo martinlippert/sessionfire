@@ -21,6 +21,9 @@ public interface Shape extends Focusable {
 	public boolean isReflectionEnabled();
 	public void setReflectionEnabled(boolean reflectionEnabled);
 	
+	public float getFocusScale();
+	public void setFocusScale(float focusScale);
+	
 	public void initialize(GLContext context) throws Exception;
 	public void release(GLContext context) throws Exception;
 	

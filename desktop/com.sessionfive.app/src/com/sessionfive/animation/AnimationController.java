@@ -92,6 +92,18 @@ public class AnimationController {
 			currentAnimator.start();
 		}
 	}
+	
+	public void directlyGoTo(int animationNo) {
+		if (presentation.getAnimationCount() > 0) {
+			currentAnimationNo = animationNo;
 
+			if (animationNo == -1) {
+				display.setCamera(presentation.getFocussedCamera());
+			} else {
+				Animation animation = presentation.getAnimation(currentAnimationNo);
+				animation.directlyGoTo(display);
+			}
+		}
+	}
 
 }

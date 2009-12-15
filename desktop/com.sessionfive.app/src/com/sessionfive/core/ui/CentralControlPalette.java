@@ -98,13 +98,23 @@ public class CentralControlPalette {
 	public void setSpace(float value, Layouter layouter) {
 		presentation.setSpace(value, layouter);
 	}
-	
+
 	public void setReflectionEnabled(boolean reflectionEnabled) {
 		presentation.setDefaultReflectionEnabled(reflectionEnabled);
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		for (Shape shape : shapes) {
 			shape.setReflectionEnabled(reflectionEnabled);
 		}
+	}
+
+	public void setFocusScale(float focusScale) {
+		presentation.setDefaultFocusScale(focusScale);
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
+		for (Shape shape : shapes) {
+			shape.setFocusScale(focusScale);
+		}
+		animationController
+				.directlyGoTo(animationController.getCurrentAnimationNo());
 	}
 
 	public PanelExtension[] getExtensionPanels() {

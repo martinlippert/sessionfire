@@ -18,6 +18,8 @@ import com.sessionfive.shapes.TitleShape;
 public class Presentation implements Focusable, ShapeChangedListener {
 
 	public static final int DEFAULT_SPACE = 25;
+	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
+	
 	private Camera startCamera;
 	private List<Animation> animations;
 	private Map<LayerType, Layer> layers;
@@ -28,12 +30,13 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	private Layouter defaultLayouter;
 	private AnimationFactory defaultAnimation;
 	private boolean defaultReflectionEnabled;
-	private float defaultRotationX = 0.0f;
-	private float defaultRotationY = 0.0f;
-	private float defaultRotationZ = 0.0f;
+	private float defaultRotationX;
+	private float defaultRotationY;
+	private float defaultRotationZ;
+	private float defaultFocusScale;
 
 	private List<PresentationChangedListener> changeListeners;
-	private float space = DEFAULT_SPACE;
+	private float space;
 
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
@@ -48,6 +51,12 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		defaultAnimation = new ZoomInZoomOutAnimationFactory();
 		defaultReflectionEnabled = true;
 		path = "";
+		
+		defaultRotationX = 0.0f;
+		defaultRotationY = 0.0f;
+		defaultRotationZ = 0.0f;
+		defaultFocusScale = DEFAULT_FOCUS_SCALE;
+		space = DEFAULT_SPACE;
 		
 		addShape(titleShape, LayerType.FIXED_POSTION);
 	}
@@ -242,6 +251,17 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public void setDefaultReflectionEnabled(boolean defaultReflectionEnabled) {
 		if (this.defaultReflectionEnabled != defaultReflectionEnabled) {
 			this.defaultReflectionEnabled = defaultReflectionEnabled;
+			firePresentationChanged();
+		}
+	}
+	
+	public float getDefaultFocusScale() {
+		return defaultFocusScale;
+	}
+	
+	public void setDefaultFocusScale(float defaultFocusScale) {
+		if (this.defaultFocusScale != defaultFocusScale) {
+			this.defaultFocusScale = defaultFocusScale;
 			firePresentationChanged();
 		}
 	}

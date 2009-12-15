@@ -16,11 +16,14 @@ public abstract class AbstractShape implements Shape {
 	private float angleZ;
 	private boolean reflectionEnabled;
 	
+	private float focusScale;
+	
 	private List<ShapeChangedListener> changeListeners;
 
 	public AbstractShape() {
 		super();
 		this.reflectionEnabled = true;
+		this.focusScale = 1.0f;
 		this.changeListeners = new LinkedList<ShapeChangedListener>();
 	}
 
@@ -85,6 +88,17 @@ public abstract class AbstractShape implements Shape {
 		}
 	}
 	
+	public float getFocusScale() {
+		return focusScale;
+	}
+	
+	public void setFocusScale(float focusScale) {
+		if (this.focusScale != focusScale) {
+			this.focusScale = focusScale;
+			fireShapeChangedEvent();
+		}
+	}
+	
 	@Override
 	public Camera getFocussedCamera() {
 		float shapeX = this.getX();
@@ -107,7 +121,7 @@ public abstract class AbstractShape implements Shape {
 		
 		float locationX = 0;
 		float locationY = 0;
-		float locationZ = shapeWidth > shapeHeight ? shapeWidth : shapeHeight;
+		float locationZ = (shapeWidth > shapeHeight ? shapeWidth : shapeHeight) * focusScale;
 		
 		// location y-axis rotation
 		locationX = (float) (locationZ * Math.sin(rotationRadianY));
