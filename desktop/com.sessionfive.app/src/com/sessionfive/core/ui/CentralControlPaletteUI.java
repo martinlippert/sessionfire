@@ -99,7 +99,12 @@ public class CentralControlPaletteUI {
 					@Override
 					public void presentationChanged(
 							PresentationChangedEvent event) {
-						updateControls();
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								updateControls();
+							}
+						});
 					}
 				});
 
