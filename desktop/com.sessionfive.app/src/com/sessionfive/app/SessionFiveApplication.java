@@ -99,9 +99,9 @@ public class SessionFiveApplication implements IApplication {
 
 		caps = new GLCapabilities();
 		caps.setSampleBuffers(true);
-		caps.setNumSamples(2);
+		caps.setNumSamples(4);
 
-		canvas = new GLCanvas(caps, null, null, null);
+		canvas = new GLCanvas(caps);
 
 		presentation = new Presentation();
 		display = new Display(presentation);
