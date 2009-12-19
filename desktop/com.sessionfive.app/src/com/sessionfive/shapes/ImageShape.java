@@ -11,6 +11,7 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -130,23 +131,38 @@ public class ImageShape extends AbstractShape {
 	
 	@Override
 	public void initialize(final GLContext context) throws Exception {
-		super.initialize(context);
-		
-		final TextureData textureData = TextureIO.newTextureData(this.file, true, null);
-
-		Threading.invokeOnOpenGLThread(new Runnable() {
-			public void run() {
-				try {
-					context.makeCurrent();
-					t = TextureIO.newTexture(textureData);
-					t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
-				} catch (GLException e) {
-					e.printStackTrace();
+		if (t == null) {
+			super.initialize(context);
+			final TextureData textureData = initTextureData();
+			Threading.invokeOnOpenGLThread(new Runnable() {
+				public void run() {
+					try {
+						context.makeCurrent();
+						initTexture(textureData);
+						context.release();
+					} catch (GLException e) {
+						e.printStackTrace();
+					}
 				}
+			});
+		}
+	}
+	
+	private TextureData initTextureData() throws IOException {
+		return TextureIO.newTextureData(this.file, true, null);
+	}
+	
+	private void initTexture(final TextureData textureData) {
+		if (t == null && textureData != null) {
+			try {
+				t = TextureIO.newTexture(textureData);
+				t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
+			} catch (GLException e) {
+				e.printStackTrace();
 			}
-		});
+		}
 	}
 	
 	@Override
@@ -159,6 +175,7 @@ public class ImageShape extends AbstractShape {
 					context.makeCurrent();
 					t.dispose();
 					t = null;
+					context.release();
 				}
 			});
 		}
