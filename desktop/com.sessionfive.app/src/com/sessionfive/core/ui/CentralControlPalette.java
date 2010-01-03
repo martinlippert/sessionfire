@@ -35,11 +35,9 @@ public class CentralControlPalette {
 		canvas.requestFocus();
 	}
 
-	public void savePresentation(Layouter layouter,
-			AnimationFactory animationFactory) {
+	public void savePresentation(GLCanvas canvas) {
 		PresentationLoader loader = new PresentationLoader();
-		loader.savePresentation(presentation, layouter.getName(),
-				animationFactory.getName());
+		loader.savePresentation(presentation, canvas);
 	}
 
 	public void startPresentation() {

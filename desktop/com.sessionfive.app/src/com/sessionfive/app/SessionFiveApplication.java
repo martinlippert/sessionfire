@@ -1,9 +1,12 @@
 package com.sessionfive.app;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -42,6 +45,7 @@ public class SessionFiveApplication implements IApplication {
 	private GLCanvas canvas;
 
 	private MultiplexingKeyListener keyListener;
+	private MultiplexingKeyListener globalKeyListener;
 	private Display display;
 	private Frame frame;
 
@@ -113,6 +117,8 @@ public class SessionFiveApplication implements IApplication {
 		canvas.addGLEventListener(display);
 
 		keyListener = new MultiplexingKeyListener();
+		globalKeyListener = new MultiplexingKeyListener();
+
 		new KeyListenerExtensionReader()
 				.addKeyListenerExtensionsTo(keyListener);
 
@@ -137,14 +143,15 @@ public class SessionFiveApplication implements IApplication {
 					goToKeyframeDirectly();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN
 						|| e.getKeyCode() == KeyEvent.VK_DOWN
-						|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						|| e.getKeyCode() == KeyEvent.VK_RIGHT
+						|| e.getKeyCode() == KeyEvent.VK_SPACE) {
 					animationController.forward();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP
 						|| e.getKeyCode() == KeyEvent.VK_UP
-						|| e.getKeyCode() == KeyEvent.VK_LEFT) {
+						|| e.getKeyCode() == KeyEvent.VK_LEFT
+						|| e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					animationController.backward();
-				} else if (e.getKeyCode() == KeyEvent.VK_F11
-						|| e.getKeyChar() == 'f') {
+				} else if (e.getKeyChar() == 'f') {
 					switchFullScreen();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					if (isFullScreenShowing()) {
@@ -162,8 +169,46 @@ public class SessionFiveApplication implements IApplication {
 			}
 		});
 
+		globalKeyListener.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {
+			}
+
+			public void keyReleased(KeyEvent e) {
+			}
+
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_F11) {
+					switchFullScreen();
+				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					if (isFullScreenShowing()) {
+						switchFullScreen();
+					}
+				} else if (e.getKeyCode() == KeyEvent.VK_O && (e
+						.getModifiers() & KeyEvent.META_MASK) != 0) {
+					centralControlPalette.choosePresentation(canvas);
+				} else if (e.getKeyCode() == KeyEvent.VK_S && (e
+						.getModifiers() & KeyEvent.META_MASK) != 0) {
+					centralControlPalette.savePresentation(canvas);
+				}
+			}
+		});
+
 		canvas.addKeyListener(keyListener);
 		frame.addKeyListener(keyListener);
+		
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				if (event instanceof KeyEvent) {
+					KeyEvent keyevent = (KeyEvent) event;
+					if (keyevent.getID() == KeyEvent.KEY_PRESSED) {
+						globalKeyListener.keyPressed(keyevent);
+					}
+				}
+			}
+		}, AWTEvent.KEY_EVENT_MASK);
+
+		
 
 		frame.setLayout(new BorderLayout());
 
@@ -213,8 +258,6 @@ public class SessionFiveApplication implements IApplication {
 	}
 
 	public void switchFullScreen() {
-		System.out.println("switch to full screen");
-
 		if (fullScreenFrame == null) {
 			fullScreenFrame = new Frame("Session Five");
 			fullScreenFrame.setFocusable(true);

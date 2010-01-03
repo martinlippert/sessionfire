@@ -147,6 +147,7 @@ public class CentralControlPaletteUI {
 
 		choosePresentationButton = HudWidgetFactory
 				.createHudButton("Choose Presentation...");
+		choosePresentationButton.setMnemonic(KeyEvent.VK_O);
 		choosePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				centralControlPalette.choosePresentation(canvas);
@@ -158,12 +159,11 @@ public class CentralControlPaletteUI {
 				.createHudButton("Save Presentation");
 		savePresentationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centralControlPalette.savePresentation((Layouter) layoutChoice
-						.getSelectedItem(), (AnimationFactory) animationChoice
-						.getSelectedItem());
+				centralControlPalette.savePresentation(canvas);
 			}
 		});
 		savePresentationButton.setEnabled(false);
+		savePresentationButton.setMnemonic(KeyEvent.VK_S);
 		subContentPane.add(savePresentationButton, cc.xyw(1, 3, 2));
 
 		startPresentationButton = HudWidgetFactory
@@ -174,8 +174,6 @@ public class CentralControlPaletteUI {
 			}
 		});
 		subContentPane.add(startPresentationButton, cc.xyw(1, 5, 2));
-		// subContentPane.add(HelpLabelFactory.createHelpLabel("Press ESC or F11 to switch back"),
-		// cc.xy(1, 5));
 
 		layoutModel = new DefaultComboBoxModel();
 		Layouter[] allLayouter = centralControlPalette.getLayouter();

@@ -32,8 +32,9 @@ public class PresentationLoader implements PropertyChangeListener {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
+		chooser.setDialogTitle("Open Presentation");
 
-		int showDialog = chooser.showDialog(null, "Choose Presentation");
+		int showDialog = chooser.showDialog(canvas, "Choose Presentation");
 
 		if (showDialog == JFileChooser.APPROVE_OPTION) {
 			File[] files = getFiles(chooser);
@@ -42,7 +43,8 @@ public class PresentationLoader implements PropertyChangeListener {
 
 			if (files.length > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, files, canvas, layouter, animationFactories);
+				readFiles(presentation, files, canvas, layouter,
+						animationFactories);
 			}
 		}
 	}
@@ -74,7 +76,7 @@ public class PresentationLoader implements PropertyChangeListener {
 			return new File[0];
 		}
 	}
-	
+
 	private String getPresentationPath(JFileChooser chooser) {
 		File[] selectedFiles = chooser.getSelectedFiles();
 		if (selectedFiles != null) {
@@ -100,8 +102,7 @@ public class PresentationLoader implements PropertyChangeListener {
 			try {
 				long parsed = Long.parseLong(digits.toString());
 				return parsed;
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				return null;
 			}
 		} else {
@@ -109,14 +110,17 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas, Layouter[] layouter, AnimationFactory[] animationFactories) {
+	private void readFiles(Presentation presentation, File[] files,
+			GLCanvas canvas, Layouter[] layouter,
+			AnimationFactory[] animationFactories) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreator();
 
-		progressMonitor = new ProgressMonitor(null, "Loading Presentation", "",
-				0, 100);
+		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation",
+				"", 0, 100);
 		progressMonitor.setProgress(0);
 
-		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter, animationFactories);
+		task = new PresentationLoaderTask(files, creator, presentation, canvas,
+				layouter, animationFactories);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
@@ -135,7 +139,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	public void savePresentation(Presentation presentation, String layoutName, String animationName) {
+	public void savePresentation(final Presentation presentation, final GLCanvas canvas) {
 		List<Shape> shapes = presentation.getAllShapes();
 		if (shapes.size() > 0) {
 			File dir = new File(presentation.getPath());
@@ -143,13 +147,18 @@ public class PresentationLoader implements PropertyChangeListener {
 				File presentationFile = new File(dir, "sessionfire.settings");
 				try {
 					Properties presentationSettings = createSettingsMap(presentation);
-					FileOutputStream fos = new FileOutputStream(presentationFile);
+					FileOutputStream fos = new FileOutputStream(
+							presentationFile);
 					presentationSettings.store(fos, "sessionfire-settings");
 					fos.flush();
 					fos.close();
-					
-					JOptionPane.showMessageDialog(null, "Presentation settings saved successfully to:\n" + presentationFile.getAbsolutePath(), "Presentation saved...", JOptionPane.INFORMATION_MESSAGE);
-					
+
+					JOptionPane.showMessageDialog(canvas,
+							"Presentation settings saved successfully to:\n"
+									+ presentationFile.getAbsolutePath(),
+							"Presentation saved...",
+							JOptionPane.INFORMATION_MESSAGE);
+
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -161,18 +170,27 @@ public class PresentationLoader implements PropertyChangeListener {
 
 	private Properties createSettingsMap(Presentation presentation) {
 		Properties result = new Properties();
-		
-		result.setProperty("layout", presentation.getDefaultLayouter().getName());
-		result.setProperty("animation", presentation.getDefaultAnimation().getName());
-		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor().getRGB()));
-		result.setProperty("rotationX", Float.toString(presentation.getDefaultRotationX()));
-		result.setProperty("rotationY", Float.toString(presentation.getDefaultRotationY()));
-		result.setProperty("rotationZ", Float.toString(presentation.getDefaultRotationZ()));
+
+		result.setProperty("layout", presentation.getDefaultLayouter()
+				.getName());
+		result.setProperty("animation", presentation.getDefaultAnimation()
+				.getName());
+		result.setProperty("backgroundColor", Integer.toString(presentation
+				.getBackgroundColor().getRGB()));
+		result.setProperty("rotationX", Float.toString(presentation
+				.getDefaultRotationX()));
+		result.setProperty("rotationY", Float.toString(presentation
+				.getDefaultRotationY()));
+		result.setProperty("rotationZ", Float.toString(presentation
+				.getDefaultRotationZ()));
 		result.setProperty("layerText", presentation.getLayerText());
-		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
-		result.setProperty("reflection", Boolean.toString(presentation.isDefaultReflectionEnabled()));
-		result.setProperty("focusscale", Float.toString(presentation.getDefaultFocusScale()));
-		
+		result.setProperty("spaceBetween", Float.toString(presentation
+				.getSpace()));
+		result.setProperty("reflection", Boolean.toString(presentation
+				.isDefaultReflectionEnabled()));
+		result.setProperty("focusscale", Float.toString(presentation
+				.getDefaultFocusScale()));
+
 		return result;
 	}
 
