@@ -438,7 +438,8 @@ public class CentralControlPaletteUI {
 				"Next shape: Right-Arrow, Down-Arrow, Page-Down",
 				"Previous shape: Left-Arrow, Up-Arrow, Page-Up",
 				"First shape: Meta-Home, Meta-Up-Arrow",
-				"Last shape: Meta-End, Meta-Down-Arrow"));
+				"Last shape: Meta-End, Meta-Down-Arrow", 
+				"Number & enter: Jumps to the shape"));
 		showHelpInExtensions();
 
 		helpshown = true;
