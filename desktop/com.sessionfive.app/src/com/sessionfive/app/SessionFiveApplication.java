@@ -46,6 +46,8 @@ public class SessionFiveApplication implements IApplication {
 
 	private MultiplexingKeyListener keyListener;
 	private MultiplexingKeyListener globalKeyListener;
+	private LayoutMover layoutMover;
+
 	private Display display;
 	private Frame frame;
 
@@ -98,8 +100,7 @@ public class SessionFiveApplication implements IApplication {
 
 	public Object start(final org.eclipse.swt.widgets.Display swtDisplay) {
 		frame = new Frame("Sessionfire - A New Kind of Presentation Tool");
-		frame.setIconImage(new ImageIcon(this.getClass()
-				.getResource("sf16.png")).getImage());
+		frame.setIconImage(new ImageIcon(this.getClass().getResource("sf16.png")).getImage());
 
 		caps = new GLCapabilities();
 		caps.setSampleBuffers(true);
@@ -111,16 +112,15 @@ public class SessionFiveApplication implements IApplication {
 		display = new Display(presentation);
 		animationController = new AnimationController();
 
-		displayRepaintManager = new DisplayRepaintManager(display,
-				presentation, canvas);
+		displayRepaintManager = new DisplayRepaintManager(display, presentation, canvas);
 
 		canvas.addGLEventListener(display);
 
 		keyListener = new MultiplexingKeyListener();
 		globalKeyListener = new MultiplexingKeyListener();
+		layoutMover = new LayoutMover(presentation, animationController);
 
-		new KeyListenerExtensionReader()
-				.addKeyListenerExtensionsTo(keyListener);
+		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
 
 		keyListener.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
@@ -131,14 +131,11 @@ public class SessionFiveApplication implements IApplication {
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_HOME
-						|| (e.getKeyCode() == KeyEvent.VK_UP && (e
-								.getModifiers() & KeyEvent.META_MASK) != 0)) {
+						|| (e.getKeyCode() == KeyEvent.VK_UP && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
 					animationController.goTo(0);
 				} else if (e.getKeyCode() == KeyEvent.VK_END
-						|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e
-								.getModifiers() & KeyEvent.META_MASK) != 0)) {
-					animationController.goTo(animationController
-							.getNumberOfKeyFrames() - 1);
+						|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
+					animationController.goTo(animationController.getNumberOfKeyFrames() - 1);
 				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					goToKeyframeDirectly();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN
@@ -147,8 +144,7 @@ public class SessionFiveApplication implements IApplication {
 						|| e.getKeyCode() == KeyEvent.VK_SPACE) {
 					animationController.forward();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP
-						|| e.getKeyCode() == KeyEvent.VK_UP
-						|| e.getKeyCode() == KeyEvent.VK_LEFT
+						|| e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT
 						|| e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					animationController.backward();
 				} else if (e.getKeyChar() == 'f') {
@@ -159,12 +155,14 @@ public class SessionFiveApplication implements IApplication {
 					}
 				}
 
-				if (e.getKeyCode() >= KeyEvent.VK_0
-						&& e.getKeyCode() <= KeyEvent.VK_9) {
+				if (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9) {
 					goToKeyframeDirectlyBuffer.append(e.getKeyChar());
+					if (presentation.getAllShapes().size() < 10) {
+						goToKeyframeDirectly();
+						goToKeyframeDirectlyBuffer.delete(0, goToKeyframeDirectlyBuffer.length());
+					}
 				} else {
-					goToKeyframeDirectlyBuffer.delete(0,
-							goToKeyframeDirectlyBuffer.length());
+					goToKeyframeDirectlyBuffer.delete(0, goToKeyframeDirectlyBuffer.length());
 				}
 			}
 		});
@@ -183,11 +181,11 @@ public class SessionFiveApplication implements IApplication {
 					if (isFullScreenShowing()) {
 						switchFullScreen();
 					}
-				} else if (e.getKeyCode() == KeyEvent.VK_O && (e
-						.getModifiers() & KeyEvent.META_MASK) != 0) {
+				} else if (e.getKeyCode() == KeyEvent.VK_O
+						&& (e.getModifiers() & KeyEvent.META_MASK) != 0) {
 					centralControlPalette.choosePresentation(canvas);
-				} else if (e.getKeyCode() == KeyEvent.VK_S && (e
-						.getModifiers() & KeyEvent.META_MASK) != 0) {
+				} else if (e.getKeyCode() == KeyEvent.VK_S
+						&& (e.getModifiers() & KeyEvent.META_MASK) != 0) {
 					centralControlPalette.savePresentation(canvas);
 				}
 			}
@@ -195,7 +193,7 @@ public class SessionFiveApplication implements IApplication {
 
 		canvas.addKeyListener(keyListener);
 		frame.addKeyListener(keyListener);
-		
+
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 			@Override
 			public void eventDispatched(AWTEvent event) {
@@ -208,7 +206,19 @@ public class SessionFiveApplication implements IApplication {
 			}
 		}, AWTEvent.KEY_EVENT_MASK);
 
-		
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				layoutMover.mouseMoved(event);
+			}
+		}, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				layoutMover.mouseClicked(event);
+			}
+		}, AWTEvent.MOUSE_EVENT_MASK);
 
 		frame.setLayout(new BorderLayout());
 
@@ -234,10 +244,9 @@ public class SessionFiveApplication implements IApplication {
 		frame.setVisible(true);
 		animationController.init(presentation, display);
 
-		centralControlPalette = new CentralControlPalette(presentation,
-				animationController);
-		centralControlPaletteUI = new CentralControlPaletteUI(
-				centralControlPalette, presentation, canvas);
+		centralControlPalette = new CentralControlPalette(presentation, animationController);
+		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
+				canvas);
 		centralControlPaletteUI.show();
 		centralControlPaletteUI.setStatus(generalStatus);
 
@@ -246,11 +255,9 @@ public class SessionFiveApplication implements IApplication {
 
 	protected void goToKeyframeDirectly() {
 		try {
-			int keyframeNo = Integer.parseInt(goToKeyframeDirectlyBuffer
-					.toString());
+			int keyframeNo = Integer.parseInt(goToKeyframeDirectlyBuffer.toString());
 			if (keyframeNo >= 0) {
-				keyframeNo = Math.min(keyframeNo, animationController
-						.getNumberOfKeyFrames());
+				keyframeNo = Math.min(keyframeNo, animationController.getNumberOfKeyFrames());
 				animationController.goTo(keyframeNo - 1);
 			}
 		} catch (NumberFormatException e) {
@@ -266,12 +273,11 @@ public class SessionFiveApplication implements IApplication {
 			fullScreenFrame.setUndecorated(true);
 			fullScreenFrame.setLayout(new BorderLayout());
 
-			final GLCanvas fullScreenCanvas = new GLCanvas(caps, null, canvas
-					.getContext(), null);
+			final GLCanvas fullScreenCanvas = new GLCanvas(caps, null, canvas.getContext(), null);
 			fullScreenCanvas.addGLEventListener(display);
 			fullScreenCanvas.setFocusable(true);
-			fullScreenDisplayRepaintManager = new DisplayRepaintManager(
-					display, presentation, fullScreenCanvas);
+			fullScreenDisplayRepaintManager = new DisplayRepaintManager(display, presentation,
+					fullScreenCanvas);
 			fullScreenFrame.add(fullScreenCanvas, BorderLayout.CENTER);
 
 			fullScreenFrame.addKeyListener(keyListener);
@@ -282,12 +288,12 @@ public class SessionFiveApplication implements IApplication {
 				}
 			});
 
-			GraphicsDevice screenDevice = GraphicsEnvironment
-					.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			GraphicsDevice screenDevice = GraphicsEnvironment.getLocalGraphicsEnvironment()
+					.getDefaultScreenDevice();
 			screenDevice.setFullScreenWindow(fullScreenFrame);
 		} else {
-			GraphicsDevice screenDevice = GraphicsEnvironment
-					.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			GraphicsDevice screenDevice = GraphicsEnvironment.getLocalGraphicsEnvironment()
+					.getDefaultScreenDevice();
 
 			screenDevice.setFullScreenWindow(null);
 			fullScreenFrame.setVisible(false);
@@ -326,17 +332,15 @@ public class SessionFiveApplication implements IApplication {
 		caps.setDoubleBuffered(false);
 
 		if (!GLDrawableFactory.getFactory().canCreateGLPbuffer()) {
-			throw new GLException(
-					"Pbuffers not supported with this graphics card");
+			throw new GLException("Pbuffers not supported with this graphics card");
 		}
-		GLPbuffer pbuffer = GLDrawableFactory.getFactory().createGLPbuffer(
-				caps, null, 512, 512, canvas.getContext());
+		GLPbuffer pbuffer = GLDrawableFactory.getFactory().createGLPbuffer(caps, null, 512, 512,
+				canvas.getContext());
 
 		Display offscreenDisplay = new Display(presentation);
 
 		boolean alpha;
-		if (parsedNumber >= 0
-				&& parsedNumber < presentation.getAnimationCount()) {
+		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
 			Animation animation = presentation.getAnimation(parsedNumber);
 			animation.directlyGoTo(offscreenDisplay);
 			alpha = true;
@@ -383,8 +387,7 @@ public class SessionFiveApplication implements IApplication {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 			try {
-				BufferedImage image = Screenshot.readToBufferedImage(0, 0,
-						width, height, alpha);
+				BufferedImage image = Screenshot.readToBufferedImage(0, 0, width, height, alpha);
 				if (!ImageIO.write(image, "png", bos)) {
 					throw new IOException("Unsupported file format png");
 				}

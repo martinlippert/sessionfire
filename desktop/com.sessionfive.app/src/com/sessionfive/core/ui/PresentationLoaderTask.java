@@ -148,6 +148,20 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					presentation.setDefaultFocusScale(Float.parseFloat(focusscale));
 				}
 				
+				String layouterLocationX = settings.getProperty("layouterLocationX");
+				String layouterTargetX = settings.getProperty("layouterTargetX");
+				String layouterTargetY = settings.getProperty("layouterTargetY");
+				Layouter defaultLayouter = presentation.getDefaultLayouter();
+				if (layouterLocationX != null && defaultLayouter instanceof MoveableLayouter) {
+					MoveableLayouter mLayouter = (MoveableLayouter) defaultLayouter;
+					mLayouter.setLocationX(Float.parseFloat(layouterLocationX));
+					mLayouter.setTargetX(Float.parseFloat(layouterTargetX));
+					mLayouter.setTargetY(Float.parseFloat(layouterTargetY));
+				}
+				
+				
+				
+				
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 				e.printStackTrace();

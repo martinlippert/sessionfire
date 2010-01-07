@@ -7,9 +7,13 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class TileLayouter implements Layouter {
+public class TileLayouter extends MoveableLayouter implements Layouter {
 
 	public static final String NAME = "Tiling";
+
+	public TileLayouter() {
+		super(-80f, 20f, -50f);
+	}
 
 	@Override
 	public String getName() {
@@ -18,7 +22,8 @@ public class TileLayouter implements Layouter {
 
 	@Override
 	public void layout(Presentation presentation) {
-		final Camera startCamera = new Camera(-80f, -40f, 120f, 20f, -50f, 0f, 0f, 1f, 0f);
+		final Camera startCamera = new Camera(locationX, -40f, 120f, targetX, targetY, 0f, 0f, 1f,
+				0f);
 		presentation.setStartCamera(startCamera);
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
