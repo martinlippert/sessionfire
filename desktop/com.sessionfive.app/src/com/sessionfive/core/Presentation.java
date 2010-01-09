@@ -19,14 +19,14 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public static final int DEFAULT_SPACE = 25;
 	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
-	
+
 	private Camera startCamera;
 	private List<Animation> animations;
 	private Map<LayerType, Layer> layers;
 	private Color backgroundColor;
 	private TitleShape titleShape;
 	private String path;
-	
+
 	private Layouter defaultLayouter;
 	private AnimationFactory defaultAnimation;
 	private boolean defaultReflectionEnabled;
@@ -37,6 +37,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	private List<PresentationChangedListener> changeListeners;
 	private float space;
+	private Camera defaultStartCamera;
 
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
@@ -51,13 +52,13 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		defaultAnimation = new ZoomInZoomOutAnimationFactory();
 		defaultReflectionEnabled = true;
 		path = "";
-		
+
 		defaultRotationX = 0.0f;
 		defaultRotationY = 0.0f;
 		defaultRotationZ = 0.0f;
 		defaultFocusScale = DEFAULT_FOCUS_SCALE;
 		space = DEFAULT_SPACE;
-		
+
 		addShape(titleShape, LayerType.FIXED_POSTION);
 	}
 
@@ -68,6 +69,17 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public void setStartCamera(Camera startCamera) {
 		if (!this.startCamera.equals(startCamera)) {
 			this.startCamera = startCamera;
+			firePresentationChanged();
+		}
+	}
+
+	public void setDefaultStartCamera(Camera defaultStartCamera) {
+		this.defaultStartCamera = defaultStartCamera;
+	}
+
+	public void resetStartCamera() {
+		if (defaultStartCamera != null) {
+			this.startCamera = defaultStartCamera;
 			firePresentationChanged();
 		}
 	}
@@ -175,29 +187,29 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		}
 		return allshapes;
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
-	
+
 	public void setPath(String path) {
 		if (!this.path.equals(path)) {
 			this.path = path;
 			firePresentationChanged();
 		}
 	}
-	
+
 	public AnimationFactory getDefaultAnimation() {
 		return defaultAnimation;
 	}
-	
+
 	public void setDefaultAnimation(AnimationFactory defaultAnimation) {
 		if (!this.defaultAnimation.equals(defaultAnimation)) {
 			this.defaultAnimation = defaultAnimation;
 			firePresentationChanged();
 		}
 	}
-	
+
 	public Layouter getDefaultLayouter() {
 		return defaultLayouter;
 	}
@@ -212,10 +224,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public float getSpace() {
 		return space;
 	}
-	
+
 	public void setSpace(float space, Layouter layouter) {
 		if (this.space != space) {
-			this.space = space;	
+			this.space = space;
 			layouter.layout(this);
 			firePresentationChanged();
 		}
@@ -224,18 +236,18 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public float getDefaultRotationX() {
 		return defaultRotationX;
 	}
-	
+
 	public float getDefaultRotationY() {
 		return defaultRotationY;
 	}
-	
+
 	public float getDefaultRotationZ() {
 		return defaultRotationZ;
 	}
-	
-	public void setDefaultRotation(float defaultRotationX, float defaultRotationY, float defaultRotationZ) {
-		if (this.defaultRotationX != defaultRotationX
-				|| this.defaultRotationY != defaultRotationY
+
+	public void setDefaultRotation(float defaultRotationX, float defaultRotationY,
+			float defaultRotationZ) {
+		if (this.defaultRotationX != defaultRotationX || this.defaultRotationY != defaultRotationY
 				|| this.defaultRotationZ != defaultRotationZ) {
 			this.defaultRotationX = defaultRotationX;
 			this.defaultRotationY = defaultRotationY;
@@ -243,27 +255,27 @@ public class Presentation implements Focusable, ShapeChangedListener {
 			firePresentationChanged();
 		}
 	}
-	
+
 	public boolean isDefaultReflectionEnabled() {
 		return defaultReflectionEnabled;
 	}
-	
+
 	public void setDefaultReflectionEnabled(boolean defaultReflectionEnabled) {
 		if (this.defaultReflectionEnabled != defaultReflectionEnabled) {
 			this.defaultReflectionEnabled = defaultReflectionEnabled;
 			firePresentationChanged();
 		}
 	}
-	
+
 	public float getDefaultFocusScale() {
 		return defaultFocusScale;
 	}
-	
+
 	public void setDefaultFocusScale(float defaultFocusScale) {
 		if (this.defaultFocusScale != defaultFocusScale) {
 			this.defaultFocusScale = defaultFocusScale;
 			firePresentationChanged();
 		}
 	}
-	
+
 }

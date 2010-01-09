@@ -191,6 +191,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("focusscale", Float.toString(presentation
 				.getDefaultFocusScale()));
 		
+		/*
 		Layouter defaultLayouter = presentation.getDefaultLayouter();
 		if (defaultLayouter instanceof MoveableLayouter) {
 			MoveableLayouter mLayouter = (MoveableLayouter) defaultLayouter;
@@ -198,7 +199,7 @@ public class PresentationLoader implements PropertyChangeListener {
 			result.setProperty("layouterTargetX", Float.toString(mLayouter.getTargetX()));
 			result.setProperty("layouterTargetY", Float.toString(mLayouter.getTargetY()));
 		}
-
+		*/
 		return result;
 	}
 

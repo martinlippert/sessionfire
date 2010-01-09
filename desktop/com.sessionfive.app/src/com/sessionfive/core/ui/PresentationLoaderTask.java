@@ -148,6 +148,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					presentation.setDefaultFocusScale(Float.parseFloat(focusscale));
 				}
 				
+				/*
 				String layouterLocationX = settings.getProperty("layouterLocationX");
 				String layouterTargetX = settings.getProperty("layouterTargetX");
 				String layouterTargetY = settings.getProperty("layouterTargetY");
@@ -158,6 +159,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					mLayouter.setTargetX(Float.parseFloat(layouterTargetX));
 					mLayouter.setTargetY(Float.parseFloat(layouterTargetY));
 				}
+				*/
 				
 				
 				

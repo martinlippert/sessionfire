@@ -5,13 +5,9 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class CircleLayouter extends MoveableLayouter implements Layouter {
+public class CircleLayouter implements Layouter {
 
 	public static final String NAME = "Circle";
-
-	public CircleLayouter() {
-		super(-80f, 1f, 1f);
-	}
 
 	@Override
 	public String getName() {
@@ -21,9 +17,9 @@ public class CircleLayouter extends MoveableLayouter implements Layouter {
 	@Override
 	public void layout(Presentation presentation) {
 		int size = presentation.getShapes(LayerType.CAMERA_ANIMATED).size();
-		final Camera startCamera = new Camera(locationX, 0f, size * 25f, targetX, targetY, 0f, 0f,
-				targetY, 0f);
+		final Camera startCamera = new Camera(-80f, 0f, size * 25f, 1, 1, 0f, 0f, 1, 0f);
 		presentation.setStartCamera(startCamera);
+		presentation.setDefaultStartCamera(startCamera);
 
 		float space = presentation.getSpace() / 13f;
 

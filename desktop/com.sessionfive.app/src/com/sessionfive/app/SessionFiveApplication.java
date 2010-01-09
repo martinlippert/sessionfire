@@ -46,7 +46,7 @@ public class SessionFiveApplication implements IApplication {
 
 	private MultiplexingKeyListener keyListener;
 	private MultiplexingKeyListener globalKeyListener;
-	private LayoutMover layoutMover;
+	private CameraMover layoutMover;
 
 	private Display display;
 	private Frame frame;
@@ -118,7 +118,7 @@ public class SessionFiveApplication implements IApplication {
 
 		keyListener = new MultiplexingKeyListener();
 		globalKeyListener = new MultiplexingKeyListener();
-		layoutMover = new LayoutMover(presentation, animationController);
+		layoutMover = new CameraMover(presentation, animationController);
 
 		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
 
