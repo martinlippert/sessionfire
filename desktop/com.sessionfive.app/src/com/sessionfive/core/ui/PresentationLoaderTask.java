@@ -15,6 +15,7 @@ import javax.swing.SwingWorker;
 
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
+import com.sessionfive.core.Camera;
 import com.sessionfive.core.Focusable;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
@@ -147,20 +148,18 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				if (focusscale != null) {
 					presentation.setDefaultFocusScale(Float.parseFloat(focusscale));
 				}
-				
-				/*
-				String layouterLocationX = settings.getProperty("layouterLocationX");
-				String layouterTargetX = settings.getProperty("layouterTargetX");
-				String layouterTargetY = settings.getProperty("layouterTargetY");
-				Layouter defaultLayouter = presentation.getDefaultLayouter();
-				if (layouterLocationX != null && defaultLayouter instanceof MoveableLayouter) {
-					MoveableLayouter mLayouter = (MoveableLayouter) defaultLayouter;
-					mLayouter.setLocationX(Float.parseFloat(layouterLocationX));
-					mLayouter.setTargetX(Float.parseFloat(layouterTargetX));
-					mLayouter.setTargetY(Float.parseFloat(layouterTargetY));
+
+				String startCameraLocationXS = settings.getProperty("startCameraLocationX");
+				if (startCameraLocationXS != null) {
+					float cameraLocationX = Float.parseFloat(startCameraLocationXS);
+					float cameraLocationY = Float.parseFloat(settings.getProperty("startCameraLocationY"));
+					float cameraLocationZ = Float.parseFloat(settings.getProperty("startCameraLocationZ"));
+					float cameraTargetY = Float.parseFloat(settings.getProperty("startCameraTargetY"));
+					float cameraTargetX = Float.parseFloat(settings.getProperty("startCameraTargetX"));
+					float cameraTargetZ = Float.parseFloat(settings.getProperty("startCameraTargetZ"));
+					Camera camera = new Camera(cameraLocationX, cameraLocationY, cameraLocationZ, cameraTargetX, cameraTargetY, cameraTargetZ);
+					presentation.setStartCamera(camera);
 				}
-				*/
-				
 				
 				
 				

@@ -18,9 +18,8 @@ public class LineLayouter implements Layouter {
 
 	@Override
 	public void layout(Presentation presentation) {
-		final Camera startCamera = new Camera(-80f, 30f, 90f, -20f, 30.1f, 0f, 0f, 1f, 0f);
-		presentation.setStartCamera(startCamera);
-		presentation.setDefaultStartCamera(startCamera);
+		final Camera newStartCamera = new Camera(-80f, 30f, 90f, -20f, 30.1f, 0f, 0f, 1f, 0f);
+		presentation.setDefaultStartCamera(newStartCamera);
 
 		float space = presentation.getSpace() * 2f;
 		float x = -space;

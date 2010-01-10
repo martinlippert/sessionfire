@@ -46,7 +46,7 @@ public class SessionFiveApplication implements IApplication {
 
 	private MultiplexingKeyListener keyListener;
 	private MultiplexingKeyListener globalKeyListener;
-	private CameraMover layoutMover;
+	private CameraMover cameraMover;
 
 	private Display display;
 	private Frame frame;
@@ -118,7 +118,7 @@ public class SessionFiveApplication implements IApplication {
 
 		keyListener = new MultiplexingKeyListener();
 		globalKeyListener = new MultiplexingKeyListener();
-		layoutMover = new CameraMover(presentation, animationController);
+		cameraMover = new CameraMover(presentation, animationController);
 
 		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
 
@@ -209,14 +209,14 @@ public class SessionFiveApplication implements IApplication {
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 			@Override
 			public void eventDispatched(AWTEvent event) {
-				layoutMover.mouseMoved(event);
+				cameraMover.mouseMoved(event);
 			}
 		}, AWTEvent.MOUSE_MOTION_EVENT_MASK);
 
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 			@Override
 			public void eventDispatched(AWTEvent event) {
-				layoutMover.mouseClicked(event);
+				cameraMover.mouseClicked(event);
 			}
 		}, AWTEvent.MOUSE_EVENT_MASK);
 

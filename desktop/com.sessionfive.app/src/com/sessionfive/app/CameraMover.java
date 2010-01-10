@@ -56,21 +56,20 @@ public class CameraMover {
 			diffX = diffX / 40;
 			diffY = diffY / 40;
 			Camera startCamera = new Camera(location.getX(), location.getY(), location.getZ(),
-					target.getX() + diffX, target.getY() + diffY, target.getZ(), 0, 1, 0);
+					target.getX() - diffX, target.getY() - diffY, target.getZ());
 			presentation.setStartCamera(startCamera);
 			animationController.directlyGoTo(-1);
 		} else if ((modifiers & MouseEvent.SHIFT_MASK) != 0) {
 			diffY = diffY / 40;
 			Camera startCamera = new Camera(location.getX(), location.getY(), location.getZ()
-					+ diffY, target.getX(), target.getY(), target.getZ() + diffY, 0, 1, 0);
+					+ diffY, target.getX(), target.getY(), target.getZ() + diffY);
 			presentation.setStartCamera(startCamera);
 			animationController.directlyGoTo(-1);
 		} else {
 			diffX = diffX / 40;
 			diffY = diffY / 40;
 			Camera startCamera = new Camera(location.getX() + diffX, location.getY() - diffY,
-					location.getZ(), target.getX() + diffX, target.getY() - diffY, target.getZ(),
-					0, 1, 0);
+					location.getZ(), target.getX() + diffX, target.getY() - diffY, target.getZ());
 			presentation.setStartCamera(startCamera);
 			animationController.directlyGoTo(-1);
 		}

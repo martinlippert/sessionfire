@@ -19,7 +19,6 @@ public class TileLayouter implements Layouter {
 	@Override
 	public void layout(Presentation presentation) {
 		final Camera startCamera = new Camera(-80f, -40f, 120f, 20f, -50f, 0f, 0f, 1f, 0f);
-		presentation.setStartCamera(startCamera);
 		presentation.setDefaultStartCamera(startCamera);
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);

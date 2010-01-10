@@ -16,6 +16,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
+import com.sessionfive.animation.Point;
+import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -27,8 +29,8 @@ public class PresentationLoader implements PropertyChangeListener {
 	public PresentationLoader() {
 	}
 
-	public void loadPresentation(Presentation presentation, GLCanvas canvas,
-			Layouter[] layouter, AnimationFactory[] animationFactories) {
+	public void loadPresentation(Presentation presentation, GLCanvas canvas, Layouter[] layouter,
+			AnimationFactory[] animationFactories) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
@@ -43,8 +45,7 @@ public class PresentationLoader implements PropertyChangeListener {
 
 			if (files.length > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, files, canvas, layouter,
-						animationFactories);
+				readFiles(presentation, files, canvas, layouter, animationFactories);
 			}
 		}
 	}
@@ -110,17 +111,15 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private void readFiles(Presentation presentation, File[] files,
-			GLCanvas canvas, Layouter[] layouter,
-			AnimationFactory[] animationFactories) {
+	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas,
+			Layouter[] layouter, AnimationFactory[] animationFactories) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreator();
 
-		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation",
-				"", 0, 100);
+		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation", "", 0, 100);
 		progressMonitor.setProgress(0);
 
-		task = new PresentationLoaderTask(files, creator, presentation, canvas,
-				layouter, animationFactories);
+		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter,
+				animationFactories);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
@@ -147,16 +146,14 @@ public class PresentationLoader implements PropertyChangeListener {
 				File presentationFile = new File(dir, "sessionfire.settings");
 				try {
 					Properties presentationSettings = createSettingsMap(presentation);
-					FileOutputStream fos = new FileOutputStream(
-							presentationFile);
+					FileOutputStream fos = new FileOutputStream(presentationFile);
 					presentationSettings.store(fos, "sessionfire-settings");
 					fos.flush();
 					fos.close();
 
 					JOptionPane.showMessageDialog(canvas,
 							"Presentation settings saved successfully to:\n"
-									+ presentationFile.getAbsolutePath(),
-							"Presentation saved...",
+									+ presentationFile.getAbsolutePath(), "Presentation saved...",
 							JOptionPane.INFORMATION_MESSAGE);
 
 				} catch (FileNotFoundException e) {
@@ -171,35 +168,29 @@ public class PresentationLoader implements PropertyChangeListener {
 	private Properties createSettingsMap(Presentation presentation) {
 		Properties result = new Properties();
 
-		result.setProperty("layout", presentation.getDefaultLayouter()
-				.getName());
-		result.setProperty("animation", presentation.getDefaultAnimation()
-				.getName());
-		result.setProperty("backgroundColor", Integer.toString(presentation
-				.getBackgroundColor().getRGB()));
-		result.setProperty("rotationX", Float.toString(presentation
-				.getDefaultRotationX()));
-		result.setProperty("rotationY", Float.toString(presentation
-				.getDefaultRotationY()));
-		result.setProperty("rotationZ", Float.toString(presentation
-				.getDefaultRotationZ()));
+		result.setProperty("layout", presentation.getDefaultLayouter().getName());
+		result.setProperty("animation", presentation.getDefaultAnimation().getName());
+		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor()
+				.getRGB()));
+		result.setProperty("rotationX", Float.toString(presentation.getDefaultRotationX()));
+		result.setProperty("rotationY", Float.toString(presentation.getDefaultRotationY()));
+		result.setProperty("rotationZ", Float.toString(presentation.getDefaultRotationZ()));
 		result.setProperty("layerText", presentation.getLayerText());
-		result.setProperty("spaceBetween", Float.toString(presentation
-				.getSpace()));
-		result.setProperty("reflection", Boolean.toString(presentation
-				.isDefaultReflectionEnabled()));
-		result.setProperty("focusscale", Float.toString(presentation
-				.getDefaultFocusScale()));
-		
-		/*
-		Layouter defaultLayouter = presentation.getDefaultLayouter();
-		if (defaultLayouter instanceof MoveableLayouter) {
-			MoveableLayouter mLayouter = (MoveableLayouter) defaultLayouter;
-			result.setProperty("layouterLocationX", Float.toString(mLayouter.getLocationX()));
-			result.setProperty("layouterTargetX", Float.toString(mLayouter.getTargetX()));
-			result.setProperty("layouterTargetY", Float.toString(mLayouter.getTargetY()));
-		}
-		*/
+		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
+		result.setProperty("reflection", Boolean
+				.toString(presentation.isDefaultReflectionEnabled()));
+		result.setProperty("focusscale", Float.toString(presentation.getDefaultFocusScale()));
+
+		Camera startCamera = presentation.getStartCamera();
+		Point loc = startCamera.getLocation();
+		Point tar = startCamera.getTarget();
+		result.setProperty("startCameraLocationX", Float.toString(loc.getX()));
+		result.setProperty("startCameraLocationY", Float.toString(loc.getY()));
+		result.setProperty("startCameraLocationZ", Float.toString(loc.getZ()));
+		result.setProperty("startCameraTargetX", Float.toString(tar.getX()));
+		result.setProperty("startCameraTargetY", Float.toString(tar.getY()));
+		result.setProperty("startCameraTargetZ", Float.toString(tar.getZ()));
+
 		return result;
 	}
 

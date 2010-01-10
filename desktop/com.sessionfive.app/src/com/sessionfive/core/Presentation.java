@@ -75,6 +75,9 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public void setDefaultStartCamera(Camera defaultStartCamera) {
 		this.defaultStartCamera = defaultStartCamera;
+		if (this.startCamera == null) {
+			this.startCamera = defaultStartCamera;
+		}
 	}
 
 	public void resetStartCamera() {
