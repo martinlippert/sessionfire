@@ -3,8 +3,6 @@ package com.sessionfive.shapes;
 import static javax.media.opengl.GL.GL_BLEND;
 import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_MODULATE;
-import static javax.media.opengl.GL.GL_ONE;
-import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
 import static javax.media.opengl.GL.GL_TEXTURE_ENV;
 import static javax.media.opengl.GL.GL_TEXTURE_ENV_MODE;
 import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
@@ -67,7 +65,9 @@ public class ImageShape extends AbstractShape {
 
 		// Enable blending, using the SrcOver rule
 		gl.glEnable(GL_BLEND);
-		gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL.GL_ALPHA_TEST);
+		gl.glAlphaFunc(GL.GL_GREATER, 0.1f);
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
 		// Use the GL_MODULATE texture function to effectively multiply
 		// each pixel in the texture by the current alpha value
@@ -127,6 +127,7 @@ public class ImageShape extends AbstractShape {
 
         gl.glPopMatrix();
 		gl.glDisable(GL_BLEND);
+		gl.glDisable(GL.GL_ALPHA_TEST);
 	}
 	
 	@Override
