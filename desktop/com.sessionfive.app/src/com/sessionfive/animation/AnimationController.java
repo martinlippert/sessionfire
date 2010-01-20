@@ -3,8 +3,11 @@ package com.sessionfive.animation;
 import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
+import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
+import com.sessionfive.core.Shape;
 
 public class AnimationController {
 
@@ -39,6 +42,8 @@ public class AnimationController {
 
 		currentAnimator = animator;
 		currentAnimator.start();
+
+//		updateSelection();
 	}
 
 	public void backward() {
@@ -55,6 +60,8 @@ public class AnimationController {
 
 		currentAnimator = animator;
 		currentAnimator.start();
+		
+//		updateSelection();
 	}
 
 	public int getNumberOfKeyFrames() {
@@ -90,6 +97,8 @@ public class AnimationController {
 
 			currentAnimator = animator;
 			currentAnimator.start();
+			
+//			updateSelection();
 		}
 	}
 	
@@ -103,7 +112,21 @@ public class AnimationController {
 				Animation animation = presentation.getAnimation(currentAnimationNo);
 				animation.directlyGoTo(display);
 			}
+			
+//			updateSelection();
 		}
+	}
+	
+	protected void updateSelection() {
+		if (currentAnimationNo == -1) {
+			Shape[] allShapes = presentation.getShapes(LayerType.CAMERA_ANIMATED).toArray(new Shape[0]);
+			SessionFiveApplication.getInstance().getSelectionService().setSelection(allShapes);
+		}
+		else {
+			Shape currentFocussedShape = presentation.getShapes(LayerType.CAMERA_ANIMATED).get(currentAnimationNo);
+			SessionFiveApplication.getInstance().getSelectionService().setSelection(new Shape[] {currentFocussedShape});
+		}
+		
 	}
 
 }

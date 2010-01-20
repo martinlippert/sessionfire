@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.sessionfive.animation,
  com.sessionfive.app,
  com.sessionfive.core,
+ com.sessionfive.core.ui,
  com.sun.opengl.util.j2d,
  javax.media.opengl,
  javax.media.opengl.glu,

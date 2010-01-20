@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="panel"/>
+            <element ref="view"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,15 +47,15 @@
       </complexType>
    </element>
 
-   <element name="panel">
+   <element name="view">
       <complexType>
-         <attribute name="class" type="string" use="required">
+         <attribute name="viewclass" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="javax.swing.JPanel:com.sessionfive.app.SessionfivePanel"/>
+                  <meta.attribute kind="java" basedOn=":com.sessionfive.core.ui.View"/>
                </appinfo>
             </annotation>
          </attribute>

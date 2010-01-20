@@ -86,6 +86,9 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		}
 
 		setProgress(100);
+		
+		Shape[] allShapes = presentation.getShapes(LayerType.CAMERA_ANIMATED).toArray(new Shape[0]);
+		SessionFiveApplication.getInstance().getSelectionService().setSelection(allShapes);
 		return null;
 	}
 

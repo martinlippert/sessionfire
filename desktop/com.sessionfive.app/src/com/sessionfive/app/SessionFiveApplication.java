@@ -52,6 +52,7 @@ public class SessionFiveApplication implements IApplication {
 	private Frame frame;
 
 	private AnimationController animationController;
+	private SelectionService selectionService;
 	private Presentation presentation;
 
 	private static SessionFiveApplication application;
@@ -75,6 +76,10 @@ public class SessionFiveApplication implements IApplication {
 
 	public AnimationController getAnimationController() {
 		return animationController;
+	}
+	
+	public SelectionService getSelectionService() {
+		return selectionService;
 	}
 
 	public Presentation getPresentation() {
@@ -111,6 +116,7 @@ public class SessionFiveApplication implements IApplication {
 		presentation = new Presentation();
 		display = new Display(presentation);
 		animationController = new AnimationController();
+		selectionService = new SelectionServiceImpl();
 
 		displayRepaintManager = new DisplayRepaintManager(display, presentation, canvas);
 

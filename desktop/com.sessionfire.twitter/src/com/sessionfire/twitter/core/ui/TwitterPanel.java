@@ -19,11 +19,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.sessionfire.twitter.core.Activator;
+import com.sessionfive.core.ui.View;
 
-public class TwitterPanel extends JPanel {
+public class TwitterPanel extends JPanel implements View {
+	
 	// private static String TWITTER_USER_DEFAULT = "<Twitter User>";
 	// private static String TWITTER_PASSWORD_DEFAULT = "<Twitter Password>";
 	private static String TWITTER_KEYWORD_DEFAULT = "<Twitter Search>";
+	private static final long serialVersionUID = 1L;
 
 	public TwitterPanel() {
 		final Activator activator = Activator.getActivator();
@@ -113,5 +116,10 @@ public class TwitterPanel extends JPanel {
 		add(sizeSlider, BorderLayout.SOUTH);
 	}
 
-	private static final long serialVersionUID = 1L;
+	@Override
+	public JPanel createUI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

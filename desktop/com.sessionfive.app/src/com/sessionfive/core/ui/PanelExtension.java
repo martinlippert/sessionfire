@@ -1,23 +1,21 @@
 package com.sessionfive.core.ui;
 
-import javax.swing.JPanel;
-
 public class PanelExtension {
 	
 	private final String name;
-	private final JPanel panel;
+	private final View view;
 
-	public PanelExtension(String name, JPanel panel) {
+	public PanelExtension(String name, View view) {
 		this.name = name;
-		this.panel = panel;
+		this.view = view;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public JPanel getPanel() {
-		return panel;
+	public View getView() {
+		return view;
 	}
 
 }

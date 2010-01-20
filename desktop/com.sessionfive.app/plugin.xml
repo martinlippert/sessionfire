@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
    <extension-point id="shapes" name="shapes" schema="schema/shapes.exsd"/>
-   <extension-point id="panel" name="panel" schema="schema/panel.exsd"/>
+   <extension-point id="view" name="view" schema="schema/view.exsd"/>
    <extension-point id="keylistener" name="keylistener" schema="schema/keylistener.exsd"/>
+
    <extension
          id="startup"
          point="org.eclipse.core.runtime.applications">
@@ -16,6 +18,7 @@
          </run>
       </application>
    </extension>
+   
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
@@ -28,6 +31,7 @@
          </property>
       </product>
    </extension>
+   
    <extension
          point="com.sessionfive.app.shapes">
       <shape

@@ -23,8 +23,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sessionfive.core.ui.HelpWindow;
 import com.sessionfive.core.ui.HelpWindowPosition;
 import com.sessionfive.core.ui.ShowsHelp;
+import com.sessionfive.core.ui.View;
 
-public class TimerUI extends JPanel implements ShowsHelp, TimerListener {
+public class TimerView extends JPanel implements View, ShowsHelp, TimerListener {
 
 	private static final long serialVersionUID = -430613350613330878L;
 	private JTextField time;
@@ -34,7 +35,7 @@ public class TimerUI extends JPanel implements ShowsHelp, TimerListener {
 	private JButton stopButton;
 	private JLabel runningTime;
 
-	public TimerUI() {
+	public TimerView() {
 		FormLayout layout = new FormLayout("fill:pref:grow, 3dlu, fill:pref:grow, 6dlu, pref", // columns
 				"pref, 3dlu, pref"); // rows
 
@@ -91,6 +92,11 @@ public class TimerUI extends JPanel implements ShowsHelp, TimerListener {
 		subContentPane.add(runningTime, cc.xy(5, 3));
 		
 		Activator.getInstance().getTimerController().addTimerListener(this);
+	}
+
+	@Override
+	public JPanel createUI() {
+		return this;
 	}
 
 	public void updateTimeSetting(String newValue) {

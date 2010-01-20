@@ -3,8 +3,6 @@ package com.sessionfive.core.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -21,18 +19,18 @@ public class PanelExtensionLoader {
 		
 		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 		IExtensionPoint extensionPoint = extensionRegistry
-				.getExtensionPoint("com.sessionfive.app.panel");
+				.getExtensionPoint("com.sessionfive.app.view");
 		IExtension[] extensions = extensionPoint.getExtensions();
 
 		for (IExtension extension : extensions) {
 			IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 			for (IConfigurationElement iConfigurationElement : configurationElements) {
-				if (iConfigurationElement.getName().equals("panel")) {
+				if (iConfigurationElement.getName().equals("view")) {
 					try {
-						JPanel panel = (JPanel) iConfigurationElement
-								.createExecutableExtension("class");
+						View view = (View) iConfigurationElement
+								.createExecutableExtension("viewclass");
 						String name = iConfigurationElement.getAttribute("name");
-						result.add(new PanelExtension(name, panel));
+						result.add(new PanelExtension(name, view));
 					} catch (Throwable e) {
 						e.printStackTrace();
 					}

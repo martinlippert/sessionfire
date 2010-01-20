@@ -367,7 +367,7 @@ public class CentralControlPaletteUI {
 				.getExtensionPanels();
 
 		for (PanelExtension panelExtension : extensions) {
-			JPanel panelToEmbed = panelExtension.getPanel();
+			JPanel panelToEmbed = panelExtension.getView().createUI();
 			if (panelToEmbed != null) {
 				TranslucentPalette palette = new TranslucentPalette(
 						panelExtension.getName(), false, (Window) window

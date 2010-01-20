@@ -6,6 +6,7 @@ import java.util.List;
 import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
+import com.sessionfive.app.SelectionService;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
@@ -17,11 +18,17 @@ public class CentralControlPalette {
 
 	private final Presentation presentation;
 	private final AnimationController animationController;
+	
+	private final RotationView rotationController;
 
 	public CentralControlPalette(Presentation presentation,
 			AnimationController animationController) {
 		this.presentation = presentation;
 		this.animationController = animationController;
+		
+		
+		SelectionService selectionService = SessionFiveApplication.getInstance().getSelectionService();
+		this.rotationController = new RotationView(selectionService);
 	}
 
 	public void show() {
@@ -87,10 +94,7 @@ public class CentralControlPalette {
 
 	public void setRotation(int x, int y, int z) {
 		presentation.setDefaultRotation(x, y, z);
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		for (Shape shape : shapes) {
-			shape.setRotation(x, y, z);
-		}
+		rotationController.setRotation(x, y, z);
 	}
 
 	public void setSpace(float value, Layouter layouter) {
