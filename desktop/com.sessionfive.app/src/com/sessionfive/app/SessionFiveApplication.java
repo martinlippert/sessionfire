@@ -9,6 +9,11 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -212,20 +217,21 @@ public class SessionFiveApplication implements IApplication {
 			}
 		}, AWTEvent.KEY_EVENT_MASK);
 
-		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+		
+		canvas.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
-			public void eventDispatched(AWTEvent event) {
-				cameraMover.mouseMoved(event);
+			public void mouseDragged(MouseEvent e) {
+				cameraMover.mouseMoved(e);
 			}
-		}, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-
-		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+		});
+		
+		canvas.addMouseListener(new MouseAdapter() {
 			@Override
-			public void eventDispatched(AWTEvent event) {
-				cameraMover.mouseClicked(event);
+			public void mousePressed(MouseEvent e) {
+				cameraMover.mouseClicked(e);
 			}
-		}, AWTEvent.MOUSE_EVENT_MASK);
-
+		});
+		
 		frame.setLayout(new BorderLayout());
 
 		frame.add(canvas, BorderLayout.CENTER);
