@@ -252,7 +252,7 @@ public class SessionFiveApplication implements IApplication {
 
 		centralControlPalette = new CentralControlPalette(presentation, animationController);
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
-				canvas);
+				selectionService, canvas);
 		centralControlPaletteUI.show();
 		centralControlPaletteUI.setStatus(generalStatus);
 

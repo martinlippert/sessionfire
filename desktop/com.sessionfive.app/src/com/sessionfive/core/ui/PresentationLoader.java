@@ -18,6 +18,7 @@ import javax.swing.ProgressMonitor;
 
 import com.sessionfive.animation.Point;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -172,9 +173,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("animation", presentation.getDefaultAnimation().getName());
 		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor()
 				.getRGB()));
-		result.setProperty("rotationX", Float.toString(presentation.getDefaultRotationX()));
-		result.setProperty("rotationY", Float.toString(presentation.getDefaultRotationY()));
-		result.setProperty("rotationZ", Float.toString(presentation.getDefaultRotationZ()));
+		
 		result.setProperty("layerText", presentation.getLayerText());
 		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
 		result.setProperty("reflection", Boolean
@@ -190,6 +189,11 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("startCameraTargetX", Float.toString(tar.getX()));
 		result.setProperty("startCameraTargetY", Float.toString(tar.getY()));
 		result.setProperty("startCameraTargetZ", Float.toString(tar.getZ()));
+
+		Shape firstShape = presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0);
+		result.setProperty("rotationX", Float.toString(firstShape.getRotationAngleX()));
+		result.setProperty("rotationY", Float.toString(firstShape.getRotationAngleY()));
+		result.setProperty("rotationZ", Float.toString(firstShape.getRotationAngleZ()));
 
 		return result;
 	}

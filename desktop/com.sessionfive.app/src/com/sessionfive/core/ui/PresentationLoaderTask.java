@@ -57,17 +57,30 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
 		Focusable animationStart = presentation;
 
-		loadPresentationSettings(presentation);
+		Properties settings = loadPresentationSettings(presentation);
+		
 		AnimationFactory animationFactory = presentation.getDefaultAnimation();
 		Layouter layouter = presentation.getDefaultLayouter();
+		
+		float rotationX = 0.0f;
+		float rotationY = 0.0f;
+		float rotationZ = 0.0f;
+		
+		String rotationXProp = settings.getProperty("rotationX");
+		String rotationYProp = settings.getProperty("rotationY");
+		String rotationZProp = settings.getProperty("rotationZ");
+
+		if (rotationXProp != null && rotationYProp != null && rotationZProp != null) {
+			rotationX = Float.parseFloat(rotationXProp);
+			rotationY = Float.parseFloat(rotationYProp);
+			rotationZ = Float.parseFloat(rotationZProp);
+		}
 
 		GLContext context = canvas.getContext();
 		for (int i = 0; i < numberOfFiles; i++) {
 			Shape newShape = creator.createShape(files[i]);
 			if (newShape != null) {
-				newShape.setRotation(presentation.getDefaultRotationX(),
-						presentation.getDefaultRotationY(), presentation
-								.getDefaultRotationZ());
+				newShape.setRotation(rotationX, rotationY, rotationZ);
 				newShape.setReflectionEnabled(presentation.isDefaultReflectionEnabled());
 				newShape.setFocusScale(presentation.getDefaultFocusScale());
 				newShape.initialize(context);
@@ -92,12 +105,13 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	private void loadPresentationSettings(Presentation presentation) {
+	private Properties loadPresentationSettings(Presentation presentation) {
+		Properties settings = new Properties();
+
 		File dir = new File(presentation.getPath());
 		if (dir.exists()) {
 			File presentationFile = new File(dir, "sessionfire.settings");
 			try {
-				Properties settings = new Properties();
 				FileInputStream fis = new FileInputStream(presentationFile);
 				settings.load(fis);
 				fis.close();
@@ -106,6 +120,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				Layouter layouter = getLayouter(layouterSetting, allLayouter);
 				if (layouter != null) {
 					presentation.setDefaultLayouter(layouter);
+					layouter.layout(presentation);
 				}
 				
 				String animationSetting = settings.getProperty("animation");
@@ -118,17 +133,6 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				if (color != null) {
 					presentation.setBackgroundColor(new Color(Integer
 							.parseInt(color)));
-				}
-
-				String rotationX = settings.getProperty("rotationX");
-				String rotationY = settings.getProperty("rotationY");
-				String rotationZ = settings.getProperty("rotationZ");
-
-				if (rotationX != null && rotationY != null && rotationZ != null) {
-					presentation.setDefaultRotation(
-							Float.parseFloat(rotationX), Float
-									.parseFloat(rotationY), Float
-									.parseFloat(rotationZ));
 				}
 
 				String layerText = settings.getProperty("layerText");
@@ -163,14 +167,16 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					Camera camera = new Camera(cameraLocationX, cameraLocationY, cameraLocationZ, cameraTargetX, cameraTargetY, cameraTargetZ);
 					presentation.setStartCamera(camera);
 				}
-				
-				
-				
+				else {
+					presentation.resetStartCamera();
+				}
+
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		return settings;
 	}
 
 	private Layouter getLayouter(String layouterSetting, Layouter[] allLayouter) {

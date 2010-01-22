@@ -39,6 +39,7 @@ import javax.swing.event.DocumentListener;
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.PresentationChangedEvent;
@@ -49,6 +50,7 @@ public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
 	private final Presentation presentation;
+	private final SelectionService selectionService;
 
 	private TranslucentPalette window;
 	private JButton choosePresentationButton;
@@ -59,10 +61,6 @@ public class CentralControlPaletteUI {
 	private JComboBox animationChoice;
 	private JTextField layerText;
 	private final GLCanvas canvas;
-
-	private JSlider xRotationSlider;
-	private JSlider yRotationSlider;
-	private JSlider zRotationSlider;
 
 	private JSlider spaceRotationSlider;
 	private JCheckBox reflectionEnabledBox;
@@ -80,9 +78,10 @@ public class CentralControlPaletteUI {
 	private DefaultComboBoxModel layoutModel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
-			Presentation presentation, GLCanvas canvas) {
+			Presentation presentation, SelectionService selectionService, GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.presentation = presentation;
+		this.selectionService = selectionService;
 		this.canvas = canvas;
 
 		Window windowAncestor = SwingUtilities.getWindowAncestor(canvas);
@@ -136,7 +135,7 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"10dlu, fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -246,32 +245,13 @@ public class CentralControlPaletteUI {
 			}
 		});
 
-		xRotationSlider = new JSlider(0, 360, 0);
-		yRotationSlider = new JSlider(0, 360, 0);
-		zRotationSlider = new JSlider(0, 360, 0);
 		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
-		subContentPane.add(HudWidgetFactory.createHudLabel("X"), cc.xy(1, 17));
-		subContentPane.add(xRotationSlider, cc.xy(2, 17));
-		subContentPane.add(HudWidgetFactory.createHudLabel("Y"), cc.xy(1, 19));
-		subContentPane.add(yRotationSlider, cc.xy(2, 19));
-		subContentPane.add(HudWidgetFactory.createHudLabel("Z"), cc.xy(1, 21));
-		subContentPane.add(zRotationSlider, cc.xy(2, 21));
-		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 23));
-		subContentPane.add(spaceRotationSlider, cc.xy(2, 23));
+		
+		RotationView rotationView = new RotationView(selectionService);
+		subContentPane.add(rotationView.createUI(), cc.xyw(1, 17, 2));
+		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 19));
+		subContentPane.add(spaceRotationSlider, cc.xy(2, 19));
 
-		ChangeListener rotationSliderListener = new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (!inChange) {
-					centralControlPalette.setRotation(xRotationSlider
-							.getValue(), yRotationSlider.getValue(),
-							zRotationSlider.getValue());
-				}
-			}
-		};
-
-		xRotationSlider.addChangeListener(rotationSliderListener);
-		yRotationSlider.addChangeListener(rotationSliderListener);
-		zRotationSlider.addChangeListener(rotationSliderListener);
 		spaceRotationSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!inChange) {
@@ -303,7 +283,7 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 25, 2));
+		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 21, 2));
 
 		focusScaleSlider = new JSlider(1, 200, 100);
 		focusScaleSlider.addChangeListener(new ChangeListener() {
@@ -323,11 +303,11 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 27));
-		subContentPane.add(focusScaleSlider, cc.xy(2, 27));
+		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 23));
+		subContentPane.add(focusScaleSlider, cc.xy(2, 23));
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xyw(1, 29, 2));
+		subContentPane.add(helpButton, cc.xyw(1, 25, 2));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -421,9 +401,9 @@ public class CentralControlPaletteUI {
 				"and a layout of your shapes"));
 		helpWindows.add(new HelpWindow(layerText,
 				HelpWindowPosition.CENTER_NO_ARROW, "Change the layer text"));
-		helpWindows.add(new HelpWindow(yRotationSlider,
-				HelpWindowPosition.ABOVE, "Use these sliders to control",
-				"the X,Y and Z rotation of your shapes"));
+//		helpWindows.add(new HelpWindow(yRotationSlider,
+//				HelpWindowPosition.ABOVE, "Use these sliders to control",
+//				"the X,Y and Z rotation of your shapes"));
 		helpWindows.add(new HelpWindow(spaceRotationSlider,
 				HelpWindowPosition.ABOVE,
 				"Change the spacing between your shapes",
@@ -477,9 +457,9 @@ public class CentralControlPaletteUI {
 			layerText.setText(presentation.getLayerText());
 		}
 
-		xRotationSlider.setValue((int) presentation.getDefaultRotationX());
-		yRotationSlider.setValue((int) presentation.getDefaultRotationY());
-		zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
+//		xRotationSlider.setValue((int) presentation.getDefaultRotationX());
+//		yRotationSlider.setValue((int) presentation.getDefaultRotationY());
+//		zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
 		spaceRotationSlider.setValue((int) presentation.getSpace());
 		reflectionEnabledBox.setSelected(presentation
 				.isDefaultReflectionEnabled());
