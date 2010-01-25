@@ -44,11 +44,12 @@ public abstract class AbstractShape implements Shape {
 
 	@Override
 	public void setPosition(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		
-		fireShapeChangedEvent();
+		if (this.x != x || this.y != y || this.z != z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			fireShapeChangedEvent();
+		}
 	}
 
 	@Override
@@ -68,11 +69,12 @@ public abstract class AbstractShape implements Shape {
 
 	@Override
 	public void setRotation(float angleX, float angleY, float angleZ) {
-		this.angleX = angleX;
-		this.angleY = angleY;
-		this.angleZ = angleZ;
-		
-		fireShapeChangedEvent();
+		if (this.angleX != angleX || this.angleY != angleY || this.angleZ != angleZ) {
+			this.angleX = angleX;
+			this.angleY = angleY;
+			this.angleZ = angleZ;
+			fireShapeChangedEvent();
+		}
 	}
 	
 	@Override
