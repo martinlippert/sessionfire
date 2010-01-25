@@ -2,57 +2,25 @@ package com.sessionfive.core.ui;
 
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sessionfive.app.SelectionChangedEvent;
 import com.sessionfive.app.SelectionListener;
 import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.Shape;
-import com.sessionfive.core.ShapeChangedEvent;
 import com.sessionfive.core.ShapeChangedListener;
 
-public class RotationView implements View, SelectionListener, ShapeChangedListener {
-
-	private Shape[] selectedShapes;
+public class RotationView extends AbstractView implements SelectionListener, ShapeChangedListener {
 
 	private JSlider xRotationSlider;
 	private JSlider yRotationSlider;
 	private JSlider zRotationSlider;
 	
-	boolean selfChanging = false;
-
 	public RotationView(final SelectionService selectionService) {
-		selectedShapes = new Shape[0];
-		selectionService.addSelectionListener(this);
-	}
-
-	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		removeShapeListener(this.selectedShapes);
-		this.selectedShapes = event.getSelectedShapes();
-		addShapeListener(this.selectedShapes);
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				updateControls();
-			}
-		});
-	}
-
-	@Override
-	public void shapeChanged(ShapeChangedEvent event) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				updateControls();
-			}
-		});
+		super(selectionService);
 	}
 
 	@Override
@@ -90,36 +58,23 @@ public class RotationView implements View, SelectionListener, ShapeChangedListen
 	}
 
 	public void setRotation(float x, float y, float z) {
-		selfChanging = true;
-		for (Shape shape : selectedShapes) {
+		setSelfChanging(true);
+		for (Shape shape : getSelectedShapes()) {
 			shape.setRotation(x, y, z);
 		}
-		selfChanging = false;
+		setSelfChanging(false);
 	}
 
-	public void updateControls() {
-		if (!selfChanging) {
-			if (selectedShapes.length > 0 && xRotationSlider != null
-					&& yRotationSlider != null && zRotationSlider != null) {
-				xRotationSlider.setValue((int) selectedShapes[0]
-						.getRotationAngleX());
-				yRotationSlider.setValue((int) selectedShapes[0]
-						.getRotationAngleY());
-				zRotationSlider.setValue((int) selectedShapes[0]
-						.getRotationAngleZ());
-			}
-		}
-	}
-
-	protected void addShapeListener(Shape[] shapes) {
-		for (Shape shape : shapes) {
-			shape.addShapeChangedListener(this);
-		}
-	}
-
-	protected void removeShapeListener(Shape[] shapes) {
-		for (Shape shape : shapes) {
-			shape.removeShapeChangedListener(this);
+	@Override
+	protected void doUpdateControls() {
+		if (getSelectedShapes().length > 0 && xRotationSlider != null
+				&& yRotationSlider != null && zRotationSlider != null) {
+			xRotationSlider.setValue((int) getSelectedShapes()[0]
+			                                              .getRotationAngleX());
+			yRotationSlider.setValue((int) getSelectedShapes()[0]
+			                                              .getRotationAngleY());
+			zRotationSlider.setValue((int) getSelectedShapes()[0]
+			                                              .getRotationAngleZ());
 		}
 	}
 
