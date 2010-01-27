@@ -20,6 +20,7 @@ import javax.media.opengl.glu.GLU;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.shapes.GroupShape;
 
 public class Display implements GLEventListener {
 
@@ -62,9 +63,9 @@ public class Display implements GLEventListener {
 
 		List<Shape> shapes = presentation.getAllShapes();
 		for (Shape shape : shapes) {
-			shape.display(drawable);
+				shape.display(drawable);				
 		}
-		
+
 		// try {
 		// long timestamp = System.currentTimeMillis();
 		// Screenshot.writeToFile(new File("shot" + timestamp + ".jpg"), 400,

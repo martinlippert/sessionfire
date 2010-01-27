@@ -2,6 +2,7 @@ package com.sessionfive.core;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,8 +11,10 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sessionfive.core.ui.AnimationFactory;
+import com.sessionfive.core.ui.GroupLineLayouter;
 import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
+import com.sessionfive.core.ui.MoveToAnimationFactory;
 import com.sessionfive.core.ui.ZoomInZoomOutAnimationFactory;
 import com.sessionfive.shapes.TitleShape;
 
@@ -48,8 +51,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		layers.put(LayerType.FIXED_POSTION, new Layer());
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
-		defaultLayouter = new LineLayouter();
-		defaultAnimation = new ZoomInZoomOutAnimationFactory();
+		defaultLayouter = new GroupLineLayouter();
+		defaultAnimation = new MoveToAnimationFactory();
 		defaultReflectionEnabled = true;
 		path = "";
 
@@ -118,8 +121,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		return animations.get(index);
 	}
 
-	public void addAnimation(Animation animation) {
-		animations.add(animation);
+	public void addAnimation(Animation... animation) {
+		animations.addAll(Arrays.asList(animation));
 	}
 
 	public void removeAnimation(Animation animation) {

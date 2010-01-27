@@ -20,6 +20,7 @@ import com.sessionfive.core.Focusable;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.shapes.GroupShape;
 
 public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
@@ -31,7 +32,8 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 	private final AnimationFactory[] allAnimationFactories;
 
 	public PresentationLoaderTask(File[] files, ShapeExtensionCreator creator,
-			Presentation presentation, GLCanvas canvas, Layouter[] layouter, AnimationFactory[] animationFactories) {
+			Presentation presentation, GLCanvas canvas, Layouter[] layouter,
+			AnimationFactory[] animationFactories) {
 		this.files = files;
 		this.creator = creator;
 		this.presentation = presentation;
@@ -62,26 +64,39 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		Layouter layouter = presentation.getDefaultLayouter();
 
 		GLContext context = canvas.getContext();
-		for (int i = 0; i < numberOfFiles; i++) {
-			Shape newShape = creator.createShape(files[i]);
+		System.out.println("numberOfFiles:" + numberOfFiles);
+		for (int i = 0; i < numberOfFiles; i += 2) {
+			System.out.println(i);
+
+			Shape newShape1 = creator.createShape(files[i]);
+			Shape newShape2 = creator.createShape(files[i + 1]);
+			Shape newShape3 = creator.createShape(files[i + 2]);
+			GroupShape newShape = null;
+			if (newShape1 != null && newShape2 != null && newShape3 != null) {
+				newShape = new GroupShape(i, newShape1, newShape2, newShape3);
+				System.out.println("NewShape:" + newShape);
+			}
+
 			if (newShape != null) {
-				newShape.setRotation(presentation.getDefaultRotationX(),
-						presentation.getDefaultRotationY(), presentation
-								.getDefaultRotationZ());
+				newShape.setRotation(presentation.getDefaultRotationX(), presentation
+						.getDefaultRotationY(), presentation.getDefaultRotationZ());
 				newShape.setReflectionEnabled(presentation.isDefaultReflectionEnabled());
 				newShape.setFocusScale(presentation.getDefaultFocusScale());
 				newShape.initialize(context);
 				presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 
-				Animation animation = animationFactory.createAnimation(
-						animationStart, newShape);
+				Animation animation = animationFactory.createAnimation(animationStart, newShape);
+				// GroupZoomInZoomOutAnimationFactory animationFactory2 = new
+				// GroupZoomInZoomOutAnimationFactory();
+				// Animation[] animation2 =
+				// animationFactory2.createAnimation2(animationStart, newShape);
 				presentation.addAnimation(animation);
 				animationStart = newShape;
 
 				layouter.layout(presentation);
-				SessionFiveApplication.getInstance().getAnimationController()
-						.resetTo(-1);
+				SessionFiveApplication.getInstance().getAnimationController().resetTo(-1);
 			}
+
 			setProgress(Math.min(i * 100 / numberOfFiles, 100));
 		}
 
@@ -98,23 +113,23 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				FileInputStream fis = new FileInputStream(presentationFile);
 				settings.load(fis);
 				fis.close();
-				
+
 				String layouterSetting = settings.getProperty("layout");
 				Layouter layouter = getLayouter(layouterSetting, allLayouter);
 				if (layouter != null) {
 					presentation.setDefaultLayouter(layouter);
 				}
-				
+
 				String animationSetting = settings.getProperty("animation");
-				AnimationFactory animationFactory = getAnimationFactory(animationSetting, allAnimationFactories);
+				AnimationFactory animationFactory = getAnimationFactory(animationSetting,
+						allAnimationFactories);
 				if (animationFactory != null) {
 					presentation.setDefaultAnimation(animationFactory);
 				}
-				
+
 				String color = settings.getProperty("backgroundColor");
 				if (color != null) {
-					presentation.setBackgroundColor(new Color(Integer
-							.parseInt(color)));
+					presentation.setBackgroundColor(new Color(Integer.parseInt(color)));
 				}
 
 				String rotationX = settings.getProperty("rotationX");
@@ -122,10 +137,8 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				String rotationZ = settings.getProperty("rotationZ");
 
 				if (rotationX != null && rotationY != null && rotationZ != null) {
-					presentation.setDefaultRotation(
-							Float.parseFloat(rotationX), Float
-									.parseFloat(rotationY), Float
-									.parseFloat(rotationZ));
+					presentation.setDefaultRotation(Float.parseFloat(rotationX), Float
+							.parseFloat(rotationY), Float.parseFloat(rotationZ));
 				}
 
 				String layerText = settings.getProperty("layerText");
@@ -138,10 +151,11 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					presentation.setSpace(Float.parseFloat(space), presentation
 							.getDefaultLayouter());
 				}
-				
+
 				String reflectionEnabled = settings.getProperty("reflection");
 				if (reflectionEnabled != null) {
-					presentation.setDefaultReflectionEnabled(Boolean.parseBoolean(reflectionEnabled));
+					presentation.setDefaultReflectionEnabled(Boolean
+							.parseBoolean(reflectionEnabled));
 				}
 
 				String focusscale = settings.getProperty("focusscale");
@@ -152,17 +166,21 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				String startCameraLocationXS = settings.getProperty("startCameraLocationX");
 				if (startCameraLocationXS != null) {
 					float cameraLocationX = Float.parseFloat(startCameraLocationXS);
-					float cameraLocationY = Float.parseFloat(settings.getProperty("startCameraLocationY"));
-					float cameraLocationZ = Float.parseFloat(settings.getProperty("startCameraLocationZ"));
-					float cameraTargetY = Float.parseFloat(settings.getProperty("startCameraTargetY"));
-					float cameraTargetX = Float.parseFloat(settings.getProperty("startCameraTargetX"));
-					float cameraTargetZ = Float.parseFloat(settings.getProperty("startCameraTargetZ"));
-					Camera camera = new Camera(cameraLocationX, cameraLocationY, cameraLocationZ, cameraTargetX, cameraTargetY, cameraTargetZ);
+					float cameraLocationY = Float.parseFloat(settings
+							.getProperty("startCameraLocationY"));
+					float cameraLocationZ = Float.parseFloat(settings
+							.getProperty("startCameraLocationZ"));
+					float cameraTargetY = Float.parseFloat(settings
+							.getProperty("startCameraTargetY"));
+					float cameraTargetX = Float.parseFloat(settings
+							.getProperty("startCameraTargetX"));
+					float cameraTargetZ = Float.parseFloat(settings
+							.getProperty("startCameraTargetZ"));
+					Camera camera = new Camera(cameraLocationX, cameraLocationY, cameraLocationZ,
+							cameraTargetX, cameraTargetY, cameraTargetZ);
 					presentation.setStartCamera(camera);
 				}
-				
-				
-				
+
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 				e.printStackTrace();
