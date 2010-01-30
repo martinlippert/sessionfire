@@ -49,6 +49,7 @@ public class CentralControlPalette {
 	public void changeLayout(Layouter layouter) {
 		layouter.layout(presentation);
 		presentation.setDefaultLayouter(layouter);
+		presentation.resetStartCamera();
 		animationController
 				.resetTo(animationController.getCurrentAnimationNo());
 	}
