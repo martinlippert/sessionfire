@@ -9,7 +9,7 @@ public class ImageShapeFactory implements ShapeFactory {
 
 	public Shape createShape(File resource) {
 		ImageShape imageShape = new ImageShape(resource);
-		imageShape.setWidth(45f);
+		imageShape.setSize(45f, 0f, 0f);
 		return imageShape;
 	}
 

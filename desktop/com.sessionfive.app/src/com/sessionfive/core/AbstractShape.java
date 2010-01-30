@@ -11,11 +11,16 @@ public abstract class AbstractShape implements Shape {
 	private float x;
 	private float y;
 	private float z;
+	
+	private float width;
+	private float height;
+	private float depth;
+	
 	private float angleX;
 	private float angleY;
 	private float angleZ;
-	private boolean reflectionEnabled;
 	
+	private boolean reflectionEnabled;
 	private float focusScale;
 	
 	private List<ShapeChangedListener> changeListeners;
@@ -41,6 +46,21 @@ public abstract class AbstractShape implements Shape {
 	public float getZ() {
 		return z;
 	}
+	
+	@Override
+	public float getWidth() {
+		return width;
+	}
+	
+	@Override
+	public float getHeight() {
+		return height;
+	}
+	
+	@Override
+	public float getDepth() {
+		return depth;
+	}
 
 	@Override
 	public void setPosition(float x, float y, float z) {
@@ -48,6 +68,16 @@ public abstract class AbstractShape implements Shape {
 			this.x = x;
 			this.y = y;
 			this.z = z;
+			fireShapeChangedEvent();
+		}
+	}
+	
+	@Override
+	public void setSize(float width, float height, float depth) {
+		if (this.width != width || this.height != height || this.depth != depth) {
+			this.width = width;
+			this.height = height;
+			this.depth = depth;
 			fireShapeChangedEvent();
 		}
 	}

@@ -42,14 +42,4 @@ public class TitleShape extends AbstractShape implements Shape {
 		}
 	}
 
-	@Override
-	public float getHeight() {
-		return 0;
-	}
-
-	@Override
-	public float getWidth() {
-		return 0;
-	}
-
 }

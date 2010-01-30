@@ -27,27 +27,9 @@ public class ImageShape extends AbstractShape {
 
 	private Texture t;
 	private final File file;
-	private float width;
-	private float imageRatio;
 	
 	public ImageShape(File file) {
 		this.file = file;
-	}
-
-	@Override
-	public float getWidth() {
-		return width;
-	}
-	
-	public void setWidth(float width) {
-		this.width = width;
-		
-		fireShapeChangedEvent();
-	}
-
-	@Override
-	public float getHeight() {
-		return getWidth() * imageRatio;
 	}
 
 	@Override
@@ -159,7 +141,12 @@ public class ImageShape extends AbstractShape {
 				t = TextureIO.newTexture(textureData);
 				t.setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
+				
+				float imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
+				float width = getWidth();
+				float newHeight = width * imageRatio;
+				float depth = getDepth();
+				setSize(width, newHeight, depth);
 			} catch (GLException e) {
 				e.printStackTrace();
 			}

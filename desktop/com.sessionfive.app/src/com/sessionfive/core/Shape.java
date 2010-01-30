@@ -10,12 +10,14 @@ public interface Shape extends Focusable {
 	public float getZ();
 	public float getWidth();
 	public float getHeight();
+	public float getDepth();
 
 	public float getRotationAngleX();
 	public float getRotationAngleY();
 	public float getRotationAngleZ();
 	
 	public void setPosition(float x, float y, float z);
+	public void setSize(float width, float height, float depth);
 	public void setRotation(float angleX, float angleY, float angleZ);
 	
 	public boolean isReflectionEnabled();
