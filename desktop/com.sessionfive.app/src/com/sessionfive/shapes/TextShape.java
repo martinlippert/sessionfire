@@ -18,16 +18,8 @@ public class TextShape extends AbstractShape {
 		this.text = text;
 		this.renderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 60), true,
 				false);
-	}
-
-	@Override
-	public float getWidth() {
-		return (float) renderer.getBounds(text).getWidth() * 0.05f;
-	}
-
-	@Override
-	public float getHeight() {
-		return (float) renderer.getBounds(text).getHeight() * 0.05f;
+		
+		recalculateSize();
 	}
 
 	@Override
@@ -65,7 +57,8 @@ public class TextShape extends AbstractShape {
 
 	public void setFont(Font font) {
 		this.font = font;
-		
+
+		recalculateSize();
 		fireShapeChangedEvent();
 	}
 
@@ -75,8 +68,15 @@ public class TextShape extends AbstractShape {
 
 	public void setText(String text) {
 		this.text = text;
-		
+
+		recalculateSize();
 		fireShapeChangedEvent();
+	}
+
+	protected void recalculateSize() {
+		float width = (float) renderer.getBounds(text).getWidth() * 0.05f;
+		float height = (float) renderer.getBounds(text).getHeight() * 0.05f;
+		setSize(width, height, 0f);
 	}
 
 }
