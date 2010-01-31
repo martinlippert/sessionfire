@@ -33,7 +33,7 @@ public class ImageShape extends AbstractShape {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	protected void basicDisplay(GLAutoDrawable drawable) {
 		if (t == null) return;
 		
 		Texture tex = t;
@@ -113,9 +113,9 @@ public class ImageShape extends AbstractShape {
 	}
 	
 	@Override
-	public void initialize(final GLContext context) throws Exception {
+	protected void basicInitialize(final GLContext context) throws Exception {
 		if (t == null) {
-			super.initialize(context);
+			super.basicInitialize(context);
 			final TextureData textureData = initTextureData();
 			Threading.invokeOnOpenGLThread(new Runnable() {
 				public void run() {
@@ -154,8 +154,8 @@ public class ImageShape extends AbstractShape {
 	}
 	
 	@Override
-	public void release(final GLContext context) throws Exception {
-		super.release(context);
+	protected void basicRelease(final GLContext context) throws Exception {
+		super.basicRelease(context);
 		
 		if (t != null) {
 			Threading.invokeOnOpenGLThread(new Runnable() {

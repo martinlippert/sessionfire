@@ -3,10 +3,12 @@ package com.sessionfive.core;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
-public abstract class AbstractShape implements Shape {
+public class AbstractShape implements Shape, ShapeChangedListener {
 
 	private float x;
 	private float y;
@@ -23,13 +25,17 @@ public abstract class AbstractShape implements Shape {
 	private boolean reflectionEnabled;
 	private float focusScale;
 	
+	private List<Shape> shapes;
+	private Shape owner;
 	private List<ShapeChangedListener> changeListeners;
-
+	
 	public AbstractShape() {
 		super();
 		this.reflectionEnabled = true;
 		this.focusScale = 1.0f;
 		this.changeListeners = new LinkedList<ShapeChangedListener>();
+		this.shapes = new CopyOnWriteArrayList<Shape>();
+		this.owner = null;
 	}
 
 	@Override
@@ -45,6 +51,21 @@ public abstract class AbstractShape implements Shape {
 	@Override
 	public float getZ() {
 		return z;
+	}
+	
+	@Override
+	public float getAbsoluteX() {
+		return getX() + (this.getOwner() != null ? this.getOwner().getAbsoluteX() : 0);
+	}
+	
+	@Override
+	public float getAbsoluteY() {
+		return getY() + (this.getOwner() != null ? this.getOwner().getAbsoluteY() : 0);
+	}
+	
+	@Override
+	public float getAbsoluteZ() {
+		return getZ() + (this.getOwner() != null ? this.getOwner().getAbsoluteZ() : 0);
 	}
 	
 	@Override
@@ -189,13 +210,78 @@ public abstract class AbstractShape implements Shape {
 	}
 	
 	@Override
+	public void display(GLAutoDrawable drawable) {
+		this.basicDisplay(drawable);
+		for (Shape shape : shapes) {
+			shape.display(drawable);
+		}
+	}
+	
+	protected void basicDisplay(GLAutoDrawable drawable) {
+	}
+
+	@Override
 	public void initialize(GLContext context) throws Exception {
+		this.basicInitialize(context);
+		for (Shape shape : shapes) {
+			shape.initialize(context);
+		}
+	}
+	
+	protected void basicInitialize(GLContext context) throws Exception {
+	}
+
+	@Override
+	public void release(GLContext context) throws Exception {
+		this.basicRelease(context);
+		for (Shape shape : shapes) {
+			shape.release(context);
+		}
+	}
+	
+	protected void basicRelease(GLContext context) throws Exception {
+	}
+
+	@Override
+	public List<Shape> getShapes() {
+		return this.shapes;
 	}
 	
 	@Override
-	public void release(GLContext context) throws Exception {
+	public Shape getOwner() {
+		return this.owner;
 	}
 	
+	@Override
+	public void setOwner(Shape owner) {
+		this.owner = owner;
+	}
+	
+	@Override
+	public void addShape(Shape shape) {
+		if (shape.getOwner() != null) {
+			shape.getOwner().removeShape(shape);
+		}
+		
+		this.shapes.add(shape);
+		shape.addShapeChangedListener(this);
+		shape.setOwner(this);
+		fireShapeChangedEvent();
+	}
+	
+	@Override
+	public void removeShape(Shape shape) {
+		this.shapes.remove(shape);
+		shape.setOwner(null);
+		shape.removeShapeChangedListener(this);
+		fireShapeChangedEvent();
+	}
+
+	@Override
+	public void shapeChanged(ShapeChangedEvent event) {
+		fireShapeChangedEvent();
+	}
+
 	@Override
 	public void addShapeChangedListener(ShapeChangedListener listener) {
 		changeListeners.add(listener);

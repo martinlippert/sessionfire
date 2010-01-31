@@ -30,7 +30,7 @@ public class TitleShape extends AbstractShape implements Shape {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	protected void basicDisplay(GLAutoDrawable drawable) {
 		if (text != null && text.length() > 0) {
 			Rectangle2D bounds = textRenderer.getBounds(text);
 			int x = (int) (drawable.getWidth() - (bounds.getWidth() + 10));

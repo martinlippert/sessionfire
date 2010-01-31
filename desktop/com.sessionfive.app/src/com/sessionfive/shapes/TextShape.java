@@ -23,7 +23,7 @@ public class TextShape extends AbstractShape {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	protected void basicDisplay(GLAutoDrawable drawable) {
 		float x = getX();
 		float y = getY();
 		float z = getZ();
