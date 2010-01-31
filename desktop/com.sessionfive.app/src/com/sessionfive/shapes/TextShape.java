@@ -24,9 +24,9 @@ public class TextShape extends AbstractShape {
 
 	@Override
 	protected void basicDisplay(GLAutoDrawable drawable) {
-		float x = getX();
-		float y = getY();
-		float z = getZ();
+		float x = getAbsoluteX();
+		float y = getAbsoluteY();
+		float z = getAbsoluteZ();
 		float w = getWidth();
 		float h = getHeight();
 		

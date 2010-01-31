@@ -55,9 +55,9 @@ public class ImageShape extends AbstractShape {
 		// each pixel in the texture by the current alpha value
 		gl.glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-		float x = getX();
-		float y = getY();
-		float z = getZ();
+		float x = getAbsoluteX();
+		float y = getAbsoluteY();
+		float z = getAbsoluteZ();
 		float w = getWidth();
 		float h = getHeight();
 

@@ -29,7 +29,7 @@ public class ZoomOutZoomInAnimation implements Animation {
 		Camera startSetting = display.getCamera();
 		Camera endSetting = endShape.getFocussedCamera();
 
-		float shapeX = endShape.getX();
+		float shapeX = endShape.getAbsoluteX();
 
 		float positionY = (startSetting.getLocation().getY() + endSetting.getLocation().getY()) / 2;
 		float targetY = (startSetting.getTarget().getY() + endSetting.getTarget().getY()) / 2;
@@ -61,7 +61,7 @@ public class ZoomOutZoomInAnimation implements Animation {
 		Camera startSetting = display.getCamera();
 		Camera endSetting = startShape.getFocussedCamera();
 
-		float shapeX = endShape.getX();
+		float shapeX = endShape.getAbsoluteX();
 
 		float positionY = (startSetting.getLocation().getY() + endSetting.getLocation().getY()) / 2;
 		float targetY = (startSetting.getTarget().getY() + endSetting.getTarget().getY()) / 2;

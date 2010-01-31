@@ -154,9 +154,9 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	
 	@Override
 	public Camera getFocussedCamera() {
-		float shapeX = this.getX();
-		float shapeY = this.getY();
-		float shapeZ = this.getZ();
+		float shapeX = this.getAbsoluteX();
+		float shapeY = this.getAbsoluteY();
+		float shapeZ = this.getAbsoluteZ();
 		
 		float shapeWidth = this.getWidth();
 		float shapeHeight = this.getHeight();
