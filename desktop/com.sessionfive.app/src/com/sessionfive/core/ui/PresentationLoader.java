@@ -42,11 +42,27 @@ public class PresentationLoader implements PropertyChangeListener {
 		if (showDialog == JFileChooser.APPROVE_OPTION) {
 			File[] files = getFiles(chooser);
 
-			files = sortImageFiles(files);
+			HierarchicFileStructureNode fileStructure = new HierarchicFileStructureNode(null);
+			addFilesToStructure(files, fileStructure);
 
-			if (files.length > 0) {
+			if (fileStructure.getElementCount() > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, files, canvas, layouter, animationFactories);
+				readFiles(presentation, fileStructure, canvas, layouter, animationFactories);
+			}
+		}
+	}
+
+	private void addFilesToStructure(File[] files,
+			HierarchicFileStructureNode fileStructure) {
+		
+		files = sortImageFiles(files);
+		fileStructure.setChilds(files);
+		
+		for(int i = 0; i < fileStructure.getChildCount(); i++) {
+			HierarchicFileStructureNode child = fileStructure.getChild(i);
+			if (child.getFile().exists() && child.getFile().isDirectory()) {
+				File[] newChilds = child.getFile().listFiles();
+				addFilesToStructure(newChilds, child);
 			}
 		}
 	}
@@ -112,14 +128,14 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private void readFiles(Presentation presentation, File[] files, GLCanvas canvas,
+	private void readFiles(Presentation presentation, HierarchicFileStructureNode fileStructure, GLCanvas canvas,
 			Layouter[] layouter, AnimationFactory[] animationFactories) {
-		ShapeExtensionCreator creator = new ShapeExtensionCreator();
+		ShapeExtensionCreator creator = new ShapeExtensionCreatorImpl();
 
 		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation", "", 0, 100);
 		progressMonitor.setProgress(0);
-
-		task = new PresentationLoaderTask(files, creator, presentation, canvas, layouter,
+		
+		task = new PresentationLoaderTask(fileStructure, creator, presentation, canvas, layouter,
 				animationFactories);
 		task.addPropertyChangeListener(this);
 		task.execute();
