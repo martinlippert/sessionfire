@@ -85,14 +85,27 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		createShapes(animationFactory, layouter, rotationX, rotationY,
 				rotationZ, canvas.getContext(), SessionFiveApplication
 						.getInstance().getAnimationController());
+		
+		createAnimations(animationFactory);
 
 		setProgress(100);
 
-		Shape[] allShapes = presentation.getShapes(LayerType.CAMERA_ANIMATED)
-				.toArray(new Shape[0]);
 		SessionFiveApplication.getInstance().getSelectionService()
-				.setSelection(allShapes);
+				.selectAllShapes(presentation);
 		return null;
+	}
+
+	public void createAnimations(AnimationFactory animationFactory) {
+		Focusable animationStart = presentation;
+		
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
+			Animation animation = animationFactory.createAnimation(
+					animationStart, shape);
+			presentation.addAnimation(animation);
+			animationStart = shape;
+		}
 	}
 
 	public void createShapes(AnimationFactory animationFactory,
@@ -103,22 +116,14 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		totalNumberOfFiles = fileStructure.getElementCount();
 		counter = 0;
 
-		Focusable animationStart = presentation;
 		int childCount = fileStructure.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			HierarchicFileStructureNode child = fileStructure.getChild(i);
-			Shape newShape = createShapesRecursively(child, null, layouter, rotationX, rotationY, rotationZ, context, animationController);
-
-			if (newShape != null) {
-				Animation animation = animationFactory.createAnimation(
-						animationStart, newShape);
-				presentation.addAnimation(animation);
-				animationStart = newShape;
-			}
+			createShapesRecursively(child, null, layouter, rotationX, rotationY, rotationZ, context, animationController);
 		}
 	}
 
-	private Shape createShapesRecursively(HierarchicFileStructureNode node,
+	private void createShapesRecursively(HierarchicFileStructureNode node,
 			Shape parentShape, Layouter layouter, float rotationX,
 			float rotationY, float rotationZ, GLContext context,
 			AnimationController animationController) throws Exception {
@@ -162,8 +167,6 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 						animationController);
 			}
 		}
-		
-		return newShape;
 	}
 
 	private Shape createConcreteShape(File file, float rotationX,

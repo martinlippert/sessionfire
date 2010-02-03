@@ -1,7 +1,8 @@
 package com.sessionfive.core.ui;
 
+import java.util.Iterator;
+
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -16,7 +17,14 @@ public class CircleLayouter implements Layouter {
 
 	@Override
 	public void layout(Presentation presentation) {
-		int size = presentation.getShapes(LayerType.CAMERA_ANIMATED).size();
+
+		int size = 0;
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			iter.next();
+			size++;
+		}
+
 		final Camera startCamera = new Camera(-80f, 0f, size * 25f, 1, 1, 0f, 0f, 1, 0f);
 		presentation.setDefaultStartCamera(startCamera);
 
@@ -28,7 +36,9 @@ public class CircleLayouter implements Layouter {
 		float centery = 0f;
 		float radius = size * 5f;
 
-		for (Shape shape : presentation.getShapes(LayerType.CAMERA_ANIMATED)) {
+		iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / size)) * space;
 			float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / size)) * space;
 			z += 0.01f;

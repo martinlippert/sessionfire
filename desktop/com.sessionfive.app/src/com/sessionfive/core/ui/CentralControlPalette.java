@@ -1,7 +1,7 @@
 package com.sessionfive.core.ui;
 
 import java.awt.Color;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.media.opengl.GLCanvas;
 
@@ -9,7 +9,6 @@ import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.Animation;
 import com.sessionfive.core.Focusable;
-import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -17,7 +16,7 @@ public class CentralControlPalette {
 
 	private final Presentation presentation;
 	private final AnimationController animationController;
-	
+
 	public CentralControlPalette(Presentation presentation,
 			AnimationController animationController) {
 		this.presentation = presentation;
@@ -58,8 +57,9 @@ public class CentralControlPalette {
 		Focusable startShape = presentation;
 		presentation.removeAllAnimations();
 
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		for (Shape shape : shapes) {
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			Animation animation = animationFactory.createAnimation(startShape,
 					shape);
 			presentation.addAnimation(animation);
@@ -92,20 +92,23 @@ public class CentralControlPalette {
 
 	public void setReflectionEnabled(boolean reflectionEnabled) {
 		presentation.setDefaultReflectionEnabled(reflectionEnabled);
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		for (Shape shape : shapes) {
+
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			shape.setReflectionEnabled(reflectionEnabled);
 		}
 	}
 
 	public void setFocusScale(float focusScale) {
 		presentation.setDefaultFocusScale(focusScale);
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		for (Shape shape : shapes) {
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			shape.setFocusScale(focusScale);
 		}
-		animationController
-				.directlyGoTo(animationController.getCurrentAnimationNo());
+		animationController.directlyGoTo(animationController
+				.getCurrentAnimationNo());
 	}
 
 	public PanelExtension[] getExtensionPanels() {

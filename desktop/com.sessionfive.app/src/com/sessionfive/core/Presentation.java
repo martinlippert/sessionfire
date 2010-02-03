@@ -252,4 +252,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		}
 	}
 
+	public Iterator<Shape> shapeIterator(boolean skipAbstractShapes) {
+		return skipAbstractShapes ? new SkippingShapeIterator(this) : new ShapeIterator(this);
+	}
+
 }

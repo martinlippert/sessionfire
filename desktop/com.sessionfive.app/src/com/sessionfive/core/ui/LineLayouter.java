@@ -1,9 +1,8 @@
 package com.sessionfive.core.ui;
 
-import java.util.List;
+import java.util.Iterator;
 
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -25,8 +24,9 @@ public class LineLayouter implements Layouter {
 		float x = -space;
 		float z = 0f;
 
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		for (Shape shape : shapes) {
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			shape.setPosition(x, 10, z);
 			x += space;
 			z += 0.01f;

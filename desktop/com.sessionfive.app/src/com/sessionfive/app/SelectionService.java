@@ -1,5 +1,6 @@
 package com.sessionfive.app;
 
+import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
 public interface SelectionService {
@@ -8,5 +9,6 @@ public interface SelectionService {
 	public void addSelectionListener(SelectionListener listener);
 	public void removeSelectionListener(SelectionListener listener);
 	public void setSelection(Shape[] selectedShapes);
+	public void selectAllShapes(Presentation presentation);
 
 }

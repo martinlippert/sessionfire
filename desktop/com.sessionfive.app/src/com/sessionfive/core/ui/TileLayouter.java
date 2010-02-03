@@ -1,9 +1,8 @@
 package com.sessionfive.core.ui;
 
-import java.util.List;
+import java.util.Iterator;
 
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -21,8 +20,12 @@ public class TileLayouter implements Layouter {
 		final Camera startCamera = new Camera(-80f, -40f, 120f, 20f, -50f, 0f, 0f, 1f, 0f);
 		presentation.setDefaultStartCamera(startCamera);
 
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		int size = shapes.size();
+		int size = 0;
+		Iterator<Shape> iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			iter.next();
+			size++;
+		}
 
 		double sqrt = Math.sqrt(size);
 		long countPerLine = Math.round(sqrt - 1);
@@ -34,7 +37,9 @@ public class TileLayouter implements Layouter {
 
 		int lineCounter = 0;
 
-		for (Shape shape : presentation.getShapes(LayerType.CAMERA_ANIMATED)) {
+		iter = presentation.shapeIterator(true);
+		while (iter.hasNext()) {
+			Shape shape = iter.next();
 			shape.setPosition(x, y, z);
 
 			x += space;
