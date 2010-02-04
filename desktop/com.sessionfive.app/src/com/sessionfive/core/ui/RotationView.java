@@ -13,12 +13,13 @@ import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapeChangedListener;
 
-public class RotationView extends AbstractView implements SelectionListener, ShapeChangedListener {
+public class RotationView extends AbstractView implements SelectionListener,
+		ShapeChangedListener {
 
 	private JSlider xRotationSlider;
 	private JSlider yRotationSlider;
 	private JSlider zRotationSlider;
-	
+
 	public RotationView(final SelectionService selectionService) {
 		super(selectionService);
 	}
@@ -29,16 +30,34 @@ public class RotationView extends AbstractView implements SelectionListener, Sha
 		yRotationSlider = new JSlider(0, 360, 0);
 		zRotationSlider = new JSlider(0, 360, 0);
 
-		ChangeListener rotationSliderListener = new ChangeListener() {
+		ChangeListener rotationSliderListenerX = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				setRotation(xRotationSlider.getValue(), yRotationSlider
-						.getValue(), zRotationSlider.getValue());
+				if (getSelectedShapes().length > 0) {
+					setRotation(xRotationSlider.getValue(),
+							getRotationAngleY(), getRotationAngleZ());
+				}
+			}
+		};
+		ChangeListener rotationSliderListenerY = new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (getSelectedShapes().length > 0) {
+					setRotation(getRotationAngleX(),
+							yRotationSlider.getValue(), getRotationAngleZ());
+				}
+			}
+		};
+		ChangeListener rotationSliderListenerZ = new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (getSelectedShapes().length > 0) {
+					setRotation(getRotationAngleX(), getRotationAngleY(),
+							zRotationSlider.getValue());
+				}
 			}
 		};
 
-		xRotationSlider.addChangeListener(rotationSliderListener);
-		yRotationSlider.addChangeListener(rotationSliderListener);
-		zRotationSlider.addChangeListener(rotationSliderListener);
+		xRotationSlider.addChangeListener(rotationSliderListenerX);
+		yRotationSlider.addChangeListener(rotationSliderListenerY);
+		zRotationSlider.addChangeListener(rotationSliderListenerZ);
 
 		FormLayout layout = new FormLayout("10dlu, fill:pref:grow",
 				"pref, 0dlu, pref, 0dlu, pref");
@@ -69,13 +88,22 @@ public class RotationView extends AbstractView implements SelectionListener, Sha
 	protected void doUpdateControls() {
 		if (getSelectedShapes().length > 0 && xRotationSlider != null
 				&& yRotationSlider != null && zRotationSlider != null) {
-			xRotationSlider.setValue((int) getSelectedShapes()[0]
-			                                              .getRotationAngleX());
-			yRotationSlider.setValue((int) getSelectedShapes()[0]
-			                                              .getRotationAngleY());
-			zRotationSlider.setValue((int) getSelectedShapes()[0]
-			                                              .getRotationAngleZ());
+			xRotationSlider.setValue(getRotationAngleX());
+			yRotationSlider.setValue(getRotationAngleY());
+			zRotationSlider.setValue(getRotationAngleZ());
 		}
+	}
+
+	protected int getRotationAngleX() {
+		return (int) getSelectedShapes()[0].getRotationAngleX();
+	}
+
+	protected int getRotationAngleY() {
+		return (int) getSelectedShapes()[0].getRotationAngleY();
+	}
+
+	protected int getRotationAngleZ() {
+		return (int) getSelectedShapes()[0].getRotationAngleZ();
 	}
 
 }
