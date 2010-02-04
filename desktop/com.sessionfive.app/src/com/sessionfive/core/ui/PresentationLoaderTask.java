@@ -87,7 +87,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 						.getInstance().getAnimationController());
 		
 		createAnimations(animationFactory);
-		SessionFiveApplication.getInstance().getAnimationController().resetTo(-1);
+//		SessionFiveApplication.getInstance().getAnimationController().resetTo(-1);
 
 		setProgress(100);
 

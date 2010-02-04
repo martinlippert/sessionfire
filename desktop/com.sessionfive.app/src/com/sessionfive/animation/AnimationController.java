@@ -77,12 +77,12 @@ public class AnimationController {
 	}
 
 	public void resetTo(int animationNo) {
+		Animator animator = null;
+
 		if (presentation.getAnimationCount() > 0) {
 			currentAnimationNo = animationNo;
 
 			Animation animation = null;
-			Animator animator = null;
-
 			if (animationNo == -1) {
 				animation = presentation.getAnimation(0);
 				animator = animation.getBackwardAnimation(display);
@@ -90,11 +90,15 @@ public class AnimationController {
 				animation = presentation.getAnimation(currentAnimationNo);
 				animator = animation.getForwardAnimation(display);
 			}
-
+		}
+		else if (animationNo == -1) {
+			animator = new MoveToAnimation(presentation, null).getBackwardAnimation(display);
+		}
+		
+		if (animator != null) {
 			if (currentAnimator != null && currentAnimator.isRunning()) {
 				currentAnimator.stop();
 			}
-
 			currentAnimator = animator;
 			currentAnimator.start();
 			
