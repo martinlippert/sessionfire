@@ -43,5 +43,19 @@ public class Camera {
 		glu.gluLookAt(location.getX(), location.getY(), location.getZ(), target.getX(), target
 				.getY(), target.getZ(), up.getX(), up.getY(), up.getZ());
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Camera))
+			return false;
+
+		Camera other = (Camera) obj;
+		return this.location.equals(other.location) && this.target.equals(other.target) && this.up.equals(other.up);
+	}
+	
+	@Override
+	public int hashCode() {
+		return location.hashCode() + target.hashCode() + up.hashCode();
+	}
 
 }

@@ -39,6 +39,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public Presentation() {
 		animations = new CopyOnWriteArrayList<Animation>();
 		startCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
+		defaultStartCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		backgroundColor = Color.BLACK;
 		layers = new HashMap<LayerType, Layer>();
 		layers.put(LayerType.CAMERA_ANIMATED, new Layer());
@@ -68,16 +69,16 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void setDefaultStartCamera(Camera defaultStartCamera) {
-		this.defaultStartCamera = defaultStartCamera;
-		if (this.startCamera == null) {
-			this.startCamera = defaultStartCamera;
+		if (this.startCamera == null
+				|| this.startCamera.equals(this.defaultStartCamera)) {
+			setStartCamera(defaultStartCamera);
 		}
+		this.defaultStartCamera = defaultStartCamera;
 	}
 
 	public void resetStartCamera() {
 		if (defaultStartCamera != null) {
-			this.startCamera = defaultStartCamera;
-			firePresentationChanged();
+			setStartCamera(defaultStartCamera);
 		}
 	}
 
@@ -94,7 +95,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public void removeAllShapes(LayerType layer) {
-		Iterator<Shape> allShapes = this.layers.get(layer).getShapes().iterator();
+		Iterator<Shape> allShapes = this.layers.get(layer).getShapes()
+				.iterator();
 		while (allShapes.hasNext()) {
 			Shape shape = allShapes.next();
 			shape.removeShapeChangedListener(this);
@@ -156,18 +158,21 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		firePresentationChanged();
 	}
 
-	public void addPresentationChangedListener(PresentationChangedListener listener) {
+	public void addPresentationChangedListener(
+			PresentationChangedListener listener) {
 		changeListeners.add(listener);
 	}
 
-	public void removePresentationChangedListener(PresentationChangedListener listener) {
+	public void removePresentationChangedListener(
+			PresentationChangedListener listener) {
 		changeListeners.remove(listener);
 	}
 
 	protected void firePresentationChanged() {
 		PresentationChangedEvent event = new PresentationChangedEvent(this);
 
-		Iterator<PresentationChangedListener> listeners = changeListeners.iterator();
+		Iterator<PresentationChangedListener> listeners = changeListeners
+				.iterator();
 		while (listeners.hasNext()) {
 			listeners.next().presentationChanged(event);
 		}
@@ -253,7 +258,8 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	}
 
 	public Iterator<Shape> shapeIterator(boolean skipAbstractShapes) {
-		return skipAbstractShapes ? new SkippingShapeIterator(this) : new ShapeIterator(this);
+		return skipAbstractShapes ? new SkippingShapeIterator(this)
+				: new ShapeIterator(this);
 	}
 
 }
