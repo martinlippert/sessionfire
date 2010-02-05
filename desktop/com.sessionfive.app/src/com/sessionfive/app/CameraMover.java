@@ -28,7 +28,7 @@ public class CameraMover {
 				mouseX = mevent.getX();
 				mouseY = mevent.getY();
 			}
-			if (mevent.getClickCount() == 2) {
+			if (mevent.getClickCount() == 2 && animationController.getCurrentAnimationNo() == -1) {
 				presentation.resetStartCamera();
 				animationController.directlyGoTo(-1);
 			}
@@ -38,7 +38,7 @@ public class CameraMover {
 	public void mouseMoved(AWTEvent event) {
 		if (event instanceof MouseEvent) {
 			MouseEvent mevent = (MouseEvent) event;
-			if (mevent.getButton() == MouseEvent.BUTTON1) {
+			if (mevent.getButton() == MouseEvent.BUTTON1 && animationController.getCurrentAnimationNo() == -1) {
 				float diffX = mouseX - mevent.getX();
 				float diffY = mouseY - mevent.getY();
 				setDiff(diffX, diffY, mevent.getModifiers());
