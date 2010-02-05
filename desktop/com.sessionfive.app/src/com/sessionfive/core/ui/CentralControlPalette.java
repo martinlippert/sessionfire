@@ -74,7 +74,7 @@ public class CentralControlPalette {
 
 	public Layouter[] getLayouter() {
 		return new Layouter[] { new LineLayouter(), new TileLayouter(),
-				new CircleLayouter() };
+				new CircleLayouter(), new LineGroupingLayouter() };
 	}
 
 	public AnimationFactory[] getAnimators() {

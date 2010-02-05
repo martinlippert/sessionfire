@@ -2,13 +2,14 @@ package com.sessionfive.core.ui;
 
 import java.util.Iterator;
 
+import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
 public class TileLayouter implements Layouter {
 
-	public static final String NAME = "Tiling";
+	private static final String NAME = "Tiling";
 
 	@Override
 	public String getName() {
@@ -37,20 +38,25 @@ public class TileLayouter implements Layouter {
 
 		int lineCounter = 0;
 
-		iter = presentation.shapeIterator(true);
+		iter = presentation.shapeIterator(false);
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
-			shape.setPosition(x, y, z);
-
-			x += space;
-			z += 0.01f;
-
-			if (lineCounter == countPerLine) {
-				lineCounter = 0;
-				y -= space;
-				x = -space;
-			} else {
-				lineCounter++;
+			if (shape.getClass() == AbstractShape.class) {
+				shape.setPosition(0, 0, 0);
+			}
+			else {
+				shape.setPosition(x, y, z);
+	
+				x += space;
+				z += 0.01f;
+	
+				if (lineCounter == countPerLine) {
+					lineCounter = 0;
+					y -= space;
+					x = -space;
+				} else {
+					lineCounter++;
+				}
 			}
 		}
 	}

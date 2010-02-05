@@ -1,15 +1,16 @@
 package com.sessionfive.core.ui;
 
 import java.util.Iterator;
+import java.util.List;
 
-import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class LineLayouter implements Layouter {
+public class LineGroupingLayouter implements Layouter {
 
-	private static final String NAME = "Line";
+	private static final String NAME = "Line Grouping";
 
 	@Override
 	public String getName() {
@@ -25,17 +26,25 @@ public class LineLayouter implements Layouter {
 		float x = -space;
 		float z = 0f;
 
-		Iterator<Shape> iter = presentation.shapeIterator(false);
+		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
+		Iterator<Shape> iter = shapes.iterator();
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
-			if (shape.getClass() == AbstractShape.class) {
-				shape.setPosition(0, 0, 0);
+			shape.setPosition(x, 10, z);
+			
+			float childY = 0;
+			float childZ = 0;
+			List<Shape> childs = shape.getShapes();
+			Iterator<Shape> childIter = childs.iterator();
+			while (childIter.hasNext()) {
+				Shape child = childIter.next();
+				child.setPosition(0, childY, childZ);
+				childY -= space;
+				childZ += 0.01f;
 			}
-			else {
-				shape.setPosition(x, 10, z);
-				x += space;
-				z += 0.01f;
-			}
+			
+			x += space;
+			z += 0.01f;
 		}
 	}
 
@@ -46,7 +55,7 @@ public class LineLayouter implements Layouter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof LineLayouter))
+		if (!(obj instanceof LineGroupingLayouter))
 			return false;
 		return toString().equals(obj.toString());
 	}
