@@ -78,7 +78,8 @@ public class CentralControlPaletteUI {
 	private DefaultComboBoxModel layoutModel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
-			Presentation presentation, SelectionService selectionService, GLCanvas canvas) {
+			Presentation presentation, SelectionService selectionService,
+			GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.presentation = presentation;
 		this.selectionService = selectionService;
@@ -201,9 +202,12 @@ public class CentralControlPaletteUI {
 		animationChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedAnimation = animationChoice.getSelectedItem();
-				if (selectedAnimation != null && !inChange) {
-					centralControlPalette
-							.changeAnimation((AnimationFactory) selectedAnimation);
+				Object selectedLayouter = layoutChoice.getSelectedItem();
+				if (selectedAnimation != null && selectedLayouter != null
+						&& !inChange) {
+					centralControlPalette.changeAnimation(
+							(Layouter) selectedLayouter,
+							(AnimationFactory) selectedAnimation);
 				}
 			}
 		});
@@ -246,7 +250,7 @@ public class CentralControlPaletteUI {
 		});
 
 		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
-		
+
 		RotationView rotationView = new RotationView(selectionService);
 		subContentPane.add(rotationView.createUI(), cc.xyw(1, 17, 2));
 		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 19));
@@ -299,7 +303,8 @@ public class CentralControlPaletteUI {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() == 2 && !inChange) {
-					focusScaleSlider.setValue(200 - (int)(Presentation.DEFAULT_FOCUS_SCALE * 100));
+					focusScaleSlider
+							.setValue(200 - (int) (Presentation.DEFAULT_FOCUS_SCALE * 100));
 				}
 			}
 		});
@@ -401,9 +406,9 @@ public class CentralControlPaletteUI {
 				"and a layout of your shapes"));
 		helpWindows.add(new HelpWindow(layerText,
 				HelpWindowPosition.CENTER_NO_ARROW, "Change the layer text"));
-//		helpWindows.add(new HelpWindow(yRotationSlider,
-//				HelpWindowPosition.ABOVE, "Use these sliders to control",
-//				"the X,Y and Z rotation of your shapes"));
+		// helpWindows.add(new HelpWindow(yRotationSlider,
+		// HelpWindowPosition.ABOVE, "Use these sliders to control",
+		// "the X,Y and Z rotation of your shapes"));
 		helpWindows.add(new HelpWindow(spaceRotationSlider,
 				HelpWindowPosition.ABOVE,
 				"Change the spacing between your shapes",
@@ -418,7 +423,7 @@ public class CentralControlPaletteUI {
 				"Next shape: Right-Arrow, Down-Arrow, Page-Down",
 				"Previous shape: Left-Arrow, Up-Arrow, Page-Up",
 				"First shape: Meta-Home, Meta-Up-Arrow",
-				"Last shape: Meta-End, Meta-Down-Arrow", 
+				"Last shape: Meta-End, Meta-Down-Arrow",
 				"Number & enter: Jumps to the shape"));
 		showHelpInExtensions();
 
@@ -457,13 +462,14 @@ public class CentralControlPaletteUI {
 			layerText.setText(presentation.getLayerText());
 		}
 
-//		xRotationSlider.setValue((int) presentation.getDefaultRotationX());
-//		yRotationSlider.setValue((int) presentation.getDefaultRotationY());
-//		zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
+		// xRotationSlider.setValue((int) presentation.getDefaultRotationX());
+		// yRotationSlider.setValue((int) presentation.getDefaultRotationY());
+		// zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
 		spaceRotationSlider.setValue((int) presentation.getSpace());
 		reflectionEnabledBox.setSelected(presentation
 				.isDefaultReflectionEnabled());
-		focusScaleSlider.setValue(200 - (int) (presentation.getDefaultFocusScale() * 100));
+		focusScaleSlider.setValue(200 - (int) (presentation
+				.getDefaultFocusScale() * 100));
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		savePresentationButton.setEnabled(shapes.size() > 0);

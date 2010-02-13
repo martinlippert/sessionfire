@@ -7,8 +7,6 @@ import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.SessionFiveApplication;
-import com.sessionfive.core.Animation;
-import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -53,19 +51,9 @@ public class CentralControlPalette {
 				.resetTo(animationController.getCurrentAnimationNo());
 	}
 
-	public void changeAnimation(AnimationFactory animationFactory) {
-		Focusable startShape = presentation;
-		presentation.removeAllAnimations();
-
-		Iterator<Shape> iter = presentation.shapeIterator(true);
-		while (iter.hasNext()) {
-			Shape shape = iter.next();
-			Animation animation = animationFactory.createAnimation(startShape,
-					shape);
-			presentation.addAnimation(animation);
-			startShape = shape;
-		}
+	public void changeAnimation(Layouter layouter, AnimationFactory animationFactory) {
 		presentation.setDefaultAnimation(animationFactory);
+		layouter.animate(presentation, animationFactory);
 	}
 
 	public void setBackgroundColor(Color newColor) {

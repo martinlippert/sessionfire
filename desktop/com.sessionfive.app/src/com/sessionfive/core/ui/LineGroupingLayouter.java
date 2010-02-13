@@ -8,7 +8,7 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class LineGroupingLayouter implements Layouter {
+public class LineGroupingLayouter extends AbstractLinearLayouter {
 
 	private static final String NAME = "Line Grouping";
 

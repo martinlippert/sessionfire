@@ -16,9 +16,7 @@ import javax.swing.SwingWorker;
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.AbstractShape;
-import com.sessionfive.core.Animation;
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.Focusable;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -85,27 +83,13 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		createShapes(animationFactory, layouter, rotationX, rotationY,
 				rotationZ, canvas.getContext(), SessionFiveApplication
 						.getInstance().getAnimationController());
-		
-		createAnimations(animationFactory);
+		layouter.animate(presentation, animationFactory);
 
 		setProgress(100);
 
 		SessionFiveApplication.getInstance().getSelectionService()
 				.selectAllShapes(presentation);
 		return null;
-	}
-
-	public void createAnimations(AnimationFactory animationFactory) {
-		Focusable animationStart = presentation;
-		
-		Iterator<Shape> iter = presentation.shapeIterator(true);
-		while (iter.hasNext()) {
-			Shape shape = iter.next();
-			Animation animation = animationFactory.createAnimation(
-					animationStart, shape);
-			presentation.addAnimation(animation);
-			animationStart = shape;
-		}
 	}
 
 	public void createShapes(AnimationFactory animationFactory,

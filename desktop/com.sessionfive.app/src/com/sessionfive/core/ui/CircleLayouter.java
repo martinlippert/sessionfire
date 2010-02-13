@@ -7,7 +7,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class CircleLayouter implements Layouter {
+public class CircleLayouter extends AbstractLinearLayouter {
 
 	private static final String NAME = "Circle";
 

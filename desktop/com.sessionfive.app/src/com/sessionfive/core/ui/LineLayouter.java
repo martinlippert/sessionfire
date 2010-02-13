@@ -7,7 +7,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class LineLayouter implements Layouter {
+public class LineLayouter extends AbstractLinearLayouter {
 
 	private static final String NAME = "Line";
 
