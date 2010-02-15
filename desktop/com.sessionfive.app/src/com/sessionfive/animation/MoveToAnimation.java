@@ -7,37 +7,24 @@ import org.jdesktop.animation.timing.interpolation.KeyValues;
 import org.jdesktop.animation.timing.interpolation.PropertySetter;
 
 import com.sessionfive.app.Display;
-import com.sessionfive.core.Animation;
+import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Shape;
 
-public class MoveToAnimation implements Animation {
+public class MoveToAnimation implements AnimationStyle {
 
 	public static final String NAME = "Move To";
 
-	private final Shape endShape;
-	private final Focusable startShape;
-
-	public MoveToAnimation(final Focusable startShape, final Shape endShape) {
-		this.startShape = startShape;
-		this.endShape = endShape;
-	}
-
 	@Override
-	public Animator getForwardAnimation(Display display) {
-		Camera startSetting = display.getCamera();
-		Camera cameraEnd = endShape.getFocussedCamera();
+	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
+			Display display, Shape endShape) {
+		KeyValues<Camera> values = KeyValues.create(
+				new EvaluatorCameraSetting(), cameraStart, cameraEnd);
+		KeyTimes times = new KeyTimes(0f, 1f);
+		KeyFrames frames = new KeyFrames(values, times);
+		PropertySetter ps = new PropertySetter(display, "camera", frames);
 
-		KeyValues<Camera> values2 = KeyValues.create(
-				new EvaluatorCameraSetting(), startSetting,
-				cameraEnd);
-		KeyTimes times2 = new KeyTimes(0f, 1f);
-		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "camera",
-				frames2);
-
-		Animator animator = new Animator(800, ps2);
+		Animator animator = new Animator(800, ps);
 		animator.setStartDelay(0);
 		animator.setAcceleration(0.4f);
 		animator.setDeceleration(0.4f);
@@ -46,22 +33,15 @@ public class MoveToAnimation implements Animation {
 	}
 
 	@Override
-	public Animator getBackwardAnimation(Display display) {
-		if (startShape == null)
-			return null;
+	public Animator createBackwardAnimator(Camera cameraStart,
+			Camera cameraEnd, Display display, Shape endShape) {
+		KeyValues<Camera> values = KeyValues.create(
+				new EvaluatorCameraSetting(), cameraStart, cameraEnd);
+		KeyTimes times = new KeyTimes(0f, 1f);
+		KeyFrames frames = new KeyFrames(values, times);
+		PropertySetter ps = new PropertySetter(display, "camera", frames);
 
-		Camera startSetting = display.getCamera();
-		Camera cameraEnd = startShape.getFocussedCamera();
-
-		KeyValues<Camera> values2 = KeyValues.create(
-				new EvaluatorCameraSetting(), startSetting,
-				cameraEnd);
-		KeyTimes times2 = new KeyTimes(0f, 1f);
-		KeyFrames frames2 = new KeyFrames(values2, times2);
-		PropertySetter ps2 = new PropertySetter(display, "camera",
-				frames2);
-
-		Animator animator = new Animator(800, ps2);
+		Animator animator = new Animator(800, ps);
 		animator.setStartDelay(0);
 		animator.setAcceleration(0.4f);
 		animator.setDeceleration(0.4f);
@@ -70,8 +50,20 @@ public class MoveToAnimation implements Animation {
 	}
 
 	@Override
-	public void directlyGoTo(Display display) {
-		Camera cameraEnd = endShape.getFocussedCamera();
-		display.setCamera(cameraEnd);
+	public String getName() {
+		return NAME;
 	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MoveToAnimation))
+			return false;
+		return toString().equals(obj.toString());
+	}
+
 }

@@ -40,6 +40,7 @@ import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sessionfive.app.SelectionService;
+import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.PresentationChangedEvent;
@@ -193,9 +194,8 @@ public class CentralControlPaletteUI {
 		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
 
 		animationModel = new DefaultComboBoxModel();
-		AnimationFactory[] animationFactories = centralControlPalette
-				.getAnimators();
-		for (AnimationFactory animationFactory : animationFactories) {
+		AnimationStyle[] animationStyles = centralControlPalette.getAnimators();
+		for (AnimationStyle animationFactory : animationStyles) {
 			animationModel.addElement(animationFactory);
 		}
 		animationChoice = HudWidgetFactory.createHudComboBox(animationModel);
@@ -207,7 +207,7 @@ public class CentralControlPaletteUI {
 						&& !inChange) {
 					centralControlPalette.changeAnimation(
 							(Layouter) selectedLayouter,
-							(AnimationFactory) selectedAnimation);
+							(AnimationStyle) selectedAnimation);
 				}
 			}
 		});

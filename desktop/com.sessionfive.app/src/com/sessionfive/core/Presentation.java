@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.sessionfive.core.ui.AnimationFactory;
+import com.sessionfive.animation.ZoomOutZoomInAnimation;
 import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
-import com.sessionfive.core.ui.ZoomInZoomOutAnimationFactory;
 import com.sessionfive.shapes.TitleShape;
 
 public class Presentation implements Focusable, ShapeChangedListener {
@@ -21,14 +20,14 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
 
 	private Camera startCamera;
-	private List<Animation> animations;
+	private List<AnimationStep> animations;
 	private Map<LayerType, Layer> layers;
 	private Color backgroundColor;
 	private TitleShape titleShape;
 	private String path;
 
 	private Layouter defaultLayouter;
-	private AnimationFactory defaultAnimation;
+	private AnimationStyle defaultAnimation;
 	private boolean defaultReflectionEnabled;
 	private float defaultFocusScale;
 
@@ -37,7 +36,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	private Camera defaultStartCamera;
 
 	public Presentation() {
-		animations = new CopyOnWriteArrayList<Animation>();
+		animations = new CopyOnWriteArrayList<AnimationStep>();
 		startCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		defaultStartCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		backgroundColor = Color.BLACK;
@@ -47,7 +46,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
 		defaultLayouter = new LineLayouter();
-		defaultAnimation = new ZoomInZoomOutAnimationFactory();
+		defaultAnimation = new ZoomOutZoomInAnimation();
 		defaultReflectionEnabled = true;
 		path = "";
 
@@ -110,15 +109,15 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		return animations.size();
 	}
 
-	public Animation getAnimation(int index) {
+	public AnimationStep getAnimation(int index) {
 		return animations.get(index);
 	}
 
-	public void addAnimation(Animation animation) {
+	public void addAnimation(AnimationStep animation) {
 		animations.add(animation);
 	}
 
-	public void removeAnimation(Animation animation) {
+	public void removeAnimation(AnimationStep animation) {
 		animations.remove(animation);
 	}
 
@@ -201,11 +200,11 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		}
 	}
 
-	public AnimationFactory getDefaultAnimation() {
+	public AnimationStyle getDefaultAnimation() {
 		return defaultAnimation;
 	}
 
-	public void setDefaultAnimation(AnimationFactory defaultAnimation) {
+	public void setDefaultAnimation(AnimationStyle defaultAnimation) {
 		if (!this.defaultAnimation.equals(defaultAnimation)) {
 			this.defaultAnimation = defaultAnimation;
 			firePresentationChanged();

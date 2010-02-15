@@ -4,7 +4,8 @@ import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.app.SessionFiveApplication;
-import com.sessionfive.core.Animation;
+import com.sessionfive.core.AnimationStep;
+import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -33,7 +34,7 @@ public class AnimationController {
 		}
 
 		currentAnimationNo++;
-		Animation animation = presentation.getAnimation(currentAnimationNo);
+		AnimationStep animation = presentation.getAnimation(currentAnimationNo);
 		Animator animator = animation.getForwardAnimation(display);
 
 		if (currentAnimator != null && currentAnimator.isRunning()) {
@@ -50,7 +51,7 @@ public class AnimationController {
 		if (currentAnimationNo < 0)
 			return;
 
-		Animation animation = presentation.getAnimation(currentAnimationNo);
+		AnimationStep animation = presentation.getAnimation(currentAnimationNo);
 		Animator animator = animation.getBackwardAnimation(display);
 		currentAnimationNo--;
 
@@ -82,7 +83,7 @@ public class AnimationController {
 		if (presentation.getAnimationCount() > 0) {
 			currentAnimationNo = animationNo;
 
-			Animation animation = null;
+			AnimationStep animation = null;
 			if (animationNo == -1) {
 				animation = presentation.getAnimation(0);
 				animator = animation.getBackwardAnimation(display);
@@ -92,7 +93,9 @@ public class AnimationController {
 			}
 		}
 		else if (animationNo == -1) {
-			animator = new MoveToAnimation(presentation, null).getBackwardAnimation(display);
+			Camera cameraStart = display.getCamera();
+			Camera cameraEnd = presentation.getFocussedCamera();
+			animator = new MoveToAnimation().createBackwardAnimator(cameraStart, cameraEnd, display, null);
 		}
 		
 		if (animator != null) {
@@ -113,7 +116,7 @@ public class AnimationController {
 			if (animationNo == -1) {
 				display.setCamera(presentation.getFocussedCamera());
 			} else {
-				Animation animation = presentation.getAnimation(currentAnimationNo);
+				AnimationStep animation = presentation.getAnimation(currentAnimationNo);
 				animation.directlyGoTo(display);
 			}
 			

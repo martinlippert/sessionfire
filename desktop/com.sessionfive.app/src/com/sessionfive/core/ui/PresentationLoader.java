@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
 import com.sessionfive.animation.Point;
+import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
@@ -31,7 +32,7 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	public void loadPresentation(Presentation presentation, GLCanvas canvas, Layouter[] layouter,
-			AnimationFactory[] animationFactories) {
+			AnimationStyle[] animationStyles) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
@@ -47,7 +48,7 @@ public class PresentationLoader implements PropertyChangeListener {
 
 			if (fileStructure.getElementCount() > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, fileStructure, canvas, layouter, animationFactories);
+				readFiles(presentation, fileStructure, canvas, layouter, animationStyles);
 			}
 		}
 	}
@@ -129,14 +130,14 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	private void readFiles(Presentation presentation, HierarchicFileStructureNode fileStructure, GLCanvas canvas,
-			Layouter[] layouter, AnimationFactory[] animationFactories) {
+			Layouter[] layouter, AnimationStyle[] animationStyles) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreatorImpl();
 
 		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation", "", 0, 100);
 		progressMonitor.setProgress(0);
 		
 		task = new PresentationLoaderTask(fileStructure, creator, presentation, canvas, layouter,
-				animationFactories);
+				animationStyles);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}

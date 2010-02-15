@@ -34,7 +34,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.core.Animation;
+import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
@@ -351,7 +351,7 @@ public class SessionFiveApplication implements IApplication {
 
 		boolean alpha;
 		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
-			Animation animation = presentation.getAnimation(parsedNumber);
+			AnimationStep animation = presentation.getAnimation(parsedNumber);
 			animation.directlyGoTo(offscreenDisplay);
 			alpha = true;
 		} else {

@@ -16,6 +16,7 @@ import javax.swing.SwingWorker;
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.AbstractShape;
+import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
@@ -28,7 +29,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 	private final Presentation presentation;
 	private final GLCanvas canvas;
 	private final Layouter[] allLayouter;
-	private final AnimationFactory[] allAnimationFactories;
+	private final AnimationStyle[] allAnimationStyles;
 
 	private int counter;
 	private int totalNumberOfFiles;
@@ -36,14 +37,14 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 	public PresentationLoaderTask(HierarchicFileStructureNode fileStructure,
 			ShapeExtensionCreator creator, Presentation presentation,
 			GLCanvas canvas, Layouter[] layouter,
-			AnimationFactory[] animationFactories) {
+			AnimationStyle[] animationStyles) {
 		this.fileStructure = fileStructure;
 		this.totalNumberOfFiles = fileStructure.getElementCount();
 		this.creator = creator;
 		this.presentation = presentation;
 		this.canvas = canvas;
 		this.allLayouter = layouter;
-		this.allAnimationFactories = animationFactories;
+		this.allAnimationStyles = animationStyles;
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
 		Properties settings = loadPresentationSettings(presentation);
 
-		AnimationFactory animationFactory = presentation.getDefaultAnimation();
+		AnimationStyle animationStyle = presentation.getDefaultAnimation();
 		Layouter layouter = presentation.getDefaultLayouter();
 
 		float rotationX = 0.0f;
@@ -80,10 +81,10 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 			rotationZ = Float.parseFloat(rotationZProp);
 		}
 
-		createShapes(animationFactory, layouter, rotationX, rotationY,
-				rotationZ, canvas.getContext(), SessionFiveApplication
-						.getInstance().getAnimationController());
-		layouter.animate(presentation, animationFactory);
+		createShapes(animationStyle, layouter, rotationX, rotationY, rotationZ,
+				canvas.getContext(), SessionFiveApplication.getInstance()
+						.getAnimationController());
+		layouter.animate(presentation, animationStyle);
 
 		setProgress(100);
 
@@ -92,10 +93,10 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	public void createShapes(AnimationFactory animationFactory,
-			Layouter layouter, float rotationX, float rotationY,
-			float rotationZ, GLContext context,
-			AnimationController animationController) throws Exception {
+	public void createShapes(AnimationStyle animationStyle, Layouter layouter,
+			float rotationX, float rotationY, float rotationZ,
+			GLContext context, AnimationController animationController)
+			throws Exception {
 
 		totalNumberOfFiles = fileStructure.getElementCount();
 		counter = 0;
@@ -103,7 +104,8 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		int childCount = fileStructure.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			HierarchicFileStructureNode child = fileStructure.getChild(i);
-			createShapesRecursively(child, null, layouter, rotationX, rotationY, rotationZ, context, animationController);
+			createShapesRecursively(child, null, layouter, rotationX,
+					rotationY, rotationZ, context, animationController);
 		}
 	}
 
@@ -120,8 +122,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 			if (newShape != null) {
 				if (parentShape != null) {
 					parentShape.addShape(newShape);
-				}
-				else {
+				} else {
 					presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 				}
 			}
@@ -136,8 +137,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				newShape = new AbstractShape();
 				if (parentShape != null) {
 					parentShape.addShape(newShape);
-				}
-				else {
+				} else {
 					presentation.addShape(newShape, LayerType.CAMERA_ANIMATED);
 				}
 
@@ -191,10 +191,10 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				}
 
 				String animationSetting = settings.getProperty("animation");
-				AnimationFactory animationFactory = getAnimationFactory(
-						animationSetting, allAnimationFactories);
-				if (animationFactory != null) {
-					presentation.setDefaultAnimation(animationFactory);
+				AnimationStyle animationStyle = getAnimationStyle(
+						animationSetting, allAnimationStyles);
+				if (animationStyle != null) {
+					presentation.setDefaultAnimation(animationStyle);
 				}
 
 				String color = settings.getProperty("backgroundColor");
@@ -265,9 +265,9 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	private AnimationFactory getAnimationFactory(String animationSetting,
-			AnimationFactory[] allAnimationFactories) {
-		for (AnimationFactory animationFactory : allAnimationFactories) {
+	private AnimationStyle getAnimationStyle(String animationSetting,
+			AnimationStyle[] allAnimationStyles) {
+		for (AnimationStyle animationFactory : allAnimationStyles) {
 			if (animationFactory.getName().equals(animationSetting))
 				return animationFactory;
 		}

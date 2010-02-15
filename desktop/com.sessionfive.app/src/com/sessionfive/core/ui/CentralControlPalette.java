@@ -6,7 +6,11 @@ import java.util.Iterator;
 import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
+import com.sessionfive.animation.GoToAnimation;
+import com.sessionfive.animation.MoveToAnimation;
+import com.sessionfive.animation.ZoomOutZoomInAnimation;
 import com.sessionfive.app.SessionFiveApplication;
+import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
@@ -51,9 +55,9 @@ public class CentralControlPalette {
 				.resetTo(animationController.getCurrentAnimationNo());
 	}
 
-	public void changeAnimation(Layouter layouter, AnimationFactory animationFactory) {
-		presentation.setDefaultAnimation(animationFactory);
-		layouter.animate(presentation, animationFactory);
+	public void changeAnimation(Layouter layouter, AnimationStyle animationStyle) {
+		presentation.setDefaultAnimation(animationStyle);
+		layouter.animate(presentation, animationStyle);
 	}
 
 	public void setBackgroundColor(Color newColor) {
@@ -65,9 +69,9 @@ public class CentralControlPalette {
 				new CircleLayouter(), new LineGroupingLayouter() };
 	}
 
-	public AnimationFactory[] getAnimators() {
-		return new AnimationFactory[] { new ZoomInZoomOutAnimationFactory(),
-				new MoveToAnimationFactory(), new GoToAnimationFactory() };
+	public AnimationStyle[] getAnimators() {
+		return new AnimationStyle[] { new ZoomOutZoomInAnimation(),
+				new MoveToAnimation(), new GoToAnimation() };
 	}
 
 	public void setLayerText(String text) {
