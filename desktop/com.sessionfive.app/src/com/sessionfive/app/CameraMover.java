@@ -4,8 +4,8 @@ import java.awt.AWTEvent;
 import java.awt.event.MouseEvent;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.animation.Point;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.Point;
 import com.sessionfive.core.Presentation;
 
 public class CameraMover {

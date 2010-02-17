@@ -1,4 +1,4 @@
-package com.sessionfive.animation;
+package com.sessionfive.core;
 
 public class Point {
 

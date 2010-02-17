@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class AnimationStepTest extends TestCase {
 	
-	public void testSimpleAnimation() {
+	public void testSimpleAnimationStep() {
 		AbstractShape shape1 = new AbstractShape();
 		AbstractShape shape2 = new AbstractShape();
 		

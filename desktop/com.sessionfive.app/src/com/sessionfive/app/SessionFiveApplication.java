@@ -350,8 +350,8 @@ public class SessionFiveApplication implements IApplication {
 		Display offscreenDisplay = new Display(presentation);
 
 		boolean alpha;
-		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationCount()) {
-			AnimationStep animation = presentation.getAnimation(parsedNumber);
+		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationStepCount()) {
+			AnimationStep animation = presentation.getAnimationStep(parsedNumber);
 			animation.directlyGoTo(offscreenDisplay);
 			alpha = true;
 		} else {

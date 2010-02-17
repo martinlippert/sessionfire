@@ -11,7 +11,7 @@ import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Shape;
 
-public class ZoomOutZoomInAnimation implements AnimationStyle {
+public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 
 	public static final String NAME = "Zoom Out - Zoom In";
 
@@ -85,7 +85,7 @@ public class ZoomOutZoomInAnimation implements AnimationStyle {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ZoomOutZoomInAnimation))
+		if (!(obj instanceof ZoomOutZoomInAnimationStyle))
 			return false;
 		return toString().equals(obj.toString());
 	}

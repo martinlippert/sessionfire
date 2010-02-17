@@ -16,10 +16,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
-import com.sessionfive.animation.Point;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
+import com.sessionfive.core.Point;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 

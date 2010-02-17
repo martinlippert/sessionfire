@@ -29,12 +29,12 @@ public class AnimationController {
 	}
 
 	public void forward() {
-		if (currentAnimationNo >= presentation.getAnimationCount() - 1) {
+		if (currentAnimationNo >= presentation.getAnimationStepCount() - 1) {
 			return;
 		}
 
 		currentAnimationNo++;
-		AnimationStep animation = presentation.getAnimation(currentAnimationNo);
+		AnimationStep animation = presentation.getAnimationStep(currentAnimationNo);
 		Animator animator = animation.getForwardAnimation(display);
 
 		if (currentAnimator != null && currentAnimator.isRunning()) {
@@ -51,7 +51,7 @@ public class AnimationController {
 		if (currentAnimationNo < 0)
 			return;
 
-		AnimationStep animation = presentation.getAnimation(currentAnimationNo);
+		AnimationStep animation = presentation.getAnimationStep(currentAnimationNo);
 		Animator animator = animation.getBackwardAnimation(display);
 		currentAnimationNo--;
 
@@ -66,11 +66,11 @@ public class AnimationController {
 	}
 
 	public int getNumberOfKeyFrames() {
-		return presentation.getAnimationCount();
+		return presentation.getAnimationStepCount();
 	}
 
 	public void goTo(int parsedNumber) {
-		if (parsedNumber < -1 || parsedNumber >= presentation.getAnimationCount()
+		if (parsedNumber < -1 || parsedNumber >= presentation.getAnimationStepCount()
 				|| parsedNumber == currentAnimationNo) {
 			return;
 		}
@@ -80,22 +80,22 @@ public class AnimationController {
 	public void resetTo(int animationNo) {
 		Animator animator = null;
 
-		if (presentation.getAnimationCount() > 0) {
+		if (presentation.getAnimationStepCount() > 0) {
 			currentAnimationNo = animationNo;
 
 			AnimationStep animation = null;
 			if (animationNo == -1) {
-				animation = presentation.getAnimation(0);
+				animation = presentation.getAnimationStep(0);
 				animator = animation.getBackwardAnimation(display);
 			} else {
-				animation = presentation.getAnimation(currentAnimationNo);
+				animation = presentation.getAnimationStep(currentAnimationNo);
 				animator = animation.getForwardAnimation(display);
 			}
 		}
 		else if (animationNo == -1) {
 			Camera cameraStart = display.getCamera();
 			Camera cameraEnd = presentation.getFocussedCamera();
-			animator = new MoveToAnimation().createBackwardAnimator(cameraStart, cameraEnd, display, null);
+			animator = new MoveToAnimationStyle().createBackwardAnimator(cameraStart, cameraEnd, display, null);
 		}
 		
 		if (animator != null) {
@@ -110,13 +110,13 @@ public class AnimationController {
 	}
 	
 	public void directlyGoTo(int animationNo) {
-		if (presentation.getAnimationCount() > 0) {
+		if (presentation.getAnimationStepCount() > 0) {
 			currentAnimationNo = animationNo;
 
 			if (animationNo == -1) {
 				display.setCamera(presentation.getFocussedCamera());
 			} else {
-				AnimationStep animation = presentation.getAnimation(currentAnimationNo);
+				AnimationStep animation = presentation.getAnimationStep(currentAnimationNo);
 				animation.directlyGoTo(display);
 			}
 			

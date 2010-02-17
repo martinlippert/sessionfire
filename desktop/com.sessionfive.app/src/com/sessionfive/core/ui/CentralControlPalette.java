@@ -6,9 +6,9 @@ import java.util.Iterator;
 import javax.media.opengl.GLCanvas;
 
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.animation.GoToAnimation;
-import com.sessionfive.animation.MoveToAnimation;
-import com.sessionfive.animation.ZoomOutZoomInAnimation;
+import com.sessionfive.animation.GoToAnimationStyle;
+import com.sessionfive.animation.MoveToAnimationStyle;
+import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Presentation;
@@ -31,7 +31,7 @@ public class CentralControlPalette {
 	public void choosePresentation(GLCanvas canvas) {
 		PresentationLoader loader = new PresentationLoader();
 		loader.loadPresentation(presentation, canvas, getLayouter(),
-				getAnimators());
+				getAnimationStyles());
 
 		canvas.requestFocus();
 	}
@@ -69,9 +69,9 @@ public class CentralControlPalette {
 				new CircleLayouter(), new LineGroupingLayouter() };
 	}
 
-	public AnimationStyle[] getAnimators() {
-		return new AnimationStyle[] { new ZoomOutZoomInAnimation(),
-				new MoveToAnimation(), new GoToAnimation() };
+	public AnimationStyle[] getAnimationStyles() {
+		return new AnimationStyle[] { new ZoomOutZoomInAnimationStyle(),
+				new MoveToAnimationStyle(), new GoToAnimationStyle() };
 	}
 
 	public void setLayerText(String text) {

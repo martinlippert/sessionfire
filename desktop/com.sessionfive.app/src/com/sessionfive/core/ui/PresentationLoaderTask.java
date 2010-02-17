@@ -59,7 +59,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		}
 
 		presentation.removeAllShapes(LayerType.CAMERA_ANIMATED);
-		presentation.removeAllAnimations();
+		presentation.removeAllAnimationSteps();
 
 		Properties settings = loadPresentationSettings(presentation);
 

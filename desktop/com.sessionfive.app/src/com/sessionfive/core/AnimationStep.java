@@ -1,5 +1,8 @@
 package com.sessionfive.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
@@ -10,10 +13,13 @@ public class AnimationStep {
 	private final Focusable startShape;
 	private AnimationStyle style;
 
+	private List<AnimationStep> subSteps;
+
 	public AnimationStep(final Focusable startShape, final Shape endShape) {
 		this.startShape = startShape;
 		this.endShape = endShape;
 		this.style = null;
+		this.subSteps = new ArrayList<AnimationStep>();
 	}
 	
 	public Focusable getStartShape() {
@@ -53,6 +59,18 @@ public class AnimationStep {
 	public void directlyGoTo(Display display) {
 		Camera cameraEnd = endShape.getFocussedCamera();
 		display.setCamera(cameraEnd);
+	}
+
+	public List<AnimationStep> getZoomIntoSteps() {
+		return subSteps;
+	}
+	
+	public void addSubStep(AnimationStep subStep) {
+		subSteps.add(subStep);
+	}
+	
+	public void removeSubStep(AnimationStep subStep) {
+		subSteps.remove(subStep);
 	}
 
 }

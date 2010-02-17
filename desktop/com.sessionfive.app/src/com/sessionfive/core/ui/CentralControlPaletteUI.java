@@ -194,7 +194,7 @@ public class CentralControlPaletteUI {
 		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
 
 		animationModel = new DefaultComboBoxModel();
-		AnimationStyle[] animationStyles = centralControlPalette.getAnimators();
+		AnimationStyle[] animationStyles = centralControlPalette.getAnimationStyles();
 		for (AnimationStyle animationFactory : animationStyles) {
 			animationModel.addElement(animationFactory);
 		}

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.sessionfive.animation.ZoomOutZoomInAnimation;
+import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
 import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
 import com.sessionfive.shapes.TitleShape;
@@ -46,7 +46,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
 		defaultLayouter = new LineLayouter();
-		defaultAnimation = new ZoomOutZoomInAnimation();
+		defaultAnimation = new ZoomOutZoomInAnimationStyle();
 		defaultReflectionEnabled = true;
 		path = "";
 
@@ -105,23 +105,23 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		firePresentationChanged();
 	}
 
-	public int getAnimationCount() {
+	public int getAnimationStepCount() {
 		return animations.size();
 	}
 
-	public AnimationStep getAnimation(int index) {
+	public AnimationStep getAnimationStep(int index) {
 		return animations.get(index);
 	}
 
-	public void addAnimation(AnimationStep animation) {
+	public void addAnimationStep(AnimationStep animation) {
 		animations.add(animation);
 	}
 
-	public void removeAnimation(AnimationStep animation) {
+	public void removeAnimationStep(AnimationStep animation) {
 		animations.remove(animation);
 	}
 
-	public void removeAllAnimations() {
+	public void removeAllAnimationSteps() {
 		animations.clear();
 	}
 

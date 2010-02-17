@@ -11,9 +11,9 @@ import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Shape;
 
-public class MoveToAnimation implements AnimationStyle {
+public class GoToAnimationStyle implements AnimationStyle {
 
-	public static final String NAME = "Move To";
+	public static final String NAME = "Go To";
 
 	@Override
 	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
@@ -24,10 +24,8 @@ public class MoveToAnimation implements AnimationStyle {
 		KeyFrames frames = new KeyFrames(values, times);
 		PropertySetter ps = new PropertySetter(display, "camera", frames);
 
-		Animator animator = new Animator(800, ps);
+		Animator animator = new Animator(1, ps);
 		animator.setStartDelay(0);
-		animator.setAcceleration(0.4f);
-		animator.setDeceleration(0.4f);
 
 		return animator;
 	}
@@ -41,10 +39,8 @@ public class MoveToAnimation implements AnimationStyle {
 		KeyFrames frames = new KeyFrames(values, times);
 		PropertySetter ps = new PropertySetter(display, "camera", frames);
 
-		Animator animator = new Animator(800, ps);
+		Animator animator = new Animator(1, ps);
 		animator.setStartDelay(0);
-		animator.setAcceleration(0.4f);
-		animator.setDeceleration(0.4f);
 
 		return animator;
 	}
@@ -61,7 +57,7 @@ public class MoveToAnimation implements AnimationStyle {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MoveToAnimation))
+		if (!(obj instanceof GoToAnimationStyle))
 			return false;
 		return toString().equals(obj.toString());
 	}

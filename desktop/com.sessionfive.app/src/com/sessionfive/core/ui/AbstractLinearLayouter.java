@@ -13,7 +13,7 @@ public abstract class AbstractLinearLayouter implements Layouter {
 	@Override
 	public void animate(Presentation presentation, AnimationStyle animationStyle) {
 
-		presentation.removeAllAnimations();
+		presentation.removeAllAnimationSteps();
 
 		Focusable animationStart = presentation;
 		Iterator<Shape> iter = presentation.shapeIterator(true);
@@ -22,7 +22,7 @@ public abstract class AbstractLinearLayouter implements Layouter {
 			AnimationStep step = new AnimationStep(animationStart, shape);
 			step.setStyle(animationStyle);
 
-			presentation.addAnimation(step);
+			presentation.addAnimationStep(step);
 			animationStart = shape;
 		}
 	}
