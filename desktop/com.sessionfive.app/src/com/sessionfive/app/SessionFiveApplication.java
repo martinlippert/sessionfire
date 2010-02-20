@@ -141,10 +141,10 @@ public class SessionFiveApplication implements IApplication {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_HOME
 						|| (e.getKeyCode() == KeyEvent.VK_UP && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
-					animationController.goTo(0);
+					animationController.goToKeyframeNo(0);
 				} else if (e.getKeyCode() == KeyEvent.VK_END
 						|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
-					animationController.goTo(animationController.getNumberOfKeyFrames() - 1);
+					animationController.goToKeyframeNo(animationController.getNumberOfKeyFrames() - 1);
 				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					goToKeyframeDirectly();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN
@@ -268,7 +268,7 @@ public class SessionFiveApplication implements IApplication {
 			int keyframeNo = Integer.parseInt(goToKeyframeDirectlyBuffer.toString());
 			if (keyframeNo >= 0) {
 				keyframeNo = Math.min(keyframeNo, animationController.getNumberOfKeyFrames());
-				animationController.goTo(keyframeNo - 1);
+				animationController.goToKeyframeNo(keyframeNo - 1);
 			}
 		} catch (NumberFormatException e) {
 		}

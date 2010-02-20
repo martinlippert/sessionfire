@@ -128,7 +128,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 			}
 
 			layouter.layout(presentation);
-			animationController.resetTo(-1);
+			animationController.reset();
 		}
 
 		int childCount = node.getChildCount();
@@ -142,7 +142,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				}
 
 				layouter.layout(presentation);
-				animationController.resetTo(-1);
+				animationController.reset();
 			}
 
 			for (int i = 0; i < childCount; i++) {

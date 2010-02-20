@@ -85,7 +85,7 @@ public class RemoteControlServlet extends HttpServlet {
 			int parsedNumber = Integer.parseInt(toParameter);
 			if (parsedNumber < SessionFiveApplication.getInstance().getAnimationController()
 					.getNumberOfKeyFrames()) {
-				SessionFiveApplication.getInstance().getAnimationController().goTo(parsedNumber);
+				SessionFiveApplication.getInstance().getAnimationController().goToKeyframeNo(parsedNumber);
 			}
 		}
 	}

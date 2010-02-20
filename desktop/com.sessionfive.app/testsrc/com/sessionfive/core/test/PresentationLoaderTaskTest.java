@@ -176,7 +176,7 @@ public class PresentationLoaderTaskTest extends TestCase {
 	protected static class TestAnimationController extends AnimationController {
 		
 		@Override
-		public void resetTo(int animationNo) {
+		public void reset() {
 		}
 		
 	}

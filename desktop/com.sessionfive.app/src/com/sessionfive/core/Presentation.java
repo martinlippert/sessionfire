@@ -14,7 +14,7 @@ import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
 import com.sessionfive.shapes.TitleShape;
 
-public class Presentation implements Focusable, ShapeChangedListener {
+public class Presentation implements Focusable, ShapeChangedListener, AnimationStepContainer {
 
 	public static final int DEFAULT_SPACE = 25;
 	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
@@ -81,6 +81,18 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		}
 	}
 
+	public List<Shape> getShapes(LayerType layertype) {
+		return layers.get(layertype).getShapes();
+	}
+
+	public List<Shape> getAllShapes() {
+		List<Shape> allshapes = new ArrayList<Shape>();
+		for (Layer layer : this.layers.values()) {
+			allshapes.addAll(layer.getShapes());
+		}
+		return allshapes;
+	}
+
 	public void addShape(Shape shape, LayerType layer) {
 		shape.addShapeChangedListener(this);
 		this.layers.get(layer).add(shape);
@@ -123,6 +135,11 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public void removeAllAnimationSteps() {
 		animations.clear();
+	}
+
+	@Override
+	public List<AnimationStep> getAnimationSteps() {
+		return animations;
 	}
 
 	@Override
@@ -175,18 +192,6 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		while (listeners.hasNext()) {
 			listeners.next().presentationChanged(event);
 		}
-	}
-
-	public List<Shape> getShapes(LayerType layertype) {
-		return layers.get(layertype).getShapes();
-	}
-
-	public List<Shape> getAllShapes() {
-		List<Shape> allshapes = new ArrayList<Shape>();
-		for (Layer layer : this.layers.values()) {
-			allshapes.addAll(layer.getShapes());
-		}
-		return allshapes;
 	}
 
 	public String getPath() {

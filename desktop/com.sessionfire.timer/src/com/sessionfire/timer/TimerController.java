@@ -13,7 +13,6 @@ import com.sessionfive.app.SessionFiveApplication;
 public class TimerController {
 	
 	private int seconds = 20;
-	private int currentFrame = 0;
 	private int remainingSeconds;
 	private Timer timer;
 	
@@ -39,9 +38,7 @@ public class TimerController {
 		if (timer != null && timer.isRunning()) return;
 		
 		final AnimationController animationController = SessionFiveApplication.getInstance().getAnimationController();
-		final int numberOfKeyFrames = animationController.getNumberOfKeyFrames();
 
-		currentFrame = animationController.getCurrentAnimationNo();
 		timer = new Timer(1000, new ActionListener() {
 			
 			@Override
@@ -50,11 +47,10 @@ public class TimerController {
 				fireRemainingSecondsChanged(remainingSeconds);
 
 				if (remainingSeconds <= 0) {
-					currentFrame++;
-					animationController.goTo(currentFrame);
+					animationController.forward();
 					remainingSeconds = seconds;
 				
-					if (currentFrame >= numberOfKeyFrames - 1) {
+					if (!animationController.canGoForward()) {
 						stopTimer();
 					}
 				}

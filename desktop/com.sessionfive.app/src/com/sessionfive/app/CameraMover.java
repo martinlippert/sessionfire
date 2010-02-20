@@ -15,7 +15,8 @@ public class CameraMover {
 	private int mouseX;
 	private int mouseY;
 
-	public CameraMover(Presentation presentation, AnimationController animationController) {
+	public CameraMover(Presentation presentation,
+			AnimationController animationController) {
 		this.presentation = presentation;
 		this.animationController = animationController;
 	}
@@ -28,9 +29,10 @@ public class CameraMover {
 				mouseX = mevent.getX();
 				mouseY = mevent.getY();
 			}
-			if (mevent.getClickCount() == 2 && animationController.getCurrentAnimationNo() == -1) {
+			if (mevent.getClickCount() == 2
+					&& animationController.getLastFocussedShape() == null) {
 				presentation.resetStartCamera();
-				animationController.directlyGoTo(-1);
+				animationController.readjustDirectly();
 			}
 		}
 	}
@@ -38,7 +40,8 @@ public class CameraMover {
 	public void mouseMoved(AWTEvent event) {
 		if (event instanceof MouseEvent) {
 			MouseEvent mevent = (MouseEvent) event;
-			if (mevent.getButton() == MouseEvent.BUTTON1 && animationController.getCurrentAnimationNo() == -1) {
+			if (mevent.getButton() == MouseEvent.BUTTON1
+					&& animationController.getLastFocussedShape() == null) {
 				float diffX = mouseX - mevent.getX();
 				float diffY = mouseY - mevent.getY();
 				setDiff(diffX, diffY, mevent.getModifiers());
@@ -57,23 +60,28 @@ public class CameraMover {
 		if ((modifiers & MouseEvent.META_MASK) != 0) {
 			diffX = diffX / 4;
 			diffY = diffY / 4;
-			Camera startCamera = new Camera(location.getX(), location.getY(), location.getZ(),
-					target.getX() - diffX, target.getY() - diffY, target.getZ());
+			Camera startCamera = new Camera(location.getX(), location.getY(),
+					location.getZ(), target.getX() - diffX, target.getY()
+							- diffY, target.getZ());
 			presentation.setStartCamera(startCamera);
-			animationController.directlyGoTo(-1);
+			animationController.readjustDirectly();
 		} else if ((modifiers & MouseEvent.SHIFT_MASK) != 0) {
-			//diffY = diffY;
-			Camera startCamera = new Camera(location.getX(), location.getY(), location.getZ()
-					+ diffY, target.getX(), target.getY(), target.getZ() + diffY);
+			// diffY = diffY;
+			Camera startCamera = new Camera(location.getX(), location.getY(),
+					location.getZ() + diffY, target.getX(), target.getY(),
+					target.getZ() + diffY);
 			presentation.setStartCamera(startCamera);
-			animationController.directlyGoTo(-1);
+			animationController.readjustDirectly();
 		} else {
 			diffX = diffX / 4;
 			diffY = diffY / 4;
-			Camera startCamera = new Camera(location.getX() + diffX, location.getY() - diffY,
-					location.getZ(), target.getX() + diffX, target.getY() - diffY, target.getZ());
+			Camera startCamera = new Camera(location.getX() + diffX, location
+					.getY()
+					- diffY, location.getZ(), target.getX() + diffX, target
+					.getY()
+					- diffY, target.getZ());
 			presentation.setStartCamera(startCamera);
-			animationController.directlyGoTo(-1);
+			animationController.readjustDirectly();
 		}
 	}
 

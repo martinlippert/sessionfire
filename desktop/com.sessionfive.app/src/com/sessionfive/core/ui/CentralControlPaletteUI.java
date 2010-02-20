@@ -185,16 +185,20 @@ public class CentralControlPaletteUI {
 		layoutChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedLayouter = layoutChoice.getSelectedItem();
-				if (selectedLayouter != null && !inChange) {
-					centralControlPalette
-							.changeLayout((Layouter) selectedLayouter);
+				Object selectedAnimation = animationChoice.getSelectedItem();
+				if (selectedLayouter != null && selectedAnimation != null
+						&& !inChange) {
+					centralControlPalette.changeLayout(
+							(Layouter) selectedLayouter,
+							(AnimationStyle) selectedAnimation);
 				}
 			}
 		});
 		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
 
 		animationModel = new DefaultComboBoxModel();
-		AnimationStyle[] animationStyles = centralControlPalette.getAnimationStyles();
+		AnimationStyle[] animationStyles = centralControlPalette
+				.getAnimationStyles();
 		for (AnimationStyle animationFactory : animationStyles) {
 			animationModel.addElement(animationFactory);
 		}

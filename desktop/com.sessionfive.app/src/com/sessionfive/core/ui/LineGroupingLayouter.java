@@ -91,7 +91,7 @@ public class LineGroupingLayouter extends AbstractLinearLayouter {
 				AnimationStep subStep = new AnimationStep(subStart, child);
 				subStep.setStyle(animationStyle);
 				
-				step.addSubStep(subStep);
+				step.addAnimationStep(subStep);
 				subStart = child;
 			}
 		}

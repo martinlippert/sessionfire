@@ -72,7 +72,7 @@ public class LineGroupingLayouterTest extends TestCase {
 		assertSame(top3, presentation.getAnimationStep(2).getEndShape());
 		
 		AnimationStep step1 = presentation.getAnimationStep(0);
-		List<AnimationStep> zoomSteps1 = step1.getZoomIntoSteps();
+		List<AnimationStep> zoomSteps1 = step1.getAnimationSteps();
 		assertEquals(2, zoomSteps1.size());
 		assertSame(top1, zoomSteps1.get(0).getStartShape());
 		assertSame(child11, zoomSteps1.get(0).getEndShape());
@@ -80,11 +80,11 @@ public class LineGroupingLayouterTest extends TestCase {
 		assertSame(child12, zoomSteps1.get(1).getEndShape());
 
 		AnimationStep step2 = presentation.getAnimationStep(1);
-		List<AnimationStep> zoomSteps2 = step2.getZoomIntoSteps();
+		List<AnimationStep> zoomSteps2 = step2.getAnimationSteps();
 		assertEquals(0, zoomSteps2.size());
 	
 		AnimationStep step3 = presentation.getAnimationStep(2);
-		List<AnimationStep> zoomSteps3 = step3.getZoomIntoSteps();
+		List<AnimationStep> zoomSteps3 = step3.getAnimationSteps();
 		assertEquals(0, zoomSteps3.size());
 	}
 	

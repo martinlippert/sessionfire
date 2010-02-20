@@ -47,12 +47,16 @@ public class CentralControlPalette {
 		}
 	}
 
-	public void changeLayout(Layouter layouter) {
+	public void changeLayout(Layouter layouter, AnimationStyle animationStyle) {
+		Shape focussedShape = animationController.getLastFocussedShape();
+		
 		layouter.layout(presentation);
+		layouter.animate(presentation, animationStyle);
+		
 		presentation.setDefaultLayouter(layouter);
 		presentation.resetStartCamera();
 		animationController
-				.resetTo(animationController.getCurrentAnimationNo());
+				.readjustSmoothlyTo(focussedShape);
 	}
 
 	public void changeAnimation(Layouter layouter, AnimationStyle animationStyle) {
@@ -99,8 +103,7 @@ public class CentralControlPalette {
 			Shape shape = iter.next();
 			shape.setFocusScale(focusScale);
 		}
-		animationController.directlyGoTo(animationController
-				.getCurrentAnimationNo());
+		animationController.readjustDirectly();
 	}
 
 	public PanelExtension[] getExtensionPanels() {

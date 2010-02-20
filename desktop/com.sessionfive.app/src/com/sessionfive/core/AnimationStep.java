@@ -7,7 +7,7 @@ import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 
-public class AnimationStep {
+public class AnimationStep implements AnimationStepContainer {
 
 	private final Shape endShape;
 	private final Focusable startShape;
@@ -26,7 +26,7 @@ public class AnimationStep {
 		return startShape;
 	}
 	
-	public Focusable getEndShape() {
+	public Shape getEndShape() {
 		return endShape;
 	}
 	
@@ -61,15 +61,15 @@ public class AnimationStep {
 		display.setCamera(cameraEnd);
 	}
 
-	public List<AnimationStep> getZoomIntoSteps() {
+	public List<AnimationStep> getAnimationSteps() {
 		return subSteps;
 	}
 	
-	public void addSubStep(AnimationStep subStep) {
+	public void addAnimationStep(AnimationStep subStep) {
 		subSteps.add(subStep);
 	}
 	
-	public void removeSubStep(AnimationStep subStep) {
+	public void removeAnimationStep(AnimationStep subStep) {
 		subSteps.remove(subStep);
 	}
 
