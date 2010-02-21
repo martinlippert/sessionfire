@@ -29,17 +29,16 @@ public class AnimationController {
 		return animationIterator.hasNext() || animationIterator.hasParent();
 	}
 
+	public boolean canGoBackward() {
+		return animationIterator.hasPrevious() || animationIterator.current() != null;
+	}
+	
 	public boolean canZoomIn() {
 		return animationIterator.hasChilds();
 	}
 
-	public boolean canGoBackward() {
-		return animationIterator.hasPrevious() || animationIterator.current() != null;
-	}
-
-	public Shape getLastFocussedShape() {
-		AnimationStep step = animationIterator.current();
-		return step != null ? step.getEndShape() : null;
+	public boolean canZoomOut() {
+		return animationIterator.hasParent();
 	}
 
 	public void forward() {
@@ -56,17 +55,7 @@ public class AnimationController {
 		
 		AnimationStep step = animationIterator.current();
 		Animator animator = step.getForwardAnimation(display);
-
-		if (currentAnimator != null && currentAnimator.isRunning()) {
-			currentAnimator.stop();
-		}
-
-		currentAnimator = animator;
-		if (currentAnimator != null) {
-			currentAnimator.start();
-		}
-
-//		updateSelection();
+		startNewAnimator(animator);
 	}
 
 	public void backward() {
@@ -80,20 +69,14 @@ public class AnimationController {
 		if (animationIterator.hasPrevious()) {
 			animationIterator.previous();
 		}
+		else if (animationIterator.hasParent()) {
+			animationIterator.backToParent();
+		}
 		else {
 			animationIterator = new AnimationStepIterator(presentation);
 		}
 
-		if (currentAnimator != null && currentAnimator.isRunning()) {
-			currentAnimator.stop();
-		}
-
-		currentAnimator = animator;
-		if (currentAnimator != null) {
-			currentAnimator.start();
-		}
-		
-//		updateSelection();
+		startNewAnimator(animator);
 	}
 
 	public void zoomIn() {
@@ -104,15 +87,15 @@ public class AnimationController {
 		animationIterator.intoChilds();
 		AnimationStep step = animationIterator.current();
 		Animator animator = step.getForwardAnimation(display);
+		startNewAnimator(animator);
+	}
+	
+	public void zoomOut() {
+	}
 
-		if (currentAnimator != null && currentAnimator.isRunning()) {
-			currentAnimator.stop();
-		}
-
-		currentAnimator = animator;
-		if (currentAnimator != null) {
-			currentAnimator.start();
-		}
+	public Shape getLastFocussedShape() {
+		AnimationStep step = animationIterator.current();
+		return step != null ? step.getEndShape() : null;
 	}
 
 	public int getNumberOfKeyFrames() {
@@ -125,26 +108,38 @@ public class AnimationController {
 		}
 		
 		animationIterator = new AnimationStepIterator(presentation);
-		for (int i = 0; i < keyframeNo - 1; i++) {
+		for (int i = -1; i < keyframeNo; i++) {
 			animationIterator.next();
 		}
 		
 		AnimationStep animationStep = animationIterator.current();
 		Animator animator = animationStep.getForwardAnimation(display);
-		
-		if (animator != null) {
-			if (currentAnimator != null && currentAnimator.isRunning()) {
-				currentAnimator.stop();
-			}
-			currentAnimator = animator;
-			currentAnimator.start();
-			
-//			updateSelection();
-		}
+		startNewAnimator(animator);
 	}
 
 	public void readjustSmoothlyTo(Shape focussedShape) {
-		// TODO: implement
+		if (focussedShape == null) {
+			reset();
+		}
+		else {
+			this.animationIterator = new AnimationStepIterator(presentation);
+			
+			AnimationStep foundStep = null;
+			AnimationStep lastStep = null;
+			AnimationStep currentStep = null;
+			
+			do {
+				this.animationIterator.nextIncludingChilds();
+
+				lastStep = currentStep;
+				currentStep = this.animationIterator.current();
+				if (currentStep.getEndShape() == focussedShape) {
+					Animator animator = currentStep.getForwardAnimation(display);
+					startNewAnimator(animator);
+					foundStep = currentStep;
+				}
+			} while (foundStep == null && lastStep != currentStep);
+		}
 	}
 
 	public void readjustDirectly() {
@@ -163,15 +158,17 @@ public class AnimationController {
 		Camera cameraStart = display.getCamera();
 		Camera cameraEnd = presentation.getFocussedCamera();
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(cameraStart, cameraEnd, display, null);
-		
-		if (animator != null) {
-			if (currentAnimator != null && currentAnimator.isRunning()) {
-				currentAnimator.stop();
-			}
-			currentAnimator = animator;
+		startNewAnimator(animator);
+	}
+	
+	protected void startNewAnimator(Animator animator) {
+		if (currentAnimator != null && currentAnimator.isRunning()) {
+			currentAnimator.stop();
+		}
+
+		currentAnimator = animator;
+		if (currentAnimator != null) {
 			currentAnimator.start();
-			
-//			updateSelection();
 		}
 	}
 

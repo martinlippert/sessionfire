@@ -52,6 +52,33 @@ public class AnimationStepIteratorFlatTest extends TestCase {
 		assertTrue(iter.hasPrevious());
 	}
 	
+	public void testIterateThroughLinearStepsUsingIncludingChilds() {
+		AnimationStep top = new AnimationStep(null, null);
+		
+		AnimationStep step1 = new AnimationStep(null, null);
+		AnimationStep step2 = new AnimationStep(null, null);
+		AnimationStep step3 = new AnimationStep(null, null);
+		
+		top.addAnimationStep(step1);
+		top.addAnimationStep(step2);
+		top.addAnimationStep(step3);
+		
+		AnimationStepIterator iter = new AnimationStepIterator(top);
+		
+		iter.nextIncludingChilds();
+		assertSame(step1, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(step2, iter.current());
+		
+		iter.previous();
+		assertSame(step1, iter.current());
+		
+		iter.nextIncludingChilds();
+		iter.nextIncludingChilds();
+		assertSame(step3, iter.current());
+	}
+	
 	public void testIterateFlatThroughHierarchicalSteps() {
 		AnimationStep top = new AnimationStep(null, null);
 		

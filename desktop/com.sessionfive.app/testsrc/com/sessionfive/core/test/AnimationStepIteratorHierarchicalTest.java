@@ -42,7 +42,7 @@ public class AnimationStepIteratorHierarchicalTest extends TestCase {
 		assertFalse(iter.hasParent());
 	}
 	
-	public void testIterateIntoTheChilds() {
+	public void testIterateIntoChilds() {
 		AnimationStep top = new AnimationStep(null, null);
 		AnimationStep child = new AnimationStep(null, null);
 		top.addAnimationStep(child);
@@ -76,6 +76,53 @@ public class AnimationStepIteratorHierarchicalTest extends TestCase {
 		assertFalse(iter.hasNext());
 		assertFalse(iter.hasChilds());
 		assertTrue(iter.hasParent());
+	}
+	
+	public void testIterateIntoChildsUsingIncludingChilds() {
+		AnimationStep top = new AnimationStep(null, null);
+		AnimationStep child = new AnimationStep(null, null);
+		top.addAnimationStep(child);
+		AnimationStep child2 = new AnimationStep(null, null);
+		child.addAnimationStep(child2);
+		AnimationStep child22 = new AnimationStep(null, null);
+		child.addAnimationStep(child22);
+		
+		AnimationStepIterator iter = new AnimationStepIterator(top);
+		
+		iter.nextIncludingChilds();
+		assertSame(child, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(child2, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(child22, iter.current());
+	}
+	
+	public void testIterateByIncludingChildsAndBacktracking() {
+		AnimationStep top = new AnimationStep(null, null);
+		AnimationStep child1 = new AnimationStep(null, null);
+		top.addAnimationStep(child1);
+		AnimationStep child2 = new AnimationStep(null, null);
+		top.addAnimationStep(child2);
+		AnimationStep child11 = new AnimationStep(null, null);
+		child1.addAnimationStep(child11);
+		AnimationStep child12 = new AnimationStep(null, null);
+		child1.addAnimationStep(child12);
+		
+		AnimationStepIterator iter = new AnimationStepIterator(top);
+		
+		iter.nextIncludingChilds();
+		assertSame(child1, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(child11, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(child12, iter.current());
+		
+		iter.nextIncludingChilds();
+		assertSame(child2, iter.current());
 	}
 	
 	public void testIterateIntoChildsAndBack() {

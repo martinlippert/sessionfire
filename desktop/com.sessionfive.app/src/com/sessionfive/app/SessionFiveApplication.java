@@ -152,6 +152,10 @@ public class SessionFiveApplication implements IApplication {
 						|| e.getKeyCode() == KeyEvent.VK_RIGHT
 						|| e.getKeyCode() == KeyEvent.VK_SPACE) {
 					animationController.forward();
+				} else if (e.getKeyChar() == '+' || e.getKeyChar() == '=') {
+					animationController.zoomIn();
+				} else if (e.getKeyChar() == '-') {
+					animationController.zoomOut();
 				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP
 						|| e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT
 						|| e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

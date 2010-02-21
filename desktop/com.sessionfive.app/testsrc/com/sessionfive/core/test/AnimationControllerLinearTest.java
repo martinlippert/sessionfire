@@ -89,5 +89,5 @@ public class AnimationControllerLinearTest extends TestCase {
 		assertFalse(controller.canGoBackward());
 		assertNull(controller.getLastFocussedShape());
 	}
-
+	
 }

@@ -37,6 +37,25 @@ public class AnimationStepIterator {
 		}
 	}
 	
+	public void nextIncludingChilds() {
+		if (hasChilds()) {
+			intoChilds();
+		}
+		else if (hasNext()) {
+			next();
+		}
+		else if (hasParent()) {
+			backToParent();
+			
+			while (!hasNext() && hasParent()) {
+				backToParent();
+			}
+			if (hasNext()) {
+				next();
+			}
+		}
+	}
+	
 	public void previousIncludingChilds() {
 		if (hasPrevious()) {
 			previous();

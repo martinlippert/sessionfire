@@ -90,6 +90,21 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 		assertTrue(controller.canZoomIn());
 	}
 	
+	public void testWalkBackOutOfGroupWithoutZommingOut() {
+		createHierarchicalStructure();
+		
+		controller.forward();
+		controller.zoomIn();
+		
+		assertSame(child11, controller.getLastFocussedShape());
+		controller.forward();
+		assertSame(child12, controller.getLastFocussedShape());
+		controller.backward();
+		assertSame(child11, controller.getLastFocussedShape());
+		controller.backward();
+		assertSame(top1, controller.getLastFocussedShape());
+	}
+	
 	private void createHierarchicalStructure() {
 		top1 = new ConcreteShape();
 		top2 = new AbstractShape();
