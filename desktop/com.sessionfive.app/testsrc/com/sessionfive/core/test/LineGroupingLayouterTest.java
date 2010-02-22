@@ -19,7 +19,7 @@ public class LineGroupingLayouterTest extends TestCase {
 		Presentation presentation = new Presentation();
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(0, presentation.getAnimationStepCount());
+		assertEquals(0, presentation.getTotalAnimationStepCount());
 	}
 	
 	public void testFlatShapeHierarchyAnimationCreation() {
@@ -34,13 +34,14 @@ public class LineGroupingLayouterTest extends TestCase {
 		
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(3, presentation.getAnimationStepCount());
-		assertSame(presentation, presentation.getAnimationStep(0).getStartShape());
-		assertSame(shape1, presentation.getAnimationStep(0).getEndShape());
-		assertSame(shape1, presentation.getAnimationStep(1).getStartShape());
-		assertSame(shape2, presentation.getAnimationStep(1).getEndShape());
-		assertSame(shape2, presentation.getAnimationStep(2).getStartShape());
-		assertSame(shape3, presentation.getAnimationStep(2).getEndShape());
+		assertEquals(3, presentation.getTotalAnimationStepCount());
+		List<AnimationStep> steps = presentation.getAnimationSteps();
+		assertSame(presentation,steps.get(0).getStartShape());
+		assertSame(shape1, steps.get(0).getEndShape());
+		assertSame(shape1, steps.get(1).getStartShape());
+		assertSame(shape2, steps.get(1).getEndShape());
+		assertSame(shape2, steps.get(2).getStartShape());
+		assertSame(shape3, steps.get(2).getEndShape());
 	}
 	
 	public void testDeepShapeHierarchyAnimationCreation() {
@@ -63,15 +64,18 @@ public class LineGroupingLayouterTest extends TestCase {
 		
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(3, presentation.getAnimationStepCount());
-		assertSame(presentation, presentation.getAnimationStep(0).getStartShape());
-		assertSame(top1, presentation.getAnimationStep(0).getEndShape());
-		assertSame(top1, presentation.getAnimationStep(1).getStartShape());
-		assertSame(child21, presentation.getAnimationStep(1).getEndShape());
-		assertSame(child21, presentation.getAnimationStep(2).getStartShape());
-		assertSame(top3, presentation.getAnimationStep(2).getEndShape());
+		assertEquals(5, presentation.getTotalAnimationStepCount());
+
+		List<AnimationStep> steps = presentation.getAnimationSteps();
+		assertEquals(3, steps.size());
+		assertSame(presentation, steps.get(0).getStartShape());
+		assertSame(top1, steps.get(0).getEndShape());
+		assertSame(top1, steps.get(1).getStartShape());
+		assertSame(child21, steps.get(1).getEndShape());
+		assertSame(child21, steps.get(2).getStartShape());
+		assertSame(top3, steps.get(2).getEndShape());
 		
-		AnimationStep step1 = presentation.getAnimationStep(0);
+		AnimationStep step1 = steps.get(0);
 		List<AnimationStep> zoomSteps1 = step1.getAnimationSteps();
 		assertEquals(2, zoomSteps1.size());
 		assertSame(top1, zoomSteps1.get(0).getStartShape());
@@ -79,11 +83,11 @@ public class LineGroupingLayouterTest extends TestCase {
 		assertSame(child11, zoomSteps1.get(1).getStartShape());
 		assertSame(child12, zoomSteps1.get(1).getEndShape());
 
-		AnimationStep step2 = presentation.getAnimationStep(1);
+		AnimationStep step2 = steps.get(1);
 		List<AnimationStep> zoomSteps2 = step2.getAnimationSteps();
 		assertEquals(0, zoomSteps2.size());
 	
-		AnimationStep step3 = presentation.getAnimationStep(2);
+		AnimationStep step3 = steps.get(2);
 		List<AnimationStep> zoomSteps3 = step3.getAnimationSteps();
 		assertEquals(0, zoomSteps3.size());
 	}

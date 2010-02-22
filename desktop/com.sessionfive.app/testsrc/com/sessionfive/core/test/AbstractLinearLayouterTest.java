@@ -1,7 +1,10 @@
 package com.sessionfive.core.test;
 
+import java.util.List;
+
 import com.sessionfive.animation.GoToAnimationStyle;
 import com.sessionfive.core.AbstractShape;
+import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -16,7 +19,7 @@ public class AbstractLinearLayouterTest extends TestCase {
 		Presentation presentation = new Presentation();
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(0, presentation.getAnimationStepCount());
+		assertEquals(0, presentation.getTotalAnimationStepCount());
 	}
 	
 	public void testFlatShapeHierarchyAnimationCreation() {
@@ -31,13 +34,14 @@ public class AbstractLinearLayouterTest extends TestCase {
 		
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(3, presentation.getAnimationStepCount());
-		assertSame(presentation, presentation.getAnimationStep(0).getStartShape());
-		assertSame(shape1, presentation.getAnimationStep(0).getEndShape());
-		assertSame(shape1, presentation.getAnimationStep(1).getStartShape());
-		assertSame(shape2, presentation.getAnimationStep(1).getEndShape());
-		assertSame(shape2, presentation.getAnimationStep(2).getStartShape());
-		assertSame(shape3, presentation.getAnimationStep(2).getEndShape());
+		assertEquals(3, presentation.getTotalAnimationStepCount());
+		List<AnimationStep> steps = presentation.getAnimationSteps();
+		assertSame(presentation, steps.get(0).getStartShape());
+		assertSame(shape1, steps.get(0).getEndShape());
+		assertSame(shape1, steps.get(1).getStartShape());
+		assertSame(shape2, steps.get(1).getEndShape());
+		assertSame(shape2, steps.get(2).getStartShape());
+		assertSame(shape3, steps.get(2).getEndShape());
 	}
 	
 	public void testDeepShapeHierarchyAnimationCreation() {
@@ -60,17 +64,18 @@ public class AbstractLinearLayouterTest extends TestCase {
 		
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
-		assertEquals(5, presentation.getAnimationStepCount());
-		assertSame(presentation, presentation.getAnimationStep(0).getStartShape());
-		assertSame(top1, presentation.getAnimationStep(0).getEndShape());
-		assertSame(top1, presentation.getAnimationStep(1).getStartShape());
-		assertSame(child11, presentation.getAnimationStep(1).getEndShape());
-		assertSame(child11, presentation.getAnimationStep(2).getStartShape());
-		assertSame(child12, presentation.getAnimationStep(2).getEndShape());
-		assertSame(child12, presentation.getAnimationStep(3).getStartShape());
-		assertSame(child21, presentation.getAnimationStep(3).getEndShape());
-		assertSame(child21, presentation.getAnimationStep(4).getStartShape());
-		assertSame(top3, presentation.getAnimationStep(4).getEndShape());
+		assertEquals(5, presentation.getTotalAnimationStepCount());
+		List<AnimationStep> steps = presentation.getAnimationSteps();
+		assertSame(presentation, steps.get(0).getStartShape());
+		assertSame(top1, steps.get(0).getEndShape());
+		assertSame(top1, steps.get(1).getStartShape());
+		assertSame(child11, steps.get(1).getEndShape());
+		assertSame(child11, steps.get(2).getStartShape());
+		assertSame(child12, steps.get(2).getEndShape());
+		assertSame(child12, steps.get(3).getStartShape());
+		assertSame(child21, steps.get(3).getEndShape());
+		assertSame(child21, steps.get(4).getStartShape());
+		assertSame(top3, steps.get(4).getEndShape());
 	}
 	
 	protected static class ConcreteLinearLayouter extends AbstractLinearLayouter {

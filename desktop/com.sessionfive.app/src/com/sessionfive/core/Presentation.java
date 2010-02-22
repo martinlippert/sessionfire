@@ -117,14 +117,6 @@ public class Presentation implements Focusable, ShapeChangedListener, AnimationS
 		firePresentationChanged();
 	}
 
-	public int getAnimationStepCount() {
-		return animations.size();
-	}
-
-	public AnimationStep getAnimationStep(int index) {
-		return animations.get(index);
-	}
-
 	public void addAnimationStep(AnimationStep animation) {
 		animations.add(animation);
 	}
@@ -140,6 +132,22 @@ public class Presentation implements Focusable, ShapeChangedListener, AnimationS
 	@Override
 	public List<AnimationStep> getAnimationSteps() {
 		return animations;
+	}
+
+	public int getTotalAnimationStepCount() {
+		return getTotalAnimationStepCountRecursively(this.animations);
+	}
+
+	private int getTotalAnimationStepCountRecursively(
+			List<AnimationStep> animationSteps) {
+		int count = animationSteps.size();
+		Iterator<AnimationStep> iter = animationSteps.iterator();
+		while (iter.hasNext()) {
+			AnimationStep step = iter.next();
+			List<AnimationStep> childSteps = step.getAnimationSteps();
+			count += getTotalAnimationStepCountRecursively(childSteps);
+		}
+		return count;
 	}
 
 	@Override

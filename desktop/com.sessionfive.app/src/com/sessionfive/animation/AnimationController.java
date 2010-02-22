@@ -99,7 +99,7 @@ public class AnimationController {
 	}
 
 	public int getNumberOfKeyFrames() {
-		return presentation.getAnimationStepCount();
+		return presentation.getTotalAnimationStepCount();
 	}
 	
 	public void goToKeyframeNo(int keyframeNo) {
@@ -109,7 +109,7 @@ public class AnimationController {
 		
 		animationIterator = new AnimationStepIterator(presentation);
 		for (int i = -1; i < keyframeNo; i++) {
-			animationIterator.next();
+			animationIterator.nextIncludingChilds();
 		}
 		
 		AnimationStep animationStep = animationIterator.current();

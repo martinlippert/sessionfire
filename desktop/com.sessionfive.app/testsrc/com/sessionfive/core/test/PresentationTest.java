@@ -9,7 +9,7 @@ public class PresentationTest extends TestCase {
 	
 	public void testSimplePresentation() {
 		Presentation presentation = new Presentation();
-		assertEquals(0, presentation.getAnimationStepCount());
+		assertEquals(0, presentation.getTotalAnimationStepCount());
 		assertEquals(0, presentation.getShapes(LayerType.CAMERA_ANIMATED).size());
 	}
 	

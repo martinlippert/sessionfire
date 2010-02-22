@@ -35,6 +35,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.AnimationStep;
+import com.sessionfive.core.AnimationStepIterator;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
@@ -353,14 +354,19 @@ public class SessionFiveApplication implements IApplication {
 
 		Display offscreenDisplay = new Display(presentation);
 
-		boolean alpha;
-		if (parsedNumber >= 0 && parsedNumber < presentation.getAnimationStepCount()) {
-			AnimationStep animation = presentation.getAnimationStep(parsedNumber);
-			animation.directlyGoTo(offscreenDisplay);
-			alpha = true;
+		boolean alpha = false;
+		if (parsedNumber >= 0 && parsedNumber < presentation.getTotalAnimationStepCount()) {
+			AnimationStepIterator stepIterator = new AnimationStepIterator(presentation);
+			for (int i = -1; i < parsedNumber; i++) {
+				stepIterator.nextIncludingChilds();
+			}
+			AnimationStep animation = stepIterator.current();
+			if (animation != null) {
+				animation.directlyGoTo(offscreenDisplay);
+				alpha = true;
+			}
 		} else {
 			offscreenDisplay.setCamera(presentation.getStartCamera());
-			alpha = false;
 		}
 
 		pbuffer.addGLEventListener(offscreenDisplay);
