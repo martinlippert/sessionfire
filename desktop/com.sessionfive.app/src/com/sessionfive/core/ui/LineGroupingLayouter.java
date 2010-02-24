@@ -3,16 +3,12 @@ package com.sessionfive.core.ui;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sessionfive.core.AbstractShape;
-import com.sessionfive.core.AnimationStep;
-import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
-import com.sessionfive.core.Focusable;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class LineGroupingLayouter extends AbstractLinearLayouter {
+public class LineGroupingLayouter extends AbstractGroupingLayouter {
 
 	private static final String NAME = "Line Grouping";
 
@@ -27,6 +23,7 @@ public class LineGroupingLayouter extends AbstractLinearLayouter {
 		presentation.setDefaultStartCamera(newStartCamera);
 
 		float space = presentation.getSpace() * 2f;
+		float childSpace = space;
 		float x = -space;
 		float z = 0f;
 
@@ -43,8 +40,12 @@ public class LineGroupingLayouter extends AbstractLinearLayouter {
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
 				child.setPosition(0, childY, childZ);
-				childY -= space;
+				childY -= childSpace;
 				childZ += 0.01f;
+			}
+			
+			if (childs.size() > 0) {
+				childSpace *= -1;
 			}
 			
 			x += space;
@@ -52,61 +53,4 @@ public class LineGroupingLayouter extends AbstractLinearLayouter {
 		}
 	}
 	
-	@Override
-	public void animate(Presentation presentation, AnimationStyle animationStyle) {
-
-		presentation.removeAllAnimationSteps();
-
-		Focusable animationStart = presentation;
-		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
-		Iterator<Shape> iter = shapes.iterator();
-		while (iter.hasNext()) {
-			Shape shape = iter.next();
-			
-			int startWithChildNo = 0;
-			AnimationStep step = null;
-			if (shape.getClass() != AbstractShape.class) {
-				step = new AnimationStep(animationStart, shape);
-				step.setStyle(animationStyle);
-				presentation.addAnimationStep(step);
-				animationStart = shape;
-			}
-			else {
-				List<Shape> childs = shape.getShapes();
-				if (childs.size() > 0) {
-					Shape firstChild = childs.get(0);
-					step = new AnimationStep(animationStart, firstChild);
-					step.setStyle(animationStyle);
-					presentation.addAnimationStep(step);
-					animationStart = firstChild;
-					startWithChildNo = 1;
-				}
-			}
-			
-			Focusable subStart = animationStart;
-			List<Shape> childs = shape.getShapes();
-			for(int i = startWithChildNo; i < childs.size(); i++) {
-				Shape child = childs.get(i);
-				
-				AnimationStep subStep = new AnimationStep(subStart, child);
-				subStep.setStyle(animationStyle);
-				
-				step.addAnimationStep(subStep);
-				subStart = child;
-			}
-		}
-	}
-
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof LineGroupingLayouter))
-			return false;
-		return toString().equals(obj.toString());
-	}
-
 }

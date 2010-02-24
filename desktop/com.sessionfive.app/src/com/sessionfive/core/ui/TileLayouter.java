@@ -61,16 +61,4 @@ public class TileLayouter extends AbstractLinearLayouter {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TileLayouter))
-			return false;
-		return toString().equals(obj.toString());
-	}
-
 }

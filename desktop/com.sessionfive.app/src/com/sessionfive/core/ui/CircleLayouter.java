@@ -53,16 +53,4 @@ public class CircleLayouter extends AbstractLinearLayouter {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof CircleLayouter))
-			return false;
-		return toString().equals(obj.toString());
-	}
-
 }

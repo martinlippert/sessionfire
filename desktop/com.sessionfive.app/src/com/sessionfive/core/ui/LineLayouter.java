@@ -39,16 +39,4 @@ public class LineLayouter extends AbstractLinearLayouter {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof LineLayouter))
-			return false;
-		return toString().equals(obj.toString());
-	}
-
 }

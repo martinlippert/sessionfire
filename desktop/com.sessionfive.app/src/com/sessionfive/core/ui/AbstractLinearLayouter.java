@@ -8,8 +8,8 @@ import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public abstract class AbstractLinearLayouter implements Layouter {
-
+public abstract class AbstractLinearLayouter extends AbstractLayouter {
+	
 	@Override
 	public void animate(Presentation presentation, AnimationStyle animationStyle) {
 
