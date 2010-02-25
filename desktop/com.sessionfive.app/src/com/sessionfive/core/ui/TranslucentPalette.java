@@ -102,6 +102,7 @@ public class TranslucentPalette extends JWindow {
 
 		embeddedContentPane = new JPanel();
 		embeddedContentPane.setOpaque(false);
+		embeddedContentPane.setDoubleBuffered(false);
 		
 		titleLabel = new JLabel(title, JLabel.CENTER);
 		titleLabel.setForeground(Color.WHITE);
@@ -251,6 +252,7 @@ public class TranslucentPalette extends JWindow {
 	private JComponent createBottomPane() {
 		JPanel result = new JPanel();
 		result.setOpaque(false);
+		result.setDoubleBuffered(false);
 		result.setLayout(new BorderLayout());
 		result.add(resizeLabel, BorderLayout.EAST);
 		result.add(statusLine, BorderLayout.WEST);

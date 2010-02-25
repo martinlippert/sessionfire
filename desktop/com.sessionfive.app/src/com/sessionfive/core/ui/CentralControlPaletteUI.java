@@ -142,6 +142,7 @@ public class CentralControlPaletteUI {
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
 		subContentPane.setOpaque(false);
+		subContentPane.setDoubleBuffered(false);
 
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
 		contentPane.add(subContentPane, BorderLayout.NORTH);

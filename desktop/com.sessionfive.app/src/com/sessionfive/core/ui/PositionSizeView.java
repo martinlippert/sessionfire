@@ -121,6 +121,7 @@ public class PositionSizeView extends AbstractView {
 
 		JPanel panel = new JPanel(layout);
 		panel.setOpaque(false);
+		panel.setDoubleBuffered(false);
 		CellConstraints cc = new CellConstraints();
 
 		panel.add(HudWidgetFactory.createHudLabel("X"), cc.xy(1, 1));

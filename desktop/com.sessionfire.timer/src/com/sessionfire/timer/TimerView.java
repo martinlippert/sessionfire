@@ -42,11 +42,13 @@ public class TimerView extends JPanel implements View, ShowsHelp, TimerListener 
 		CellConstraints cc = new CellConstraints();
 		JPanel subContentPane = new JPanel(layout);
 		subContentPane.setOpaque(false);
+		subContentPane.setDoubleBuffered(false);
 
 		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
 		add(subContentPane, BorderLayout.CENTER);
 
 		setOpaque(false);
+		setDoubleBuffered(false);
 
 		time = HudWidgetFactory.createHudTextField("0:20");
 		defaultForeground = time.getForeground();
