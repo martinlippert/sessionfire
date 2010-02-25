@@ -49,14 +49,13 @@ public class CentralControlPalette {
 
 	public void changeLayout(Layouter layouter, AnimationStyle animationStyle) {
 		Shape focussedShape = animationController.getLastFocussedShape();
-		
+
 		layouter.layout(presentation);
 		layouter.animate(presentation, animationStyle);
-		
+
 		presentation.setDefaultLayouter(layouter);
 		presentation.resetStartCamera();
-		animationController
-				.readjustSmoothlyTo(focussedShape);
+		animationController.readjustSmoothlyTo(focussedShape);
 	}
 
 	public void changeAnimation(Layouter layouter, AnimationStyle animationStyle) {
@@ -70,7 +69,8 @@ public class CentralControlPalette {
 
 	public Layouter[] getLayouter() {
 		return new Layouter[] { new LineLayouter(), new TileLayouter(),
-				new CircleLayouter(), new LineGroupingLayouter() };
+				new CircleLayouter(), new LineGroupingLayouter(),
+				new SphereGroupingLayouter() };
 	}
 
 	public AnimationStyle[] getAnimationStyles() {
