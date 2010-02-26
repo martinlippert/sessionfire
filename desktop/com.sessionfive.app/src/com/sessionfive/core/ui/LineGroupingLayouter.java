@@ -32,14 +32,18 @@ public class LineGroupingLayouter extends AbstractGroupingLayouter {
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
 			shape.setPosition(x, 10, z);
+			resizeToDefault(shape);
 			
 			float childY = 0;
 			float childZ = 0;
 			List<Shape> childs = shape.getShapes();
 			Iterator<Shape> childIter = childs.iterator();
+			
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
 				child.setPosition(0, childY, childZ);
+				resizeToDefault(child);
+
 				childY -= childSpace;
 				childZ += 0.01f;
 			}

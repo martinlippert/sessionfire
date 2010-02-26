@@ -46,6 +46,7 @@ public class TileLayouter extends AbstractLinearLayouter {
 			}
 			else {
 				shape.setPosition(x, y, z);
+				resizeToDefault(shape);
 	
 				x += space;
 				z += 0.01f;

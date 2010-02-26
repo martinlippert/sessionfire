@@ -48,6 +48,7 @@ public class CircleLayouter extends AbstractLinearLayouter {
 				float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / size)) * space;
 				z += 0.01f;
 				shape.setPosition(x, y, z);
+				resizeToDefault(shape);
 				i++;
 			}
 		}

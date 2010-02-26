@@ -33,6 +33,8 @@ public class LineLayouter extends AbstractLinearLayouter {
 			}
 			else {
 				shape.setPosition(x, 10, z);
+				resizeToDefault(shape);
+
 				x += space;
 				z += 0.01f;
 			}
