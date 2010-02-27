@@ -91,6 +91,14 @@ public class AnimationController {
 	}
 	
 	public void zoomOut() {
+		if (!canZoomOut()) {
+			return;
+		}
+		
+		animationIterator.backToParent();
+		AnimationStep step = animationIterator.current();
+		Animator animator = step.getForwardAnimation(display);
+		startNewAnimator(animator);
 	}
 
 	public Shape getLastFocussedShape() {
