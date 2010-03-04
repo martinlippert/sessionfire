@@ -59,8 +59,11 @@ public class CentralControlPalette {
 	}
 
 	public void changeAnimation(Layouter layouter, AnimationStyle animationStyle) {
+		Shape focussedShape = animationController.getLastFocussedShape();
+
 		presentation.setDefaultAnimation(animationStyle);
 		layouter.animate(presentation, animationStyle);
+		animationController.readjustSmoothlyTo(focussedShape);
 	}
 
 	public void setBackgroundColor(Color newColor) {

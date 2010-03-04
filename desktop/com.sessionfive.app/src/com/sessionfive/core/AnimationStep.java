@@ -13,15 +13,23 @@ public class AnimationStep implements AnimationStepContainer {
 	private final Focusable startShape;
 	private AnimationStyle style;
 
-	private List<AnimationStep> subSteps;
+	private AnimationStep previous;
+	private AnimationStep next;
+	private AnimationStep parent;
+	private AnimationStep child;
 
 	public AnimationStep(final Focusable startShape, final Shape endShape) {
 		this.startShape = startShape;
 		this.endShape = endShape;
 		this.style = null;
-		this.subSteps = new ArrayList<AnimationStep>();
 	}
 	
+	public AnimationStep() {
+		this.endShape = null;
+		this.startShape = null;
+		this.style = null;
+	}
+
 	public Focusable getStartShape() {
 		return startShape;
 	}
@@ -62,15 +70,75 @@ public class AnimationStep implements AnimationStepContainer {
 	}
 
 	public List<AnimationStep> getAnimationSteps() {
-		return subSteps;
+		ArrayList<AnimationStep> result = new ArrayList<AnimationStep>();
+		AnimationStep childStep = child;
+		while (childStep != null) {
+			result.add(childStep);
+			childStep = childStep.next;
+		}
+		return result;
 	}
 	
 	public void addAnimationStep(AnimationStep subStep) {
-		subSteps.add(subStep);
+		if (child == null) {
+			child = subStep;
+			subStep.previous = null;
+		}
+		else {
+			AnimationStep lastChild = child;
+			while (lastChild.next != null) {
+				lastChild = lastChild.next;
+			}
+			
+			lastChild.next = subStep;
+			subStep.previous = lastChild;
+		}
+		
+		subStep.setParent(this);
 	}
 	
-	public void removeAnimationStep(AnimationStep subStep) {
-		subSteps.remove(subStep);
+	public void setParent(AnimationStep parent) {
+		this.parent = parent;
+	}
+
+	public AnimationStep getPreviousStep() {
+		return previous;
+	}
+
+	public AnimationStep getNextStep() {
+		return next;
+	}
+	
+	public AnimationStep getParentStep() {
+		return parent;
+	}
+
+	public AnimationStep getChild() {
+		return child;
+	}
+	
+	public void setNext(AnimationStep step) {
+		this.next = step;
+		step.previous = this;
+	}
+	
+	public void setChild(AnimationStep step) {
+	}
+
+	public boolean hasNext() {
+		return next != null;
+	}
+
+	public boolean hasPrevious() {
+		return previous != null;
+	}
+	
+	public boolean hasChild() {
+		return child != null;
+	}
+	
+	public boolean hasParent() {
+		return parent != null;
 	}
 
 }

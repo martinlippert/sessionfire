@@ -7,21 +7,20 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
 import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
 import com.sessionfive.shapes.TitleShape;
 
-public class Presentation implements Focusable, ShapeChangedListener, AnimationStepContainer {
+public class Presentation implements Focusable, ShapeChangedListener {
 
 	public static final int DEFAULT_SPACE = 25;
 	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
 
 	private Camera startCamera;
-	private List<AnimationStep> animations;
 	private Map<LayerType, Layer> layers;
+	private AnimationStep firstAnimationStep;
 	private Color backgroundColor;
 	private TitleShape titleShape;
 	private String path;
@@ -36,7 +35,7 @@ public class Presentation implements Focusable, ShapeChangedListener, AnimationS
 	private Camera defaultStartCamera;
 
 	public Presentation() {
-		animations = new CopyOnWriteArrayList<AnimationStep>();
+		firstAnimationStep = null;
 		startCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		defaultStartCamera = new Camera(0, 0, 0, 0, 0, 0, 0, 1, 0);
 		backgroundColor = Color.BLACK;
@@ -118,36 +117,40 @@ public class Presentation implements Focusable, ShapeChangedListener, AnimationS
 	}
 
 	public void addAnimationStep(AnimationStep animation) {
-		animations.add(animation);
-	}
-
-	public void removeAnimationStep(AnimationStep animation) {
-		animations.remove(animation);
+		if (this.firstAnimationStep == null) {
+			this.firstAnimationStep = animation;
+			animation.setParent(null);
+		}
+		else {
+			AnimationStep lastStep = this.firstAnimationStep;
+			while (lastStep.getNextStep() != null) {
+				lastStep = lastStep.getNextStep();
+			}
+			lastStep.setNext(animation);
+		}
 	}
 
 	public void removeAllAnimationSteps() {
-		animations.clear();
-	}
-
-	@Override
-	public List<AnimationStep> getAnimationSteps() {
-		return animations;
+		firstAnimationStep = null;
 	}
 
 	public int getTotalAnimationStepCount() {
-		return getTotalAnimationStepCountRecursively(this.animations);
+		return getTotalAnimationStepCountRecursively(this.firstAnimationStep);
 	}
 
 	private int getTotalAnimationStepCountRecursively(
-			List<AnimationStep> animationSteps) {
-		int count = animationSteps.size();
-		Iterator<AnimationStep> iter = animationSteps.iterator();
-		while (iter.hasNext()) {
-			AnimationStep step = iter.next();
-			List<AnimationStep> childSteps = step.getAnimationSteps();
-			count += getTotalAnimationStepCountRecursively(childSteps);
+			AnimationStep animationStep) {
+		int result = 0;
+		while (animationStep != null) {
+			result++;
+			result += getTotalAnimationStepCountRecursively(animationStep.getChild());
+			animationStep = animationStep.getNextStep();
 		}
-		return count;
+		return result;
+	}
+	
+	public AnimationStep getFirstAnimationStep() {
+		return firstAnimationStep;
 	}
 
 	@Override

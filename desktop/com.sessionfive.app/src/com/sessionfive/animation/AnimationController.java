@@ -4,7 +4,6 @@ import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AnimationStep;
-import com.sessionfive.core.AnimationStepIterator;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -15,30 +14,43 @@ public class AnimationController {
 
 	private Display display;
 	private Presentation presentation;
-	
-	private AnimationStepIterator animationIterator;
-	
+
+	private AnimationStep currentAnimationStep;
+	private boolean autoZoomIn;
+
 	public void init(Presentation presentation, Display display) {
 		this.presentation = presentation;
 		this.display = display;
-		
-		this.animationIterator = new AnimationStepIterator(presentation);
+
+		this.currentAnimationStep = null;
 	}
 
 	public boolean canGoForward() {
-		return animationIterator.hasNext() || animationIterator.hasParent();
+		if (currentAnimationStep == null) {
+			return presentation.getTotalAnimationStepCount() > 0;
+		}
+		else if (autoZoomIn && currentAnimationStep.hasChild()) {
+			return true;
+		}
+		else {
+			AnimationStep step = currentAnimationStep;
+			while (step != null && !step.hasNext() && step.hasParent()) {
+				step = step.getParentStep();
+			}
+			return step != null && step.hasNext();
+		}
 	}
 
 	public boolean canGoBackward() {
-		return animationIterator.hasPrevious() || animationIterator.current() != null;
+		return currentAnimationStep != null;
 	}
-	
+
 	public boolean canZoomIn() {
-		return animationIterator.hasChilds();
+		return currentAnimationStep != null && currentAnimationStep.hasChild();
 	}
 
 	public boolean canZoomOut() {
-		return animationIterator.hasParent();
+		return currentAnimationStep != null && currentAnimationStep.hasParent();
 	}
 
 	public void forward() {
@@ -46,16 +58,27 @@ public class AnimationController {
 			return;
 		}
 
-		while (!animationIterator.hasNext() && animationIterator.hasParent()) {
-			animationIterator.backToParent();
+		if (autoZoomIn && canZoomIn()) {
+			zoomIn();
+		} else {
+			if (currentAnimationStep == null) {
+				currentAnimationStep = presentation.getFirstAnimationStep();
+			}
+			else {
+				while (!currentAnimationStep.hasNext()
+						&& currentAnimationStep.hasParent()) {
+					currentAnimationStep = currentAnimationStep.getParentStep();
+				}
+	
+				if (currentAnimationStep.hasNext()) {
+					currentAnimationStep = currentAnimationStep.getNextStep();
+				}
+			}
+				
+			Animator animator = currentAnimationStep
+					.getForwardAnimation(display);
+			startNewAnimator(animator);
 		}
-		if (animationIterator.hasNext()) {
-			animationIterator.next();
-		}
-		
-		AnimationStep step = animationIterator.current();
-		Animator animator = step.getForwardAnimation(display);
-		startNewAnimator(animator);
 	}
 
 	public void backward() {
@@ -63,17 +86,23 @@ public class AnimationController {
 			return;
 		}
 
-		AnimationStep step = animationIterator.current();
-		Animator animator = step.getBackwardAnimation(display);
-		
-		if (animationIterator.hasPrevious()) {
-			animationIterator.previous();
-		}
-		else if (animationIterator.hasParent()) {
-			animationIterator.backToParent();
-		}
-		else {
-			animationIterator = new AnimationStepIterator(presentation);
+		Animator animator = currentAnimationStep.getBackwardAnimation(display);
+
+		if (currentAnimationStep.hasPrevious()) {
+			currentAnimationStep = currentAnimationStep.getPreviousStep();
+
+			if (autoZoomIn) {
+				while (currentAnimationStep.hasChild()) {
+					currentAnimationStep = currentAnimationStep.getChild();
+					while (currentAnimationStep.hasNext()) {
+						currentAnimationStep = currentAnimationStep.getNextStep();
+					}
+				}
+			}
+		} else if (currentAnimationStep.hasParent()) {
+			currentAnimationStep = currentAnimationStep.getParentStep();
+		} else {
+			currentAnimationStep = null;
 		}
 
 		startNewAnimator(animator);
@@ -83,92 +112,120 @@ public class AnimationController {
 		if (!canZoomIn()) {
 			return;
 		}
-		
-		animationIterator.intoChilds();
-		AnimationStep step = animationIterator.current();
-		Animator animator = step.getForwardAnimation(display);
+
+		currentAnimationStep = currentAnimationStep.getChild();
+		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		startNewAnimator(animator);
 	}
-	
+
 	public void zoomOut() {
 		if (!canZoomOut()) {
 			return;
 		}
-		
-		animationIterator.backToParent();
-		AnimationStep step = animationIterator.current();
-		Animator animator = step.getForwardAnimation(display);
+
+		currentAnimationStep = currentAnimationStep.getParentStep();
+		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		startNewAnimator(animator);
 	}
 
 	public Shape getLastFocussedShape() {
-		AnimationStep step = animationIterator.current();
-		return step != null ? step.getEndShape() : null;
+		return currentAnimationStep != null ? currentAnimationStep
+				.getEndShape() : null;
 	}
 
 	public int getNumberOfKeyFrames() {
 		return presentation.getTotalAnimationStepCount();
 	}
-	
+
 	public void goToKeyframeNo(int keyframeNo) {
 		if (keyframeNo < 0 || keyframeNo >= getNumberOfKeyFrames()) {
 			return;
 		}
-		
-		animationIterator = new AnimationStepIterator(presentation);
-		for (int i = -1; i < keyframeNo; i++) {
-			animationIterator.nextIncludingChilds();
+
+		currentAnimationStep = presentation.getFirstAnimationStep();
+		int counter = 0;
+		while (counter < keyframeNo) {
+			if (currentAnimationStep.hasChild()) {
+				currentAnimationStep = currentAnimationStep.getChild();
+			}
+			else if (currentAnimationStep.hasNext()) {
+				currentAnimationStep = currentAnimationStep.getNextStep();
+			}
+			else if (currentAnimationStep.hasParent()) {
+				currentAnimationStep = currentAnimationStep.getParentStep();
+				
+				while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
+					currentAnimationStep = currentAnimationStep.getParentStep();
+				}
+				if (currentAnimationStep.hasNext()) {
+					currentAnimationStep = currentAnimationStep.getNextStep();
+				}
+			}
+			counter++;
 		}
-		
-		AnimationStep animationStep = animationIterator.current();
-		Animator animator = animationStep.getForwardAnimation(display);
+
+		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		startNewAnimator(animator);
 	}
 
 	public void readjustSmoothlyTo(Shape focussedShape) {
 		if (focussedShape == null) {
 			reset();
-		}
-		else {
-			this.animationIterator = new AnimationStepIterator(presentation);
+		} else {
 			
-			AnimationStep foundStep = null;
-			AnimationStep lastStep = null;
-			AnimationStep currentStep = null;
-			
-			do {
-				this.animationIterator.nextIncludingChilds();
-
-				lastStep = currentStep;
-				currentStep = this.animationIterator.current();
-				if (currentStep.getEndShape() == focussedShape) {
-					Animator animator = currentStep.getForwardAnimation(display);
-					startNewAnimator(animator);
-					foundStep = currentStep;
+			currentAnimationStep = presentation.getFirstAnimationStep();
+			while (currentAnimationStep != null && currentAnimationStep.getEndShape() != focussedShape) {
+				if (currentAnimationStep.hasChild()) {
+					currentAnimationStep = currentAnimationStep.getChild();
 				}
-			} while (foundStep == null && lastStep != currentStep);
+				else if (currentAnimationStep.hasNext()) {
+					currentAnimationStep = currentAnimationStep.getNextStep();
+				}
+				else if (currentAnimationStep.hasParent()) {
+					currentAnimationStep = currentAnimationStep.getParentStep();
+					
+					while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
+						currentAnimationStep = currentAnimationStep.getParentStep();
+					}
+					if (currentAnimationStep.hasNext()) {
+						currentAnimationStep = currentAnimationStep.getNextStep();
+					}
+				}
+			}
+			
+			if (currentAnimationStep != null) {
+				Animator animator = currentAnimationStep.getForwardAnimation(display);
+				startNewAnimator(animator);
+			}
 		}
 	}
 
 	public void readjustDirectly() {
-		AnimationStep currentStep = animationIterator.current();
-		if (currentStep != null) {
-			currentStep.directlyGoTo(display);
-		}
-		else {
+		if (currentAnimationStep != null) {
+			currentAnimationStep.directlyGoTo(display);
+		} else {
 			display.setCamera(presentation.getFocussedCamera());
 		}
 	}
-	
+
 	public void reset() {
-		this.animationIterator = new AnimationStepIterator(presentation);
+		this.currentAnimationStep = null;
 
 		Camera cameraStart = display.getCamera();
 		Camera cameraEnd = presentation.getFocussedCamera();
-		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(cameraStart, cameraEnd, display, null);
+		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
+				cameraStart, cameraEnd, display, null);
 		startNewAnimator(animator);
 	}
-	
+
+	public boolean isAutoZoomIn() {
+		return autoZoomIn;
+	}
+
+	public void setAutoZoomIn(boolean autoZoomIn) {
+		this.autoZoomIn = autoZoomIn;
+	}
+
 	protected void startNewAnimator(Animator animator) {
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.stop();
@@ -180,19 +237,19 @@ public class AnimationController {
 		}
 	}
 
-/*	
-	protected void updateSelection() {
-		Integer level1 = this.animationState.get(0);
-		if (level1 == -1) {
-			Shape[] allShapes = presentation.getShapes(LayerType.CAMERA_ANIMATED).toArray(new Shape[0]);
-			SessionFiveApplication.getInstance().getSelectionService().setSelection(allShapes);
-		}
-		else {
-			Shape currentFocussedShape = presentation.getShapes(LayerType.CAMERA_ANIMATED).get(level1);
-			SessionFiveApplication.getInstance().getSelectionService().setSelection(new Shape[] {currentFocussedShape});
-		}
-		
-	}
-*/
+	/*
+	 * protected void updateSelection() { Integer level1 =
+	 * this.animationState.get(0); if (level1 == -1) { Shape[] allShapes =
+	 * presentation.getShapes(LayerType.CAMERA_ANIMATED).toArray(new Shape[0]);
+	 * SessionFiveApplication
+	 * .getInstance().getSelectionService().setSelection(allShapes); } else {
+	 * Shape currentFocussedShape =
+	 * presentation.getShapes(LayerType.CAMERA_ANIMATED).get(level1);
+	 * SessionFiveApplication
+	 * .getInstance().getSelectionService().setSelection(new Shape[]
+	 * {currentFocussedShape}); }
+	 * 
+	 * }
+	 */
 
 }

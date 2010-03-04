@@ -1,7 +1,5 @@
 package com.sessionfive.core.test;
 
-import java.util.List;
-
 import junit.framework.TestCase;
 
 import com.sessionfive.animation.GoToAnimationStyle;
@@ -35,13 +33,15 @@ public class LineGroupingLayouterTest extends TestCase {
 		layouter.animate(presentation, new GoToAnimationStyle());
 		
 		assertEquals(3, presentation.getTotalAnimationStepCount());
-		List<AnimationStep> steps = presentation.getAnimationSteps();
-		assertSame(presentation,steps.get(0).getStartShape());
-		assertSame(shape1, steps.get(0).getEndShape());
-		assertSame(shape1, steps.get(1).getStartShape());
-		assertSame(shape2, steps.get(1).getEndShape());
-		assertSame(shape2, steps.get(2).getStartShape());
-		assertSame(shape3, steps.get(2).getEndShape());
+		AnimationStep step = presentation.getFirstAnimationStep();
+		assertSame(presentation,step.getStartShape());
+		assertSame(shape1, step.getEndShape());
+		step = step.getNextStep();
+		assertSame(shape1, step.getStartShape());
+		assertSame(shape2, step.getEndShape());
+		step = step.getNextStep();
+		assertSame(shape2, step.getStartShape());
+		assertSame(shape3, step.getEndShape());
 	}
 	
 	public void testDeepShapeHierarchyAnimationCreation() {
@@ -66,30 +66,32 @@ public class LineGroupingLayouterTest extends TestCase {
 		
 		assertEquals(5, presentation.getTotalAnimationStepCount());
 
-		List<AnimationStep> steps = presentation.getAnimationSteps();
-		assertEquals(3, steps.size());
-		assertSame(presentation, steps.get(0).getStartShape());
-		assertSame(top1, steps.get(0).getEndShape());
-		assertSame(top1, steps.get(1).getStartShape());
-		assertSame(child21, steps.get(1).getEndShape());
-		assertSame(child21, steps.get(2).getStartShape());
-		assertSame(top3, steps.get(2).getEndShape());
+		AnimationStep step = presentation.getFirstAnimationStep();
+		assertSame(presentation, step.getStartShape());
+		assertSame(top1, step.getEndShape());
+		step = step.getNextStep();
+		assertSame(top1, step.getStartShape());
+		assertSame(child21, step.getEndShape());
+		step = step.getNextStep();
+		assertSame(child21, step.getStartShape());
+		assertSame(top3, step.getEndShape());
 		
-		AnimationStep step1 = steps.get(0);
-		List<AnimationStep> zoomSteps1 = step1.getAnimationSteps();
-		assertEquals(2, zoomSteps1.size());
-		assertSame(top1, zoomSteps1.get(0).getStartShape());
-		assertSame(child11, zoomSteps1.get(0).getEndShape());
-		assertSame(child11, zoomSteps1.get(1).getStartShape());
-		assertSame(child12, zoomSteps1.get(1).getEndShape());
-
-		AnimationStep step2 = steps.get(1);
-		List<AnimationStep> zoomSteps2 = step2.getAnimationSteps();
-		assertEquals(0, zoomSteps2.size());
+		step = presentation.getFirstAnimationStep();
+		AnimationStep zoomStep = step.getChild();
+		assertSame(top1, zoomStep.getStartShape());
+		assertSame(child11, zoomStep.getEndShape());
+		zoomStep = zoomStep.getNextStep();
+		assertSame(child11, zoomStep.getStartShape());
+		assertSame(child12, zoomStep.getEndShape());
+		assertFalse(zoomStep.hasNext());
+		
+		step = step.getNextStep();
+		zoomStep = step.getChild();
+		assertNull(zoomStep);
 	
-		AnimationStep step3 = steps.get(2);
-		List<AnimationStep> zoomSteps3 = step3.getAnimationSteps();
-		assertEquals(0, zoomSteps3.size());
+		step = step.getNextStep();
+		zoomStep = step.getChild();
+		assertNull(zoomStep);
 	}
 	
 	protected static class ConcreteShape extends AbstractShape {

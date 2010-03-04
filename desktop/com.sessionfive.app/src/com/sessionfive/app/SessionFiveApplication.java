@@ -35,7 +35,6 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.AnimationStep;
-import com.sessionfive.core.AnimationStepIterator;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
@@ -356,13 +355,30 @@ public class SessionFiveApplication implements IApplication {
 
 		boolean alpha = false;
 		if (parsedNumber >= 0 && parsedNumber < presentation.getTotalAnimationStepCount()) {
-			AnimationStepIterator stepIterator = new AnimationStepIterator(presentation);
-			for (int i = -1; i < parsedNumber; i++) {
-				stepIterator.nextIncludingChilds();
+			AnimationStep animationStep = presentation.getFirstAnimationStep();
+			int counter = 0;
+			while (counter < parsedNumber) {
+				if (animationStep.hasChild()) {
+					animationStep = animationStep.getChild();
+				}
+				else if (animationStep.hasNext()) {
+					animationStep = animationStep.getNextStep();
+				}
+				else if (animationStep.hasParent()) {
+					animationStep = animationStep.getParentStep();
+					
+					while (!animationStep.hasNext() && animationStep.hasParent()) {
+						animationStep = animationStep.getParentStep();
+					}
+					if (animationStep.hasNext()) {
+						animationStep = animationStep.getNextStep();
+					}
+				}
+				counter++;
 			}
-			AnimationStep animation = stepIterator.current();
-			if (animation != null) {
-				animation.directlyGoTo(offscreenDisplay);
+
+			if (animationStep != null) {
+				animationStep.directlyGoTo(offscreenDisplay);
 				alpha = true;
 			}
 		} else {
