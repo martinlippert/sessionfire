@@ -5,13 +5,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.jdesktop.animation.timing.Animator;
-
 import com.sessionfive.animation.AnimationController;
-import com.sessionfive.app.Display;
 import com.sessionfive.core.AbstractShape;
-import com.sessionfive.core.AnimationStyle;
-import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -25,14 +20,12 @@ public class PresentationLoaderTaskTest extends TestCase {
 	private Presentation presentation;
 	private TestShapeCreator creator;
 	private AnimationController animationController;
-	private TestAnimationStyle animationStyle;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		presentation = new Presentation();
 		creator = new TestShapeCreator();
-		animationStyle = new TestAnimationStyle();
 		animationController = new TestAnimationController();
 		animationController.init(presentation, null);
 	}
@@ -42,10 +35,10 @@ public class PresentationLoaderTaskTest extends TestCase {
 				null);
 
 		PresentationLoaderTask loader = new PresentationLoaderTask(
-				fileStructure, creator, presentation, null, null, null);
+				fileStructure, creator, presentation, null, null, null, null);
 
-		loader.createShapes(animationStyle, new LineLayouter(), 0f, 0f, 0f,
-				null, animationController);
+		loader.createShapes(new LineLayouter(), 0f, 0f, 0f, null,
+				animationController);
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		assertNotNull(shapes);
@@ -62,10 +55,10 @@ public class PresentationLoaderTaskTest extends TestCase {
 		fileStructure.setChilds(new File[] { file1, file2, file3 });
 
 		PresentationLoaderTask loader = new PresentationLoaderTask(
-				fileStructure, creator, presentation, null, null, null);
+				fileStructure, creator, presentation, null, null, null, null);
 
-		loader.createShapes(animationStyle, new LineLayouter(), 0f, 0f, 0f,
-				null, animationController);
+		loader.createShapes(new LineLayouter(), 0f, 0f, 0f, null,
+				animationController);
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		assertNotNull(shapes);
@@ -97,10 +90,10 @@ public class PresentationLoaderTaskTest extends TestCase {
 				top2child1child2, top2child1child3, top2child1child4 });
 
 		PresentationLoaderTask loader = new PresentationLoaderTask(
-				fileStructure, creator, presentation, null, null, null);
+				fileStructure, creator, presentation, null, null, null, null);
 
-		loader.createShapes(animationStyle, new LineLayouter(), 0f, 0f, 0f,
-				null, animationController);
+		loader.createShapes(new LineLayouter(), 0f, 0f, 0f, null,
+				animationController);
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		assertNotNull(shapes);
@@ -152,33 +145,10 @@ public class PresentationLoaderTaskTest extends TestCase {
 		}
 	}
 
-	protected static class TestAnimationStyle implements AnimationStyle {
-
-		@Override
-		public String getName() {
-			return "Test";
-		}
-
-		@Override
-		public Animator createBackwardAnimator(Camera cameraStart,
-				Camera cameraEnd, Display display, Shape endShape) {
-			return new Animator(1);
-		}
-
-		@Override
-		public Animator createForwardAnimator(Camera cameraStart,
-				Camera cameraEnd, Display display, Shape endShape) {
-			return new Animator(1);
-		}
-
-	}
-	
 	protected static class TestAnimationController extends AnimationController {
-		
 		@Override
 		public void reset() {
 		}
-		
 	}
 
 }

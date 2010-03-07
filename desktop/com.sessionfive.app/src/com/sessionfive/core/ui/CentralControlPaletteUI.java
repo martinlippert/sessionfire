@@ -60,6 +60,8 @@ public class CentralControlPaletteUI {
 	private JButton helpButton;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
+	private JComboBox animationPathChoice;
+
 	private JTextField layerText;
 	private final GLCanvas canvas;
 
@@ -75,7 +77,8 @@ public class CentralControlPaletteUI {
 	private boolean inChange;
 
 	private Collection<HelpWindow> helpWindows;
-	private DefaultComboBoxModel animationModel;
+	private DefaultComboBoxModel animationStyleModel;
+	private DefaultComboBoxModel animationPathLayouterModel;
 	private DefaultComboBoxModel layoutModel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
@@ -137,7 +140,7 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"10dlu, fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -197,22 +200,20 @@ public class CentralControlPaletteUI {
 		});
 		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
 
-		animationModel = new DefaultComboBoxModel();
+		animationStyleModel = new DefaultComboBoxModel();
 		AnimationStyle[] animationStyles = centralControlPalette
 				.getAnimationStyles();
 		for (AnimationStyle animationFactory : animationStyles) {
-			animationModel.addElement(animationFactory);
+			animationStyleModel.addElement(animationFactory);
 		}
-		animationChoice = HudWidgetFactory.createHudComboBox(animationModel);
+		animationChoice = HudWidgetFactory
+				.createHudComboBox(animationStyleModel);
 		animationChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object selectedAnimation = animationChoice.getSelectedItem();
-				Object selectedLayouter = layoutChoice.getSelectedItem();
-				if (selectedAnimation != null && selectedLayouter != null
-						&& !inChange) {
-					centralControlPalette.changeAnimation(
-							(Layouter) selectedLayouter,
-							(AnimationStyle) selectedAnimation);
+				if (selectedAnimation != null && !inChange) {
+					centralControlPalette
+							.changeAnimationStyle((AnimationStyle) selectedAnimation);
 				}
 			}
 		});
@@ -228,10 +229,31 @@ public class CentralControlPaletteUI {
 		});
 		subContentPane.add(animationChoice, cc.xyw(1, 11, 2));
 
+		animationPathLayouterModel = new DefaultComboBoxModel();
+		AnimationPathLayouter[] allAnimationPathLayouter = centralControlPalette
+				.getAnimationPathLayouter();
+		for (AnimationPathLayouter animationPathLayouter : allAnimationPathLayouter) {
+			animationPathLayouterModel.addElement(animationPathLayouter);
+		}
+		animationPathChoice = HudWidgetFactory
+				.createHudComboBox(animationPathLayouterModel);
+		animationPathChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object selectedPath = animationPathChoice.getSelectedItem();
+				Object selectedStyle = animationChoice.getSelectedItem();
+				if (selectedPath != null && selectedStyle != null && !inChange) {
+					centralControlPalette.changeAnimationPath(
+							(AnimationPathLayouter) selectedPath,
+							(AnimationStyle) selectedStyle);
+				}
+			}
+		});
+		subContentPane.add(animationPathChoice, cc.xyw(1, 13, 2));
+
 		JButton backgroundChooser = HudWidgetFactory
 				.createHudButton("Choose Background Color...");
 		backgroundChooser.setMaximumSize(new Dimension(10, 5));
-		subContentPane.add(backgroundChooser, cc.xyw(1, 13, 2));
+		subContentPane.add(backgroundChooser, cc.xyw(1, 15, 2));
 		backgroundChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
@@ -239,7 +261,7 @@ public class CentralControlPaletteUI {
 		});
 
 		layerText = HudWidgetFactory.createHudTextField("");
-		subContentPane.add(layerText, cc.xyw(1, 15, 2));
+		subContentPane.add(layerText, cc.xyw(1, 17, 2));
 		layerText.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {
 				setLayerText();
@@ -257,9 +279,9 @@ public class CentralControlPaletteUI {
 		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
 
 		RotationView rotationView = new RotationView(selectionService);
-		subContentPane.add(rotationView.createUI(), cc.xyw(1, 17, 2));
-		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 19));
-		subContentPane.add(spaceRotationSlider, cc.xy(2, 19));
+		subContentPane.add(rotationView.createUI(), cc.xyw(1, 19, 2));
+		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 21));
+		subContentPane.add(spaceRotationSlider, cc.xy(2, 21));
 
 		spaceRotationSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -292,7 +314,7 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 21, 2));
+		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 23, 2));
 
 		focusScaleSlider = new JSlider(1, 200, 100);
 		focusScaleSlider.addChangeListener(new ChangeListener() {
@@ -313,11 +335,11 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 23));
-		subContentPane.add(focusScaleSlider, cc.xy(2, 23));
+		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 25));
+		subContentPane.add(focusScaleSlider, cc.xy(2, 25));
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xyw(1, 25, 2));
+		subContentPane.add(helpButton, cc.xyw(1, 27, 2));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override

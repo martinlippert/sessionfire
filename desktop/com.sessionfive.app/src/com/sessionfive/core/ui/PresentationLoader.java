@@ -32,7 +32,7 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	public void loadPresentation(Presentation presentation, GLCanvas canvas, Layouter[] layouter,
-			AnimationStyle[] animationStyles) {
+			AnimationStyle[] animationStyles, AnimationPathLayouter[] animationPathLayouter) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
@@ -48,7 +48,7 @@ public class PresentationLoader implements PropertyChangeListener {
 
 			if (fileStructure.getElementCount() > 0) {
 				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, fileStructure, canvas, layouter, animationStyles);
+				readFiles(presentation, fileStructure, canvas, layouter, animationStyles, animationPathLayouter);
 			}
 		}
 	}
@@ -130,14 +130,14 @@ public class PresentationLoader implements PropertyChangeListener {
 	}
 
 	private void readFiles(Presentation presentation, HierarchicFileStructureNode fileStructure, GLCanvas canvas,
-			Layouter[] layouter, AnimationStyle[] animationStyles) {
+			Layouter[] layouter, AnimationStyle[] animationStyles, AnimationPathLayouter[] animationPathLayouter) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreatorImpl();
 
 		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation", "", 0, 100);
 		progressMonitor.setProgress(0);
 		
 		task = new PresentationLoaderTask(fileStructure, creator, presentation, canvas, layouter,
-				animationStyles);
+				animationStyles, animationPathLayouter);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
@@ -188,6 +188,7 @@ public class PresentationLoader implements PropertyChangeListener {
 
 		result.setProperty("layout", presentation.getDefaultLayouter().getName());
 		result.setProperty("animation", presentation.getDefaultAnimation().getName());
+		result.setProperty("animationPath", presentation.getDefaultAnimationPathLayouter().getName());
 		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor()
 				.getRGB()));
 		

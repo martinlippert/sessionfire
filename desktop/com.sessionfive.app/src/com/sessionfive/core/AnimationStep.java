@@ -1,13 +1,10 @@
 package com.sessionfive.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
 
-public class AnimationStep implements AnimationStepContainer {
+public class AnimationStep {
 
 	private final Shape endShape;
 	private final Focusable startShape;
@@ -69,17 +66,7 @@ public class AnimationStep implements AnimationStepContainer {
 		display.setCamera(cameraEnd);
 	}
 
-	public List<AnimationStep> getAnimationSteps() {
-		ArrayList<AnimationStep> result = new ArrayList<AnimationStep>();
-		AnimationStep childStep = child;
-		while (childStep != null) {
-			result.add(childStep);
-			childStep = childStep.next;
-		}
-		return result;
-	}
-	
-	public void addAnimationStep(AnimationStep subStep) {
+	public void addChild(AnimationStep subStep) {
 		if (child == null) {
 			child = subStep;
 			subStep.previous = null;
@@ -101,15 +88,20 @@ public class AnimationStep implements AnimationStepContainer {
 		this.parent = parent;
 	}
 
-	public AnimationStep getPreviousStep() {
+	public void setNext(AnimationStep step) {
+		this.next = step;
+		step.previous = this;
+	}
+	
+	public AnimationStep getPrevious() {
 		return previous;
 	}
 
-	public AnimationStep getNextStep() {
+	public AnimationStep getNext() {
 		return next;
 	}
 	
-	public AnimationStep getParentStep() {
+	public AnimationStep getParent() {
 		return parent;
 	}
 
@@ -117,14 +109,6 @@ public class AnimationStep implements AnimationStepContainer {
 		return child;
 	}
 	
-	public void setNext(AnimationStep step) {
-		this.next = step;
-		step.previous = this;
-	}
-	
-	public void setChild(AnimationStep step) {
-	}
-
 	public boolean hasNext() {
 		return next != null;
 	}

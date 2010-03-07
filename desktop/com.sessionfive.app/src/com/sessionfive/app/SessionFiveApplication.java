@@ -362,16 +362,16 @@ public class SessionFiveApplication implements IApplication {
 					animationStep = animationStep.getChild();
 				}
 				else if (animationStep.hasNext()) {
-					animationStep = animationStep.getNextStep();
+					animationStep = animationStep.getNext();
 				}
 				else if (animationStep.hasParent()) {
-					animationStep = animationStep.getParentStep();
+					animationStep = animationStep.getParent();
 					
 					while (!animationStep.hasNext() && animationStep.hasParent()) {
-						animationStep = animationStep.getParentStep();
+						animationStep = animationStep.getParent();
 					}
 					if (animationStep.hasNext()) {
-						animationStep = animationStep.getNextStep();
+						animationStep = animationStep.getNext();
 					}
 				}
 				counter++;

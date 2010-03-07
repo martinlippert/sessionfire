@@ -8,20 +8,20 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sessionfive.core.ui.AbstractLinearLayouter;
+import com.sessionfive.core.ui.GroupedAnimationPathLayouter;
 
-public class AbstractLinearLayouterTest extends TestCase {
+public class GroupedAnimationPathLayouterTest extends TestCase {
 	
 	public void testEmptyPresentationAnimationCreation() {
-		ConcreteLinearLayouter layouter = new ConcreteLinearLayouter();
+		GroupedAnimationPathLayouter layouter = new GroupedAnimationPathLayouter();
 		Presentation presentation = new Presentation();
-		layouter.animate(presentation, new GoToAnimationStyle());
+		layouter.layoutAnimationPath(presentation, new GoToAnimationStyle());
 		
 		assertEquals(0, presentation.getTotalAnimationStepCount());
 	}
 	
 	public void testFlatShapeHierarchyAnimationCreation() {
-		ConcreteLinearLayouter layouter = new ConcreteLinearLayouter();
+		GroupedAnimationPathLayouter layouter = new GroupedAnimationPathLayouter();
 		Presentation presentation = new Presentation();
 		Shape shape1 = new ConcreteShape();
 		Shape shape2 = new ConcreteShape();
@@ -30,22 +30,22 @@ public class AbstractLinearLayouterTest extends TestCase {
 		presentation.addShape(shape2, LayerType.CAMERA_ANIMATED);
 		presentation.addShape(shape3, LayerType.CAMERA_ANIMATED);
 		
-		layouter.animate(presentation, new GoToAnimationStyle());
+		layouter.layoutAnimationPath(presentation, new GoToAnimationStyle());
 		
 		assertEquals(3, presentation.getTotalAnimationStepCount());
 		AnimationStep step = presentation.getFirstAnimationStep();
-		assertSame(presentation, step.getStartShape());
+		assertSame(presentation,step.getStartShape());
 		assertSame(shape1, step.getEndShape());
-		step = step.getNextStep();
+		step = step.getNext();
 		assertSame(shape1, step.getStartShape());
 		assertSame(shape2, step.getEndShape());
-		step = step.getNextStep();
+		step = step.getNext();
 		assertSame(shape2, step.getStartShape());
 		assertSame(shape3, step.getEndShape());
 	}
 	
 	public void testDeepShapeHierarchyAnimationCreation() {
-		ConcreteLinearLayouter layouter = new ConcreteLinearLayouter();
+		GroupedAnimationPathLayouter layouter = new GroupedAnimationPathLayouter();
 		Presentation presentation = new Presentation();
 		Shape top1 = new ConcreteShape();
 		Shape top2 = new AbstractShape();
@@ -62,35 +62,36 @@ public class AbstractLinearLayouterTest extends TestCase {
 		top1.addShape(child12);
 		top2.addShape(child21);
 		
-		layouter.animate(presentation, new GoToAnimationStyle());
+		layouter.layoutAnimationPath(presentation, new GoToAnimationStyle());
 		
 		assertEquals(5, presentation.getTotalAnimationStepCount());
+
 		AnimationStep step = presentation.getFirstAnimationStep();
 		assertSame(presentation, step.getStartShape());
 		assertSame(top1, step.getEndShape());
-		step = step.getNextStep();
+		step = step.getNext();
 		assertSame(top1, step.getStartShape());
-		assertSame(child11, step.getEndShape());
-		step = step.getNextStep();
-		assertSame(child11, step.getStartShape());
-		assertSame(child12, step.getEndShape());
-		step = step.getNextStep();
-		assertSame(child12, step.getStartShape());
 		assertSame(child21, step.getEndShape());
-		step = step.getNextStep();
+		step = step.getNext();
 		assertSame(child21, step.getStartShape());
 		assertSame(top3, step.getEndShape());
-	}
+		
+		step = presentation.getFirstAnimationStep();
+		AnimationStep zoomStep = step.getChild();
+		assertSame(top1, zoomStep.getStartShape());
+		assertSame(child11, zoomStep.getEndShape());
+		zoomStep = zoomStep.getNext();
+		assertSame(child11, zoomStep.getStartShape());
+		assertSame(child12, zoomStep.getEndShape());
+		assertFalse(zoomStep.hasNext());
+		
+		step = step.getNext();
+		zoomStep = step.getChild();
+		assertNull(zoomStep);
 	
-	protected static class ConcreteLinearLayouter extends AbstractLinearLayouter {
-		@Override
-		public String getName() {
-			return null;
-		}
-
-		@Override
-		public void layout(Presentation presentation) {
-		}
+		step = step.getNext();
+		zoomStep = step.getChild();
+		assertNull(zoomStep);
 	}
 	
 	protected static class ConcreteShape extends AbstractShape {

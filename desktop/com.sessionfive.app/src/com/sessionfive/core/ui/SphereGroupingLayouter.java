@@ -9,7 +9,7 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class SphereGroupingLayouter extends AbstractGroupingLayouter {
+public class SphereGroupingLayouter extends AbstractLayouter {
 
 	private static final String NAME = "Sphere Grouping";
 

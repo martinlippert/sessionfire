@@ -9,7 +9,7 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sessionfive.core.test.LineGroupingLayouterTest.ConcreteShape;
+import com.sessionfive.core.test.GroupedAnimationPathLayouterTest.ConcreteShape;
 
 public class AnimationControllerHierarchicalTest extends TestCase {
 
@@ -215,10 +215,10 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 		
 		AnimationStep childStep1 = new AnimationStep(top1, child11);
 		AnimationStep childStep2 = new AnimationStep(child11, child12);
-		topStep1.addAnimationStep(childStep1);
-		topStep1.addAnimationStep(childStep2);
+		topStep1.addChild(childStep1);
+		topStep1.addChild(childStep2);
 		AnimationStep childStep3 = new AnimationStep(top3, child31);
-		topStep3.addAnimationStep(childStep3);
+		topStep3.addChild(childStep3);
 	}
 	
 }

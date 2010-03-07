@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
+import com.sessionfive.core.ui.AnimationPathLayouter;
 import com.sessionfive.core.ui.Layouter;
 import com.sessionfive.core.ui.LineLayouter;
+import com.sessionfive.core.ui.LinearAnimationPathLayouter;
 import com.sessionfive.shapes.TitleShape;
 
 public class Presentation implements Focusable, ShapeChangedListener {
@@ -27,6 +29,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	private Layouter defaultLayouter;
 	private AnimationStyle defaultAnimation;
+	private AnimationPathLayouter defaultPath;
 	private boolean defaultReflectionEnabled;
 	private float defaultFocusScale;
 
@@ -46,6 +49,7 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		titleShape = new TitleShape();
 		defaultLayouter = new LineLayouter();
 		defaultAnimation = new ZoomOutZoomInAnimationStyle();
+		defaultPath = new LinearAnimationPathLayouter();
 		defaultReflectionEnabled = true;
 		path = "";
 
@@ -120,11 +124,10 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		if (this.firstAnimationStep == null) {
 			this.firstAnimationStep = animation;
 			animation.setParent(null);
-		}
-		else {
+		} else {
 			AnimationStep lastStep = this.firstAnimationStep;
-			while (lastStep.getNextStep() != null) {
-				lastStep = lastStep.getNextStep();
+			while (lastStep.getNext() != null) {
+				lastStep = lastStep.getNext();
 			}
 			lastStep.setNext(animation);
 		}
@@ -143,12 +146,13 @@ public class Presentation implements Focusable, ShapeChangedListener {
 		int result = 0;
 		while (animationStep != null) {
 			result++;
-			result += getTotalAnimationStepCountRecursively(animationStep.getChild());
-			animationStep = animationStep.getNextStep();
+			result += getTotalAnimationStepCountRecursively(animationStep
+					.getChild());
+			animationStep = animationStep.getNext();
 		}
 		return result;
 	}
-	
+
 	public AnimationStep getFirstAnimationStep() {
 		return firstAnimationStep;
 	}
@@ -223,6 +227,18 @@ public class Presentation implements Focusable, ShapeChangedListener {
 	public void setDefaultAnimation(AnimationStyle defaultAnimation) {
 		if (!this.defaultAnimation.equals(defaultAnimation)) {
 			this.defaultAnimation = defaultAnimation;
+			firePresentationChanged();
+		}
+	}
+
+	public AnimationPathLayouter getDefaultAnimationPathLayouter() {
+		return defaultPath;
+	}
+
+	public void setDefaultAnimationPathLayouter(
+			AnimationPathLayouter defaultAnimationPathLayouter) {
+		if (!this.defaultPath.equals(defaultAnimationPathLayouter)) {
+			this.defaultPath = defaultAnimationPathLayouter;
 			firePresentationChanged();
 		}
 	}

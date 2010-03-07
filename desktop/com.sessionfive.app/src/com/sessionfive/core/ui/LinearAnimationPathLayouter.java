@@ -8,11 +8,15 @@ import com.sessionfive.core.Focusable;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public abstract class AbstractLinearLayouter extends AbstractLayouter {
-	
-	@Override
-	public void animate(Presentation presentation, AnimationStyle animationStyle) {
+public class LinearAnimationPathLayouter extends AbstractAnimationPathLayouter {
 
+	@Override
+	public String getName() {
+		return "Straight through";
+	}
+
+	@Override
+	public void layoutAnimationPath(Presentation presentation, AnimationStyle animationStyle) {
 		presentation.removeAllAnimationSteps();
 
 		Focusable animationStart = presentation;

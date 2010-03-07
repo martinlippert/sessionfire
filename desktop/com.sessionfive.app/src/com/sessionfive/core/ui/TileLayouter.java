@@ -7,7 +7,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public class TileLayouter extends AbstractLinearLayouter {
+public class TileLayouter extends AbstractLayouter {
 
 	private static final String NAME = "Tiling";
 

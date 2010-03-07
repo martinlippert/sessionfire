@@ -30,6 +30,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 	private final GLCanvas canvas;
 	private final Layouter[] allLayouter;
 	private final AnimationStyle[] allAnimationStyles;
+	private final AnimationPathLayouter[] allAnimationPathLayouter;
 
 	private int counter;
 	private int totalNumberOfFiles;
@@ -37,7 +38,8 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 	public PresentationLoaderTask(HierarchicFileStructureNode fileStructure,
 			ShapeExtensionCreator creator, Presentation presentation,
 			GLCanvas canvas, Layouter[] layouter,
-			AnimationStyle[] animationStyles) {
+			AnimationStyle[] animationStyles,
+			AnimationPathLayouter[] animationPathLayouter) {
 		this.fileStructure = fileStructure;
 		this.totalNumberOfFiles = fileStructure.getElementCount();
 		this.creator = creator;
@@ -45,6 +47,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		this.canvas = canvas;
 		this.allLayouter = layouter;
 		this.allAnimationStyles = animationStyles;
+		this.allAnimationPathLayouter = animationPathLayouter;
 	}
 
 	@Override
@@ -65,6 +68,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
 		AnimationStyle animationStyle = presentation.getDefaultAnimation();
 		Layouter layouter = presentation.getDefaultLayouter();
+		AnimationPathLayouter pathLayouter = presentation.getDefaultAnimationPathLayouter();
 
 		float rotationX = 0.0f;
 		float rotationY = 0.0f;
@@ -81,10 +85,10 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 			rotationZ = Float.parseFloat(rotationZProp);
 		}
 
-		createShapes(animationStyle, layouter, rotationX, rotationY, rotationZ,
-				canvas.getContext(), SessionFiveApplication.getInstance()
-						.getAnimationController());
-		layouter.animate(presentation, animationStyle);
+		createShapes(layouter, rotationX, rotationY, rotationZ, canvas
+				.getContext(), SessionFiveApplication.getInstance()
+				.getAnimationController());
+		pathLayouter.layoutAnimationPath(presentation, animationStyle);
 
 		setProgress(100);
 
@@ -93,10 +97,9 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	public void createShapes(AnimationStyle animationStyle, Layouter layouter,
-			float rotationX, float rotationY, float rotationZ,
-			GLContext context, AnimationController animationController)
-			throws Exception {
+	public void createShapes(Layouter layouter, float rotationX,
+			float rotationY, float rotationZ, GLContext context,
+			AnimationController animationController) throws Exception {
 
 		totalNumberOfFiles = fileStructure.getElementCount();
 		counter = 0;
@@ -197,6 +200,15 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 					presentation.setDefaultAnimation(animationStyle);
 				}
 
+				String animationPathSetting = settings
+						.getProperty("animationPath");
+				AnimationPathLayouter animationPathLayouter = getAnimationPathLayouter(
+						animationPathSetting, allAnimationPathLayouter);
+				if (animationPathLayouter != null) {
+					presentation
+							.setDefaultAnimationPathLayouter(animationPathLayouter);
+				}
+
 				String color = settings.getProperty("backgroundColor");
 				if (color != null) {
 					presentation.setBackgroundColor(new Color(Integer
@@ -270,6 +282,17 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 		for (AnimationStyle animationFactory : allAnimationStyles) {
 			if (animationFactory.getName().equals(animationSetting))
 				return animationFactory;
+		}
+		return null;
+	}
+
+	private AnimationPathLayouter getAnimationPathLayouter(
+			String animationPathLayouterSetting,
+			AnimationPathLayouter[] allAnimationPathLayouter) {
+		for (AnimationPathLayouter animationPathLayouter : allAnimationPathLayouter) {
+			if (animationPathLayouter.getName().equals(
+					animationPathLayouterSetting))
+				return animationPathLayouter;
 		}
 		return null;
 	}

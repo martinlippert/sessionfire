@@ -10,6 +10,7 @@ import com.sessionfive.animation.GoToAnimationStyle;
 import com.sessionfive.animation.MoveToAnimationStyle;
 import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
 import com.sessionfive.app.SessionFiveApplication;
+import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
@@ -31,7 +32,7 @@ public class CentralControlPalette {
 	public void choosePresentation(GLCanvas canvas) {
 		PresentationLoader loader = new PresentationLoader();
 		loader.loadPresentation(presentation, canvas, getLayouter(),
-				getAnimationStyles());
+				getAnimationStyles(), getAnimationPathLayouter());
 
 		canvas.requestFocus();
 	}
@@ -51,18 +52,35 @@ public class CentralControlPalette {
 		Shape focussedShape = animationController.getLastFocussedShape();
 
 		layouter.layout(presentation);
-		layouter.animate(presentation, animationStyle);
+		// layouter.animate(presentation, animationStyle);
 
 		presentation.setDefaultLayouter(layouter);
 		presentation.resetStartCamera();
 		animationController.readjustSmoothlyTo(focussedShape);
 	}
 
-	public void changeAnimation(Layouter layouter, AnimationStyle animationStyle) {
+	public void changeAnimationStyle(AnimationStyle animationStyle) {
+		presentation.setDefaultAnimation(animationStyle);
+		
+		AnimationStep animationStep = presentation.getFirstAnimationStep();
+		setAnimationStyleRecursively(animationStep, animationStyle);
+	}
+
+	protected void setAnimationStyleRecursively(AnimationStep animationStep,
+			AnimationStyle animationStyle) {
+		while (animationStep != null) {
+			animationStep.setStyle(animationStyle);
+			setAnimationStyleRecursively(animationStep.getChild(), animationStyle);
+			animationStep = animationStep.getNext();
+		}
+	}
+
+	public void changeAnimationPath(AnimationPathLayouter pathLayouter,
+			AnimationStyle animationStyle) {
 		Shape focussedShape = animationController.getLastFocussedShape();
 
-		presentation.setDefaultAnimation(animationStyle);
-		layouter.animate(presentation, animationStyle);
+		presentation.setDefaultAnimationPathLayouter(pathLayouter);
+		pathLayouter.layoutAnimationPath(presentation, animationStyle);
 		animationController.readjustSmoothlyTo(focussedShape);
 	}
 
@@ -79,6 +97,11 @@ public class CentralControlPalette {
 	public AnimationStyle[] getAnimationStyles() {
 		return new AnimationStyle[] { new ZoomOutZoomInAnimationStyle(),
 				new MoveToAnimationStyle(), new GoToAnimationStyle() };
+	}
+
+	public AnimationPathLayouter[] getAnimationPathLayouter() {
+		return new AnimationPathLayouter[] { new LinearAnimationPathLayouter(),
+				new GroupedAnimationPathLayouter() };
 	}
 
 	public void setLayerText(String text) {

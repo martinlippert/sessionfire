@@ -35,7 +35,7 @@ public class AnimationController {
 		else {
 			AnimationStep step = currentAnimationStep;
 			while (step != null && !step.hasNext() && step.hasParent()) {
-				step = step.getParentStep();
+				step = step.getParent();
 			}
 			return step != null && step.hasNext();
 		}
@@ -67,11 +67,11 @@ public class AnimationController {
 			else {
 				while (!currentAnimationStep.hasNext()
 						&& currentAnimationStep.hasParent()) {
-					currentAnimationStep = currentAnimationStep.getParentStep();
+					currentAnimationStep = currentAnimationStep.getParent();
 				}
 	
 				if (currentAnimationStep.hasNext()) {
-					currentAnimationStep = currentAnimationStep.getNextStep();
+					currentAnimationStep = currentAnimationStep.getNext();
 				}
 			}
 				
@@ -89,18 +89,18 @@ public class AnimationController {
 		Animator animator = currentAnimationStep.getBackwardAnimation(display);
 
 		if (currentAnimationStep.hasPrevious()) {
-			currentAnimationStep = currentAnimationStep.getPreviousStep();
+			currentAnimationStep = currentAnimationStep.getPrevious();
 
 			if (autoZoomIn) {
 				while (currentAnimationStep.hasChild()) {
 					currentAnimationStep = currentAnimationStep.getChild();
 					while (currentAnimationStep.hasNext()) {
-						currentAnimationStep = currentAnimationStep.getNextStep();
+						currentAnimationStep = currentAnimationStep.getNext();
 					}
 				}
 			}
 		} else if (currentAnimationStep.hasParent()) {
-			currentAnimationStep = currentAnimationStep.getParentStep();
+			currentAnimationStep = currentAnimationStep.getParent();
 		} else {
 			currentAnimationStep = null;
 		}
@@ -123,7 +123,7 @@ public class AnimationController {
 			return;
 		}
 
-		currentAnimationStep = currentAnimationStep.getParentStep();
+		currentAnimationStep = currentAnimationStep.getParent();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		startNewAnimator(animator);
 	}
@@ -149,16 +149,16 @@ public class AnimationController {
 				currentAnimationStep = currentAnimationStep.getChild();
 			}
 			else if (currentAnimationStep.hasNext()) {
-				currentAnimationStep = currentAnimationStep.getNextStep();
+				currentAnimationStep = currentAnimationStep.getNext();
 			}
 			else if (currentAnimationStep.hasParent()) {
-				currentAnimationStep = currentAnimationStep.getParentStep();
+				currentAnimationStep = currentAnimationStep.getParent();
 				
 				while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
-					currentAnimationStep = currentAnimationStep.getParentStep();
+					currentAnimationStep = currentAnimationStep.getParent();
 				}
 				if (currentAnimationStep.hasNext()) {
-					currentAnimationStep = currentAnimationStep.getNextStep();
+					currentAnimationStep = currentAnimationStep.getNext();
 				}
 			}
 			counter++;
@@ -179,16 +179,16 @@ public class AnimationController {
 					currentAnimationStep = currentAnimationStep.getChild();
 				}
 				else if (currentAnimationStep.hasNext()) {
-					currentAnimationStep = currentAnimationStep.getNextStep();
+					currentAnimationStep = currentAnimationStep.getNext();
 				}
 				else if (currentAnimationStep.hasParent()) {
-					currentAnimationStep = currentAnimationStep.getParentStep();
+					currentAnimationStep = currentAnimationStep.getParent();
 					
 					while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
-						currentAnimationStep = currentAnimationStep.getParentStep();
+						currentAnimationStep = currentAnimationStep.getParent();
 					}
 					if (currentAnimationStep.hasNext()) {
-						currentAnimationStep = currentAnimationStep.getNextStep();
+						currentAnimationStep = currentAnimationStep.getNext();
 					}
 				}
 			}

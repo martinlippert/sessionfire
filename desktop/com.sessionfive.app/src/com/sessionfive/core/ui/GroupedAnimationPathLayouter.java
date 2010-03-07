@@ -11,11 +11,16 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 
-public abstract class AbstractGroupingLayouter extends AbstractLayouter {
+public class GroupedAnimationPathLayouter extends AbstractAnimationPathLayouter {
 
 	@Override
-	public void animate(Presentation presentation, AnimationStyle animationStyle) {
+	public String getName() {
+		return "Grouped";
+	}
 
+	@Override
+	public void layoutAnimationPath(Presentation presentation,
+			AnimationStyle animationStyle) {
 		presentation.removeAllAnimationSteps();
 
 		Focusable animationStart = presentation;
@@ -23,7 +28,7 @@ public abstract class AbstractGroupingLayouter extends AbstractLayouter {
 		Iterator<Shape> iter = shapes.iterator();
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
-			
+
 			int startWithChildNo = 0;
 			AnimationStep step = null;
 			if (shape.getClass() != AbstractShape.class) {
@@ -31,8 +36,7 @@ public abstract class AbstractGroupingLayouter extends AbstractLayouter {
 				step.setStyle(animationStyle);
 				presentation.addAnimationStep(step);
 				animationStart = shape;
-			}
-			else {
+			} else {
 				List<Shape> childs = shape.getShapes();
 				if (childs.size() > 0) {
 					Shape firstChild = childs.get(0);
@@ -43,16 +47,16 @@ public abstract class AbstractGroupingLayouter extends AbstractLayouter {
 					startWithChildNo = 1;
 				}
 			}
-			
+
 			Focusable subStart = animationStart;
 			List<Shape> childs = shape.getShapes();
-			for(int i = startWithChildNo; i < childs.size(); i++) {
+			for (int i = startWithChildNo; i < childs.size(); i++) {
 				Shape child = childs.get(i);
-				
+
 				AnimationStep subStep = new AnimationStep(subStart, child);
 				subStep.setStyle(animationStyle);
-				
-				step.addAnimationStep(subStep);
+
+				step.addChild(subStep);
 				subStart = child;
 			}
 		}
