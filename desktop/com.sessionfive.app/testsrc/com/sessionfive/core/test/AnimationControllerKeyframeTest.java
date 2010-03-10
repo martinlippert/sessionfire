@@ -7,7 +7,7 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sessionfive.core.test.GroupedAnimationPathLayouterTest.ConcreteShape;
+import com.sessionfive.core.test.StandardAnimationPathCreatorTest.ConcreteShape;
 
 import junit.framework.TestCase;
 

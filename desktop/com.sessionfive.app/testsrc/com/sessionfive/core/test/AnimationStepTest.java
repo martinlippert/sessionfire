@@ -11,18 +11,24 @@ public class AnimationStepTest extends TestCase {
 		AbstractShape shape1 = new AbstractShape();
 		AbstractShape shape2 = new AbstractShape();
 		
-		AnimationStep animation = new AnimationStep(shape1, shape2);
-		assertSame(shape1, animation.getStartShape());
-		assertSame(shape2, animation.getEndShape());
+		AnimationStep step = new AnimationStep(shape1, shape2);
+		assertSame(shape1, step.getStartShape());
+		assertSame(shape2, step.getEndShape());
+		assertFalse(step.hasChild());
+	}
+	
+	public void testAnimationStepAutoZoom() {
+		AnimationStep step = new AnimationStep();
+		assertTrue(step.isAutoZoomEnabled());
+		
+		step.setAutoZoomEnabled(false);
+		assertFalse(step.isAutoZoomEnabled());
 	}
 	
 	public void testAnimationStepSequence() {
-		AbstractShape shape1 = new AbstractShape();
-		AbstractShape shape2 = new AbstractShape();
-		
-		AnimationStep step1 = new AnimationStep(shape1, shape2);
-		AnimationStep step2 = new AnimationStep(shape1, shape2);
-		AnimationStep step3 = new AnimationStep(shape1, shape2);
+		AnimationStep step1 = new AnimationStep();
+		AnimationStep step2 = new AnimationStep();
+		AnimationStep step3 = new AnimationStep();
 
 		assertNull(step1.getPrevious());
 		assertNull(step1.getParent());
@@ -36,6 +42,43 @@ public class AnimationStepTest extends TestCase {
 		assertSame(step1, step2.getPrevious());
 		assertSame(step3, step2.getNext());
 		assertSame(step2, step3.getPrevious());
+	}
+	
+	public void testAnimationStepChilds() {
+		AnimationStep parent = new AnimationStep();
+		AnimationStep child1 = new AnimationStep();
+		AnimationStep child2 = new AnimationStep();
+		AnimationStep child3 = new AnimationStep();
+		
+		parent.addChild(child1);
+		assertTrue(parent.hasChild());
+		assertSame(child1, parent.getChild());
+		assertSame(parent, child1.getParent());
+		
+		parent.addChild(child2);
+		parent.addChild(child3);
+		
+		assertTrue(parent.hasChild());
+		assertSame(child1, parent.getChild());
+		assertSame(parent, child1.getParent());
+		
+		assertTrue(child1.hasNext());
+		assertFalse(child1.hasPrevious());
+		assertSame(child2, child1.getNext());
+		assertSame(child1, child2.getPrevious());
+		
+		assertTrue(child2.hasPrevious());
+		assertTrue(child2.hasNext());
+		assertSame(child1, child2.getPrevious());
+		assertSame(child3, child2.getNext());
+		assertSame(parent, child2.getParent());
+		assertFalse(child2.hasChild());
+		
+		assertTrue(child3.hasPrevious());
+		assertFalse(child3.hasNext());
+		assertSame(child2, child3.getPrevious());
+		assertSame(parent, child3.getParent());
+		assertFalse(child3.hasChild());
 	}
 
 }

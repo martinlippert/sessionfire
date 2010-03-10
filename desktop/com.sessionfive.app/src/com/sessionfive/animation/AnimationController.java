@@ -14,9 +14,7 @@ public class AnimationController {
 
 	private Display display;
 	private Presentation presentation;
-
 	private AnimationStep currentAnimationStep;
-	private boolean autoZoomIn;
 
 	public void init(Presentation presentation, Display display) {
 		this.presentation = presentation;
@@ -28,11 +26,10 @@ public class AnimationController {
 	public boolean canGoForward() {
 		if (currentAnimationStep == null) {
 			return presentation.getTotalAnimationStepCount() > 0;
-		}
-		else if (autoZoomIn && currentAnimationStep.hasChild()) {
+		} else if (currentAnimationStep.isAutoZoomEnabled()
+				&& currentAnimationStep.hasChild()) {
 			return true;
-		}
-		else {
+		} else {
 			AnimationStep step = currentAnimationStep;
 			while (step != null && !step.hasNext() && step.hasParent()) {
 				step = step.getParent();
@@ -58,23 +55,22 @@ public class AnimationController {
 			return;
 		}
 
-		if (autoZoomIn && canZoomIn()) {
+		if (canZoomIn() && currentAnimationStep.isAutoZoomEnabled()) {
 			zoomIn();
 		} else {
 			if (currentAnimationStep == null) {
 				currentAnimationStep = presentation.getFirstAnimationStep();
-			}
-			else {
+			} else {
 				while (!currentAnimationStep.hasNext()
 						&& currentAnimationStep.hasParent()) {
 					currentAnimationStep = currentAnimationStep.getParent();
 				}
-	
+
 				if (currentAnimationStep.hasNext()) {
 					currentAnimationStep = currentAnimationStep.getNext();
 				}
 			}
-				
+
 			Animator animator = currentAnimationStep
 					.getForwardAnimation(display);
 			startNewAnimator(animator);
@@ -91,7 +87,7 @@ public class AnimationController {
 		if (currentAnimationStep.hasPrevious()) {
 			currentAnimationStep = currentAnimationStep.getPrevious();
 
-			if (autoZoomIn) {
+			if (currentAnimationStep.isAutoZoomEnabled()) {
 				while (currentAnimationStep.hasChild()) {
 					currentAnimationStep = currentAnimationStep.getChild();
 					while (currentAnimationStep.hasNext()) {
@@ -147,14 +143,13 @@ public class AnimationController {
 		while (counter < keyframeNo) {
 			if (currentAnimationStep.hasChild()) {
 				currentAnimationStep = currentAnimationStep.getChild();
-			}
-			else if (currentAnimationStep.hasNext()) {
+			} else if (currentAnimationStep.hasNext()) {
 				currentAnimationStep = currentAnimationStep.getNext();
-			}
-			else if (currentAnimationStep.hasParent()) {
+			} else if (currentAnimationStep.hasParent()) {
 				currentAnimationStep = currentAnimationStep.getParent();
-				
-				while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
+
+				while (!currentAnimationStep.hasNext()
+						&& currentAnimationStep.hasParent()) {
 					currentAnimationStep = currentAnimationStep.getParent();
 				}
 				if (currentAnimationStep.hasNext()) {
@@ -172,19 +167,19 @@ public class AnimationController {
 		if (focussedShape == null) {
 			reset();
 		} else {
-			
+
 			currentAnimationStep = presentation.getFirstAnimationStep();
-			while (currentAnimationStep != null && currentAnimationStep.getEndShape() != focussedShape) {
+			while (currentAnimationStep != null
+					&& currentAnimationStep.getEndShape() != focussedShape) {
 				if (currentAnimationStep.hasChild()) {
 					currentAnimationStep = currentAnimationStep.getChild();
-				}
-				else if (currentAnimationStep.hasNext()) {
+				} else if (currentAnimationStep.hasNext()) {
 					currentAnimationStep = currentAnimationStep.getNext();
-				}
-				else if (currentAnimationStep.hasParent()) {
+				} else if (currentAnimationStep.hasParent()) {
 					currentAnimationStep = currentAnimationStep.getParent();
-					
-					while (!currentAnimationStep.hasNext() && currentAnimationStep.hasParent()) {
+
+					while (!currentAnimationStep.hasNext()
+							&& currentAnimationStep.hasParent()) {
 						currentAnimationStep = currentAnimationStep.getParent();
 					}
 					if (currentAnimationStep.hasNext()) {
@@ -192,9 +187,10 @@ public class AnimationController {
 					}
 				}
 			}
-			
+
 			if (currentAnimationStep != null) {
-				Animator animator = currentAnimationStep.getForwardAnimation(display);
+				Animator animator = currentAnimationStep
+						.getForwardAnimation(display);
 				startNewAnimator(animator);
 			}
 		}
@@ -216,14 +212,6 @@ public class AnimationController {
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
 				cameraStart, cameraEnd, display, null);
 		startNewAnimator(animator);
-	}
-
-	public boolean isAutoZoomIn() {
-		return autoZoomIn;
-	}
-
-	public void setAutoZoomIn(boolean autoZoomIn) {
-		this.autoZoomIn = autoZoomIn;
 	}
 
 	protected void startNewAnimator(Animator animator) {

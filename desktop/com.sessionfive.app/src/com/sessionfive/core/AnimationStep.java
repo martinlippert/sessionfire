@@ -14,17 +14,20 @@ public class AnimationStep {
 	private AnimationStep next;
 	private AnimationStep parent;
 	private AnimationStep child;
+	private boolean autoZoomEnabled;
 
 	public AnimationStep(final Focusable startShape, final Shape endShape) {
 		this.startShape = startShape;
 		this.endShape = endShape;
 		this.style = null;
+		this.autoZoomEnabled = true;
 	}
 	
 	public AnimationStep() {
 		this.endShape = null;
 		this.startShape = null;
 		this.style = null;
+		this.autoZoomEnabled = true;
 	}
 
 	public Focusable getStartShape() {
@@ -41,6 +44,14 @@ public class AnimationStep {
 	
 	public void setStyle(AnimationStyle style) {
 		this.style = style;
+	}
+	
+	public boolean isAutoZoomEnabled() {
+		return this.autoZoomEnabled;
+	}
+
+	public void setAutoZoomEnabled(boolean autoZoomEnabled) {
+		this.autoZoomEnabled = autoZoomEnabled;
 	}
 
 	public Animator getForwardAnimation(Display display) {

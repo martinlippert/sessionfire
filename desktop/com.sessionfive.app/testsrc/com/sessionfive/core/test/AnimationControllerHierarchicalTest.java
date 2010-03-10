@@ -9,7 +9,7 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-import com.sessionfive.core.test.GroupedAnimationPathLayouterTest.ConcreteShape;
+import com.sessionfive.core.test.StandardAnimationPathCreatorTest.ConcreteShape;
 
 public class AnimationControllerHierarchicalTest extends TestCase {
 
@@ -36,7 +36,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 	
 	public void testWalkThroughHierarchyWithoutZoomingIn() {
-		createHierarchicalStructure();
+		createHierarchicalStructure(false);
 		
 		assertTrue(controller.canGoForward());
 		assertFalse(controller.canGoBackward());
@@ -63,7 +63,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 
 	public void testWalkThroughHierarchyWithZoomingIn() {
-		createHierarchicalStructure();
+		createHierarchicalStructure(false);
 		
 		controller.forward();
 		controller.zoomIn();
@@ -102,7 +102,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 	
 	public void testWalkBackOutOfGroupWithoutZommingOut() {
-		createHierarchicalStructure();
+		createHierarchicalStructure(false);
 		
 		controller.forward();
 		controller.zoomIn();
@@ -117,7 +117,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 	
 	public void testWalkBackOutOfGroupWithZommingOut() {
-		createHierarchicalStructure();
+		createHierarchicalStructure(false);
 		
 		controller.forward();
 		controller.zoomIn();
@@ -135,11 +135,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 	
 	public void testWalkForwardThroughAutomaticallyZoomingIn() {
-		createHierarchicalStructure();
-		
-		assertFalse(controller.isAutoZoomIn());
-		controller.setAutoZoomIn(true);
-		assertTrue(controller.isAutoZoomIn());
+		createHierarchicalStructure(true);
 		
 		controller.forward();
 		assertSame(top1, controller.getLastFocussedShape());
@@ -161,9 +157,8 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 	}
 	
 	public void testWalkBackThroughHierarchyAutomaticallyZoomingIn() {
-		createHierarchicalStructure();
+		createHierarchicalStructure(true);
 
-		controller.setAutoZoomIn(true);
 		controller.readjustSmoothlyTo(child31);
 		
 		assertSame(child31, controller.getLastFocussedShape());
@@ -188,7 +183,7 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 		assertSame(top1, controller.getLastFocussedShape());
 	}
 	
-	private void createHierarchicalStructure() {
+	private void createHierarchicalStructure(boolean autoZoomIn) {
 		top1 = new ConcreteShape();
 		top2 = new AbstractShape();
 		top3 = new ConcreteShape();
@@ -219,6 +214,13 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 		topStep1.addChild(childStep2);
 		AnimationStep childStep3 = new AnimationStep(top3, child31);
 		topStep3.addChild(childStep3);
+		
+		topStep1.setAutoZoomEnabled(autoZoomIn);
+		topStep2.setAutoZoomEnabled(autoZoomIn);
+		topStep3.setAutoZoomEnabled(autoZoomIn);
+		childStep1.setAutoZoomEnabled(autoZoomIn);
+		childStep2.setAutoZoomEnabled(autoZoomIn);
+		childStep3.setAutoZoomEnabled(autoZoomIn);
 	}
 	
 }
