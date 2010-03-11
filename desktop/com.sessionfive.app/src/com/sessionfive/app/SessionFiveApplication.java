@@ -63,14 +63,12 @@ public class SessionFiveApplication implements IApplication {
 
 	private CentralControlPalette centralControlPalette;
 	private CentralControlPaletteUI centralControlPaletteUI;
-	private StringBuffer goToKeyframeDirectlyBuffer;
 
 	private DisplayRepaintManager displayRepaintManager;
 	private DisplayRepaintManager fullScreenDisplayRepaintManager;
 
 	public SessionFiveApplication() {
 		application = this;
-		goToKeyframeDirectlyBuffer = new StringBuffer();
 	}
 
 	public static SessionFiveApplication getInstance() {
@@ -127,58 +125,12 @@ public class SessionFiveApplication implements IApplication {
 
 		keyListener = new MultiplexingKeyListener();
 		globalKeyListener = new MultiplexingKeyListener();
+		
 		cameraMover = new CameraMover(presentation, animationController);
 
 		new KeyListenerExtensionReader().addKeyListenerExtensionsTo(keyListener);
 
-		keyListener.addKeyListener(new KeyListener() {
-			public void keyTyped(KeyEvent e) {
-			}
-
-			public void keyReleased(KeyEvent e) {
-			}
-
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_HOME
-						|| (e.getKeyCode() == KeyEvent.VK_UP && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
-					animationController.goToKeyframeNo(0);
-				} else if (e.getKeyCode() == KeyEvent.VK_END
-						|| (e.getKeyCode() == KeyEvent.VK_DOWN && (e.getModifiers() & KeyEvent.META_MASK) != 0)) {
-					animationController.goToKeyframeNo(animationController.getNumberOfKeyFrames() - 1);
-				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					goToKeyframeDirectly();
-				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN
-						|| e.getKeyCode() == KeyEvent.VK_DOWN
-						|| e.getKeyCode() == KeyEvent.VK_RIGHT
-						|| e.getKeyCode() == KeyEvent.VK_SPACE) {
-					animationController.forward();
-				} else if (e.getKeyChar() == '+' || e.getKeyChar() == '=') {
-					animationController.zoomIn();
-				} else if (e.getKeyChar() == '-') {
-					animationController.zoomOut();
-				} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP
-						|| e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT
-						|| e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					animationController.backward();
-				} else if (e.getKeyChar() == 'f') {
-					switchFullScreen();
-				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					if (isFullScreenShowing()) {
-						switchFullScreen();
-					}
-				}
-
-				if (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9) {
-					goToKeyframeDirectlyBuffer.append(e.getKeyChar());
-					if (presentation.getAllShapes().size() < 10) {
-						goToKeyframeDirectly();
-						goToKeyframeDirectlyBuffer.delete(0, goToKeyframeDirectlyBuffer.length());
-					}
-				} else {
-					goToKeyframeDirectlyBuffer.delete(0, goToKeyframeDirectlyBuffer.length());
-				}
-			}
-		});
+		keyListener.addKeyListener(new NavigationKeyListener(animationController, this));
 
 		globalKeyListener.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
@@ -265,17 +217,6 @@ public class SessionFiveApplication implements IApplication {
 		centralControlPaletteUI.setStatus(generalStatus);
 
 		return EXIT_OK;
-	}
-
-	protected void goToKeyframeDirectly() {
-		try {
-			int keyframeNo = Integer.parseInt(goToKeyframeDirectlyBuffer.toString());
-			if (keyframeNo >= 0) {
-				keyframeNo = Math.min(keyframeNo, animationController.getNumberOfKeyFrames());
-				animationController.goToKeyframeNo(keyframeNo - 1);
-			}
-		} catch (NumberFormatException e) {
-		}
 	}
 
 	public void switchFullScreen() {
