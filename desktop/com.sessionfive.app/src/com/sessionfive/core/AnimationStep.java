@@ -6,8 +6,7 @@ import com.sessionfive.app.Display;
 
 public class AnimationStep {
 
-	private final Shape endShape;
-	private final Focusable startShape;
+	private final Shape focussedShape;
 	private AnimationStyle style;
 
 	private AnimationStep previous;
@@ -16,26 +15,20 @@ public class AnimationStep {
 	private AnimationStep child;
 	private boolean autoZoomEnabled;
 
-	public AnimationStep(final Focusable startShape, final Shape endShape) {
-		this.startShape = startShape;
-		this.endShape = endShape;
+	public AnimationStep(final Shape focussedShape) {
+		this.focussedShape = focussedShape;
 		this.style = null;
 		this.autoZoomEnabled = true;
 	}
 	
 	public AnimationStep() {
-		this.endShape = null;
-		this.startShape = null;
+		this.focussedShape = null;
 		this.style = null;
 		this.autoZoomEnabled = true;
 	}
 
-	public Focusable getStartShape() {
-		return startShape;
-	}
-	
-	public Shape getEndShape() {
-		return endShape;
+	public Shape getFocussedShape() {
+		return focussedShape;
 	}
 	
 	public AnimationStyle getStyle() {
@@ -57,23 +50,23 @@ public class AnimationStep {
 	public Animator getForwardAnimation(Display display) {
 		if (style != null) {
 			Camera cameraStart = display.getCamera();
-			Camera cameraEnd = endShape.getFocussedCamera();
-			return style.createForwardAnimator(cameraStart, cameraEnd, display, endShape);
+			Camera cameraEnd = focussedShape.getFocussedCamera();
+			return style.createForwardAnimator(cameraStart, cameraEnd, display, focussedShape);
 		}
 		return null;
 	}
 
 	public Animator getBackwardAnimation(Display display) {
-		if (startShape == null || this.style == null)
+		if (this.style == null)
 			return null;
 		
 		Camera cameraStart = display.getCamera();
-		Camera cameraEnd = startShape.getFocussedCamera();
-		return style.createBackwardAnimator(cameraStart, cameraEnd, display, endShape);
+		Camera cameraEnd = focussedShape.getFocussedCamera();
+		return style.createBackwardAnimator(cameraStart, cameraEnd, display, focussedShape);
 	}
 
 	public void directlyGoTo(Display display) {
-		Camera cameraEnd = endShape.getFocussedCamera();
+		Camera cameraEnd = focussedShape.getFocussedCamera();
 		display.setCamera(cameraEnd);
 	}
 

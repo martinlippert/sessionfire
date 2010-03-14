@@ -34,16 +34,13 @@ public class StandardAnimationPathCreatorTest extends TestCase {
 		
 		assertEquals(3, presentation.getTotalAnimationStepCount());
 		AnimationStep step = presentation.getFirstAnimationStep();
-		assertSame(presentation,step.getStartShape());
-		assertSame(shape1, step.getEndShape());
+		assertSame(shape1, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 		step = step.getNext();
-		assertSame(shape1, step.getStartShape());
-		assertSame(shape2, step.getEndShape());
+		assertSame(shape2, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 		step = step.getNext();
-		assertSame(shape2, step.getStartShape());
-		assertSame(shape3, step.getEndShape());
+		assertSame(shape3, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 	}
 	
@@ -70,26 +67,21 @@ public class StandardAnimationPathCreatorTest extends TestCase {
 		assertEquals(5, presentation.getTotalAnimationStepCount());
 
 		AnimationStep step = presentation.getFirstAnimationStep();
-		assertSame(presentation, step.getStartShape());
-		assertSame(top1, step.getEndShape());
+		assertSame(top1, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 		step = step.getNext();
-		assertSame(top1, step.getStartShape());
-		assertSame(child21, step.getEndShape());
+		assertSame(child21, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 		step = step.getNext();
-		assertSame(child21, step.getStartShape());
-		assertSame(top3, step.getEndShape());
+		assertSame(top3, step.getFocussedShape());
 		assertTrue(step.isAutoZoomEnabled());
 		
 		step = presentation.getFirstAnimationStep();
 		AnimationStep zoomStep = step.getChild();
-		assertSame(top1, zoomStep.getStartShape());
-		assertSame(child11, zoomStep.getEndShape());
+		assertSame(child11, zoomStep.getFocussedShape());
 		assertTrue(zoomStep.isAutoZoomEnabled());
 		zoomStep = zoomStep.getNext();
-		assertSame(child11, zoomStep.getStartShape());
-		assertSame(child12, zoomStep.getEndShape());
+		assertSame(child12, zoomStep.getFocussedShape());
 		assertFalse(zoomStep.hasNext());
 		assertTrue(zoomStep.isAutoZoomEnabled());
 		

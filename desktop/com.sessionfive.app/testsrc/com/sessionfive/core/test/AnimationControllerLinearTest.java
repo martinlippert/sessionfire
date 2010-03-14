@@ -1,5 +1,7 @@
 package com.sessionfive.core.test;
 
+import junit.framework.TestCase;
+
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AbstractShape;
@@ -7,8 +9,6 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
-
-import junit.framework.TestCase;
 
 public class AnimationControllerLinearTest extends TestCase {
 	
@@ -42,9 +42,9 @@ public class AnimationControllerLinearTest extends TestCase {
 		presentation.addShape(shape2, LayerType.CAMERA_ANIMATED);
 		presentation.addShape(shape3, LayerType.CAMERA_ANIMATED);
 		
-		AnimationStep step1 = new AnimationStep(presentation, shape1);
-		AnimationStep step2 = new AnimationStep(shape1, shape2);
-		AnimationStep step3 = new AnimationStep(shape2, shape3);
+		AnimationStep step1 = new AnimationStep(shape1);
+		AnimationStep step2 = new AnimationStep(shape2);
+		AnimationStep step3 = new AnimationStep(shape3);
 		presentation.addAnimationStep(step1);
 		presentation.addAnimationStep(step2);
 		presentation.addAnimationStep(step3);

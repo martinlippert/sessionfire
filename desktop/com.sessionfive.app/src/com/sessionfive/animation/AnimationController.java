@@ -81,8 +81,8 @@ public class AnimationController {
 		if (!canGoBackward()) {
 			return;
 		}
-
-		Animator animator = currentAnimationStep.getBackwardAnimation(display);
+		
+		Shape focussedShape = getLastFocussedShape();
 
 		if (currentAnimationStep.hasPrevious()) {
 			currentAnimationStep = currentAnimationStep.getPrevious();
@@ -100,7 +100,16 @@ public class AnimationController {
 		} else {
 			currentAnimationStep = null;
 		}
-
+		
+		Animator animator = null;
+		if (currentAnimationStep != null) {
+			animator = currentAnimationStep.getBackwardAnimation(display);
+		} else {
+			Camera cameraStart = display.getCamera();
+			Camera cameraEnd = presentation.getFocussedCamera();
+			animator = presentation.getDefaultAnimation().createBackwardAnimator(
+					cameraStart, cameraEnd, display, focussedShape);
+		}
 		startNewAnimator(animator);
 	}
 
@@ -126,7 +135,7 @@ public class AnimationController {
 
 	public Shape getLastFocussedShape() {
 		return currentAnimationStep != null ? currentAnimationStep
-				.getEndShape() : null;
+				.getFocussedShape() : null;
 	}
 
 	public int getNumberOfKeyFrames() {
@@ -170,7 +179,7 @@ public class AnimationController {
 
 			currentAnimationStep = presentation.getFirstAnimationStep();
 			while (currentAnimationStep != null
-					&& currentAnimationStep.getEndShape() != focussedShape) {
+					&& currentAnimationStep.getFocussedShape() != focussedShape) {
 				if (currentAnimationStep.hasChild()) {
 					currentAnimationStep = currentAnimationStep.getChild();
 				} else if (currentAnimationStep.hasNext()) {

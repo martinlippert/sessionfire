@@ -201,18 +201,18 @@ public class AnimationControllerHierarchicalTest extends TestCase {
 		top2.addShape(child21);
 		top3.addShape(child31);
 		
-		AnimationStep topStep1 = new AnimationStep(presentation, top1);
-		AnimationStep topStep2 = new AnimationStep(top1, child21);
-		AnimationStep topStep3 = new AnimationStep(child21, top3);
+		AnimationStep topStep1 = new AnimationStep(top1);
+		AnimationStep topStep2 = new AnimationStep(child21);
+		AnimationStep topStep3 = new AnimationStep(top3);
 		presentation.addAnimationStep(topStep1);
 		presentation.addAnimationStep(topStep2);
 		presentation.addAnimationStep(topStep3);
 		
-		AnimationStep childStep1 = new AnimationStep(top1, child11);
-		AnimationStep childStep2 = new AnimationStep(child11, child12);
+		AnimationStep childStep1 = new AnimationStep(child11);
+		AnimationStep childStep2 = new AnimationStep(child12);
 		topStep1.addChild(childStep1);
 		topStep1.addChild(childStep2);
-		AnimationStep childStep3 = new AnimationStep(top3, child31);
+		AnimationStep childStep3 = new AnimationStep(child31);
 		topStep3.addChild(childStep3);
 		
 		topStep1.setAutoZoomEnabled(autoZoomIn);

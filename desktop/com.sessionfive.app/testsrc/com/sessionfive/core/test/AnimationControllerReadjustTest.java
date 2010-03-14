@@ -1,5 +1,7 @@
 package com.sessionfive.core.test;
 
+import junit.framework.TestCase;
+
 import com.sessionfive.animation.AnimationController;
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AbstractShape;
@@ -8,8 +10,6 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.test.StandardAnimationPathCreatorTest.ConcreteShape;
-
-import junit.framework.TestCase;
 
 public class AnimationControllerReadjustTest extends TestCase {
 	
@@ -42,9 +42,9 @@ public class AnimationControllerReadjustTest extends TestCase {
 		presentation.addShape(shape2, LayerType.CAMERA_ANIMATED);
 		presentation.addShape(shape3, LayerType.CAMERA_ANIMATED);
 		
-		AnimationStep step1 = new AnimationStep(presentation, shape1);
-		AnimationStep step2 = new AnimationStep(shape1, shape2);
-		AnimationStep step3 = new AnimationStep(shape2, shape3);
+		AnimationStep step1 = new AnimationStep(shape1);
+		AnimationStep step2 = new AnimationStep(shape2);
+		AnimationStep step3 = new AnimationStep(shape3);
 		presentation.addAnimationStep(step1);
 		presentation.addAnimationStep(step2);
 		presentation.addAnimationStep(step3);
@@ -79,15 +79,15 @@ public class AnimationControllerReadjustTest extends TestCase {
 		top1.addShape(child12);
 		top2.addShape(child21);
 		
-		AnimationStep topStep1 = new AnimationStep(presentation, top1);
-		AnimationStep topStep2 = new AnimationStep(top1, child21);
-		AnimationStep topStep3 = new AnimationStep(child21, top3);
+		AnimationStep topStep1 = new AnimationStep(top1);
+		AnimationStep topStep2 = new AnimationStep(child21);
+		AnimationStep topStep3 = new AnimationStep(top3);
 		presentation.addAnimationStep(topStep1);
 		presentation.addAnimationStep(topStep2);
 		presentation.addAnimationStep(topStep3);
 		
-		AnimationStep childStep1 = new AnimationStep(top1, child11);
-		AnimationStep childStep2 = new AnimationStep(child11, child12);
+		AnimationStep childStep1 = new AnimationStep(child11);
+		AnimationStep childStep2 = new AnimationStep(child12);
 		topStep1.addChild(childStep1);
 		topStep1.addChild(childStep2);
 
