@@ -106,7 +106,7 @@ public class AnimationController {
 			animator = currentAnimationStep.getBackwardAnimation(display);
 		} else {
 			Camera cameraStart = display.getCamera();
-			Camera cameraEnd = presentation.getFocussedCamera();
+			Camera cameraEnd = presentation.getStartCamera();
 			animator = presentation.getDefaultAnimation().createBackwardAnimator(
 					cameraStart, cameraEnd, display, focussedShape);
 		}
@@ -209,7 +209,7 @@ public class AnimationController {
 		if (currentAnimationStep != null) {
 			currentAnimationStep.directlyGoTo(display);
 		} else {
-			display.setCamera(presentation.getFocussedCamera());
+			display.setCamera(presentation.getStartCamera());
 		}
 	}
 
@@ -217,7 +217,7 @@ public class AnimationController {
 		this.currentAnimationStep = null;
 
 		Camera cameraStart = display.getCamera();
-		Camera cameraEnd = presentation.getFocussedCamera();
+		Camera cameraEnd = presentation.getStartCamera();
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
 				cameraStart, cameraEnd, display, null);
 		startFocusAnimator(animator);

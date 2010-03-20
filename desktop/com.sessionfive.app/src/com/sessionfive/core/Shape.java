@@ -7,7 +7,7 @@ import javax.media.opengl.GLContext;
 
 import com.sessionfive.core.ui.ExplodeGroupAction;
 
-public interface Shape extends Focusable {
+public interface Shape {
 	
 	public ShapePosition getPosition();
 	public ShapeRotation getRotation();
@@ -32,6 +32,7 @@ public interface Shape extends Focusable {
 	public void release(GLContext context) throws Exception;
 	
 	public void display(GLAutoDrawable drawable);
+	public Camera getFocussedCamera();
 
 	public List<Shape> getShapes();
 	public void addShape(Shape shape);

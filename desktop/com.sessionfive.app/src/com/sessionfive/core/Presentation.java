@@ -15,7 +15,7 @@ import com.sessionfive.core.ui.LineLayouter;
 import com.sessionfive.core.ui.LinearAnimationPathLayouter;
 import com.sessionfive.shapes.TitleShape;
 
-public class Presentation implements Focusable, ShapeChangedListener {
+public class Presentation implements ShapeChangedListener {
 
 	public static final int DEFAULT_SPACE = 25;
 	public static final float DEFAULT_FOCUS_SCALE = 1.0f;
@@ -155,11 +155,6 @@ public class Presentation implements Focusable, ShapeChangedListener {
 
 	public AnimationStep getFirstAnimationStep() {
 		return firstAnimationStep;
-	}
-
-	@Override
-	public Camera getFocussedCamera() {
-		return startCamera;
 	}
 
 	public Color getBackgroundColor() {
