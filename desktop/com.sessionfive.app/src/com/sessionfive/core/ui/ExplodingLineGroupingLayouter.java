@@ -7,6 +7,8 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapePosition;
+import com.sessionfive.core.ShapeRotation;
 
 public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 
@@ -30,7 +32,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 		Iterator<Shape> iter = shapes.iterator();
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
-			shape.setPosition(x, 10, z);
+			shape.setPosition(new ShapePosition(x, 10, z));
 			resizeToDefault(shape);
 			
 			float childZ = z - 0.1f;
@@ -38,11 +40,15 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 			List<Shape> childs = shape.getShapes();
 			Iterator<Shape> childIter = childs.iterator();
 			
+			if (childIter.hasNext()) {
+				shape.setZoomAction(new ExplodeGroupAction(shape));
+			}
+			
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
-				child.setPosition(0, 0, childZ);
+				child.setPosition(new ShapePosition(0, 0, childZ));
 				resizeToDefault(child);
-				child.setRotation(0, 0, angleZ);
+				child.setRotation(new ShapeRotation(0, 0, angleZ));
 
 				childZ -= 0.1f;
 				angleZ += 5;

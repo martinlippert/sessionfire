@@ -6,6 +6,7 @@ import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapePosition;
 
 public class CircleLayouter extends AbstractLayouter {
 
@@ -41,13 +42,13 @@ public class CircleLayouter extends AbstractLayouter {
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
 			if (shape.getClass() == AbstractShape.class) {
-				shape.setPosition(0, 0, 0);
+				shape.setPosition(ShapePosition.EMPTY);
 			}
 			else {
 				float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / size)) * space;
 				float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / size)) * space;
 				z += 0.01f;
-				shape.setPosition(x, y, z);
+				shape.setPosition(new ShapePosition(x, y, z));
 				resizeToDefault(shape);
 				i++;
 			}

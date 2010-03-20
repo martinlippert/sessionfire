@@ -19,7 +19,7 @@ public class MoveToAnimationStyle implements AnimationStyle {
 	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
 		KeyValues<Camera> values = KeyValues.create(
-				new EvaluatorCameraSetting(), cameraStart, cameraEnd);
+				new CameraMoveEvaluator(), cameraStart, cameraEnd);
 		KeyTimes times = new KeyTimes(0f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);
 		PropertySetter ps = new PropertySetter(display, "camera", frames);
@@ -36,7 +36,7 @@ public class MoveToAnimationStyle implements AnimationStyle {
 	public Animator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
 		KeyValues<Camera> values = KeyValues.create(
-				new EvaluatorCameraSetting(), cameraStart, cameraEnd);
+				new CameraMoveEvaluator(), cameraStart, cameraEnd);
 		KeyTimes times = new KeyTimes(0f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);
 		PropertySetter ps = new PropertySetter(display, "camera", frames);

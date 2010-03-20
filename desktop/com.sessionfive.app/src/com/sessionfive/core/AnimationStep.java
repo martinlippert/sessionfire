@@ -3,6 +3,7 @@ package com.sessionfive.core;
 import org.jdesktop.animation.timing.Animator;
 
 import com.sessionfive.app.Display;
+import com.sessionfive.core.ui.ExplodeGroupAction;
 
 public class AnimationStep {
 
@@ -14,6 +15,7 @@ public class AnimationStep {
 	private AnimationStep parent;
 	private AnimationStep child;
 	private boolean autoZoomEnabled;
+	private Shape groupParent;
 
 	public AnimationStep(final Shape focussedShape) {
 		this.focussedShape = focussedShape;
@@ -31,6 +33,14 @@ public class AnimationStep {
 		return focussedShape;
 	}
 	
+	public Shape getGroupShape() {
+		return groupParent;
+	}
+
+	public void setGroupParent(Shape groupParent) {
+		this.groupParent = groupParent;
+	}
+
 	public AnimationStyle getStyle() {
 		return style;
 	}
@@ -38,7 +48,7 @@ public class AnimationStep {
 	public void setStyle(AnimationStyle style) {
 		this.style = style;
 	}
-	
+
 	public boolean isAutoZoomEnabled() {
 		return this.autoZoomEnabled;
 	}
@@ -51,7 +61,14 @@ public class AnimationStep {
 		if (style != null) {
 			Camera cameraStart = display.getCamera();
 			Camera cameraEnd = focussedShape.getFocussedCamera();
-			return style.createForwardAnimator(cameraStart, cameraEnd, display, focussedShape);
+			Animator forwardAnimator = style.createForwardAnimator(cameraStart, cameraEnd, display, focussedShape);
+
+			if (groupParent != null && groupParent.getZoomAction() != null) {
+				ExplodeGroupAction zoomAction = groupParent.getZoomAction();
+				zoomAction.expand();
+			}
+			
+			return forwardAnimator;
 		}
 		return null;
 	}

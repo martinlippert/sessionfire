@@ -5,26 +5,22 @@ import java.util.List;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
+import com.sessionfive.core.ui.ExplodeGroupAction;
+
 public interface Shape extends Focusable {
 	
-	public float getX();
-	public float getY();
-	public float getZ();
+	public ShapePosition getPosition();
+	public ShapeRotation getRotation();
+	
+	public ShapePosition getAbsolutePosition();
+
 	public float getWidth();
 	public float getHeight();
 	public float getDepth();
-	
-	public float getAbsoluteX();
-	public float getAbsoluteY();
-	public float getAbsoluteZ();
 
-	public float getRotationAngleX();
-	public float getRotationAngleY();
-	public float getRotationAngleZ();
-	
-	public void setPosition(float x, float y, float z);
+	public void setPosition(ShapePosition position);
+	public void setRotation(ShapeRotation rotation);
 	public void setSize(float width, float height, float depth);
-	public void setRotation(float angleX, float angleY, float angleZ);
 	
 	public boolean isReflectionEnabled();
 	public void setReflectionEnabled(boolean reflectionEnabled);
@@ -42,8 +38,11 @@ public interface Shape extends Focusable {
 	public void removeShape(Shape shape);
 	public Shape getOwner();
 	public void setOwner(Shape owner);
+	
+	public void setZoomAction(ExplodeGroupAction explodeGroupAction);
+	public ExplodeGroupAction getZoomAction();
 
 	public void addShapeChangedListener(ShapeChangedListener listener);
 	public void removeShapeChangedListener(ShapeChangedListener listener);
-
+	
 }

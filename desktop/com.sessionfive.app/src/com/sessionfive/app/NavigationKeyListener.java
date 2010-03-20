@@ -1,11 +1,7 @@
 package com.sessionfive.app;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.swing.Timer;
 
 import com.sessionfive.animation.AnimationController;
 
@@ -15,62 +11,41 @@ public class NavigationKeyListener implements KeyListener {
 	private final StringBuffer goToKeyframeDirectlyBuffer;
 	private final SessionFiveApplication app;
 	
-	private final Timer navigationKeyTimer;
-	
-	private long lastTime;
-	private KeyEvent lastEvent = null;
-	private int pressCounter;
+	private boolean pressed;
+	private boolean pressedProcessed;
 
 	public NavigationKeyListener(AnimationController animationController, SessionFiveApplication app) {
 		this.animationController = animationController;
 		this.app = app;
 		this.goToKeyframeDirectlyBuffer = new StringBuffer();
-		
-		this.lastTime = 0;
-		this.lastEvent = null;
-		this.pressCounter = 0;
-		this.navigationKeyTimer = new Timer(200, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				keyPressed(lastEvent, pressCounter);
-			}
-		});
-		this.navigationKeyTimer.setRepeats(false);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		System.out.println("typed:  " + e.getKeyCode());
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		System.out.println("released:  " + e.getKeyCode());
+
+		if (pressed && !pressedProcessed) {
+			keyPressed(e, 1);
+		}
+		pressed = false;
+		pressedProcessed = false;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!this.navigationKeyTimer.isRunning()) {
-			this.lastEvent = e;
-			this.lastTime = e.getWhen();
-			this.pressCounter = 1;
-			this.navigationKeyTimer.start();
+		System.out.println("pressed:  " + e.getKeyCode());
+		
+		if (pressed && !pressedProcessed) {
+			keyPressed(e, 2);
+			pressedProcessed = true;
 		}
 		else {
-			long diff = e.getWhen() - lastTime;
-			if (this.lastEvent.getKeyCode() == e.getKeyCode()
-					&& this.lastEvent.getKeyChar() == e.getKeyChar() && diff > 100) {
-				pressCounter++;
-				this.lastTime = e.getWhen();
-				this.navigationKeyTimer.restart();
-			}
-			else {
-				this.navigationKeyTimer.stop();
-				keyPressed(lastEvent, pressCounter);
-				
-				lastEvent = e;
-				lastTime = e.getWhen();
-				pressCounter = 1;
-				this.navigationKeyTimer.start();
-			}
+			pressed = true;
 		}
 	}
 	

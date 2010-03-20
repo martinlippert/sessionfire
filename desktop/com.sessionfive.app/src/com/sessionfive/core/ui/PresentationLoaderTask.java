@@ -21,6 +21,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapeRotation;
 
 public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
@@ -162,7 +163,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
 		Shape newShape = creator.createShape(file);
 		if (newShape != null) {
-			newShape.setRotation(rotationX, rotationY, rotationZ);
+			newShape.setRotation(new ShapeRotation(rotationX, rotationY, rotationZ));
 			newShape.setReflectionEnabled(presentation
 					.isDefaultReflectionEnabled());
 			newShape.setFocusScale(presentation.getDefaultFocusScale());

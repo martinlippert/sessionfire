@@ -7,6 +7,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapePosition;
 
 public class LineGroupingLayouter extends AbstractLayouter {
 
@@ -31,7 +32,7 @@ public class LineGroupingLayouter extends AbstractLayouter {
 		Iterator<Shape> iter = shapes.iterator();
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
-			shape.setPosition(x, 10, z);
+			shape.setPosition(new ShapePosition(x, 10, z));
 			resizeToDefault(shape);
 			
 			float childY = 0;
@@ -41,7 +42,7 @@ public class LineGroupingLayouter extends AbstractLayouter {
 			
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
-				child.setPosition(0, childY, childZ);
+				child.setPosition(new ShapePosition(0, childY, childZ));
 				resizeToDefault(child);
 
 				childY -= childSpace;

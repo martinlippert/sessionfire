@@ -73,7 +73,7 @@ public class AnimationController {
 
 			Animator animator = currentAnimationStep
 					.getForwardAnimation(display);
-			startNewAnimator(animator);
+			startFocusAnimator(animator);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class AnimationController {
 			animator = presentation.getDefaultAnimation().createBackwardAnimator(
 					cameraStart, cameraEnd, display, focussedShape);
 		}
-		startNewAnimator(animator);
+		startFocusAnimator(animator);
 	}
 
 	public void zoomIn() {
@@ -120,7 +120,7 @@ public class AnimationController {
 
 		currentAnimationStep = currentAnimationStep.getChild();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startNewAnimator(animator);
+		startFocusAnimator(animator);
 	}
 
 	public void zoomOut() {
@@ -130,7 +130,7 @@ public class AnimationController {
 
 		currentAnimationStep = currentAnimationStep.getParent();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startNewAnimator(animator);
+		startFocusAnimator(animator);
 	}
 
 	public Shape getLastFocussedShape() {
@@ -169,7 +169,7 @@ public class AnimationController {
 		}
 
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startNewAnimator(animator);
+		startFocusAnimator(animator);
 	}
 
 	public void readjustSmoothlyTo(Shape focussedShape) {
@@ -200,7 +200,7 @@ public class AnimationController {
 			if (currentAnimationStep != null) {
 				Animator animator = currentAnimationStep
 						.getForwardAnimation(display);
-				startNewAnimator(animator);
+				startFocusAnimator(animator);
 			}
 		}
 	}
@@ -220,10 +220,10 @@ public class AnimationController {
 		Camera cameraEnd = presentation.getFocussedCamera();
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
 				cameraStart, cameraEnd, display, null);
-		startNewAnimator(animator);
+		startFocusAnimator(animator);
 	}
 
-	protected void startNewAnimator(Animator animator) {
+	protected void startFocusAnimator(Animator animator) {
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.stop();
 		}

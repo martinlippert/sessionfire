@@ -12,6 +12,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapePosition;
 
 public class PositionSizeView extends AbstractView {
 
@@ -146,7 +147,7 @@ public class PositionSizeView extends AbstractView {
 
 		Shape[] shapes = getSelectedShapes();
 		if (shapes.length > 0 && (getX() != x || getY() != y || getZ() != z)) {
-			shapes[0].setPosition(x, y, z);
+			shapes[0].setPosition(new ShapePosition(x, y, z));
 		}
 
 		setSelfChanging(false);
@@ -165,15 +166,15 @@ public class PositionSizeView extends AbstractView {
 	}
 
 	private float getX() {
-		return getSelectedShapes()[0].getX();
+		return getSelectedShapes()[0].getPosition().getX();
 	}
 
 	private float getY() {
-		return getSelectedShapes()[0].getY();
+		return getSelectedShapes()[0].getPosition().getY();
 	}
 
 	private float getZ() {
-		return getSelectedShapes()[0].getZ();
+		return getSelectedShapes()[0].getPosition().getZ();
 	}
 
 	private float getWidth() {

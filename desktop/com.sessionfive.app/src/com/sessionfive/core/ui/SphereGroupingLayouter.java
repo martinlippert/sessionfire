@@ -8,6 +8,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapePosition;
 
 public class SphereGroupingLayouter extends AbstractLayouter {
 
@@ -42,7 +43,7 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 			float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / noTopLevelShapes) * ellipseFactor) * space;
 			float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / noTopLevelShapes)) * space;
 			z += 0.01f;
-			shape.setPosition(x, y, z);
+			shape.setPosition(new ShapePosition(x, y, z));
 			i++;
 			
 			layoutChilds(shape);
@@ -57,7 +58,7 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 			float height = group.getHeight();
 
 			if (group.getClass() == AbstractShape.class) {
-				childs.get(0).setPosition(0, 0, 0);
+				childs.get(0).setPosition(ShapePosition.EMPTY);
 				width = childs.get(0).getWidth();
 				height = childs.get(0).getHeight();
 				startIndex = 1;
@@ -90,7 +91,7 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 				x -= childWidth / 2;
 				y -= childHeight / 2;
 				
-				child.setPosition(x , y, z);
+				child.setPosition(new ShapePosition(x , y, z));
 				child.setSize(childWidth, childHeight, childDepth);
 			}
 		}

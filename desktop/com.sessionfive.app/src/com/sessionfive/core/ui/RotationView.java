@@ -12,6 +12,7 @@ import com.sessionfive.app.SelectionListener;
 import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapeChangedListener;
+import com.sessionfive.core.ShapeRotation;
 
 public class RotationView extends AbstractView implements SelectionListener,
 		ShapeChangedListener {
@@ -80,7 +81,7 @@ public class RotationView extends AbstractView implements SelectionListener,
 	public void setRotation(float x, float y, float z) {
 		setSelfChanging(true);
 		for (Shape shape : getSelectedShapes()) {
-			shape.setRotation(x, y, z);
+			shape.setRotation(new ShapeRotation(x, y, z));
 		}
 		setSelfChanging(false);
 	}
@@ -96,15 +97,15 @@ public class RotationView extends AbstractView implements SelectionListener,
 	}
 
 	protected int getRotationAngleX() {
-		return (int) getSelectedShapes()[0].getRotationAngleX();
+		return (int) getSelectedShapes()[0].getRotation().getRotationAngleX();
 	}
 
 	protected int getRotationAngleY() {
-		return (int) getSelectedShapes()[0].getRotationAngleY();
+		return (int) getSelectedShapes()[0].getRotation().getRotationAngleY();
 	}
 
 	protected int getRotationAngleZ() {
-		return (int) getSelectedShapes()[0].getRotationAngleZ();
+		return (int) getSelectedShapes()[0].getRotation().getRotationAngleZ();
 	}
 
 }

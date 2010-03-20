@@ -18,7 +18,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 	@Override
 	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
-		float shapeX = endShape.getAbsoluteX();
+		float shapeX = endShape.getAbsolutePosition().getX();
 
 		float positionY = (cameraStart.getLocation().getY() + cameraEnd
 				.getLocation().getY()) / 2;
@@ -30,7 +30,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 				cameraStart.getUp().getY(), cameraStart.getUp().getZ());
 
 		KeyValues<Camera> values = KeyValues
-				.create(new EvaluatorCameraSetting(), cameraStart, cameraMid,
+				.create(new CameraMoveEvaluator(), cameraStart, cameraMid,
 						cameraEnd);
 		KeyTimes times = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);
@@ -47,7 +47,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 	@Override
 	public Animator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
-		float shapeX = endShape.getAbsoluteX();
+		float shapeX = endShape.getAbsolutePosition().getX();
 
 		float positionY = (cameraStart.getLocation().getY() + cameraEnd
 				.getLocation().getY()) / 2;
@@ -59,7 +59,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 				cameraStart.getUp().getY(), cameraStart.getUp().getZ());
 
 		KeyValues<Camera> values = KeyValues
-				.create(new EvaluatorCameraSetting(), cameraStart, cameraMid,
+				.create(new CameraMoveEvaluator(), cameraStart, cameraMid,
 						cameraEnd);
 		KeyTimes times = new KeyTimes(0f, 0.5f, 1f);
 		KeyFrames frames = new KeyFrames(values, times);

@@ -209,9 +209,9 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("startCameraTargetZ", Float.toString(tar.getZ()));
 
 		Shape firstShape = presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0);
-		result.setProperty("rotationX", Float.toString(firstShape.getRotationAngleX()));
-		result.setProperty("rotationY", Float.toString(firstShape.getRotationAngleY()));
-		result.setProperty("rotationZ", Float.toString(firstShape.getRotationAngleZ()));
+		result.setProperty("rotationX", Float.toString(firstShape.getRotation().getRotationAngleX()));
+		result.setProperty("rotationY", Float.toString(firstShape.getRotation().getRotationAngleY()));
+		result.setProperty("rotationZ", Float.toString(firstShape.getRotation().getRotationAngleZ()));
 
 		return result;
 	}

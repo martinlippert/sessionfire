@@ -18,6 +18,7 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.Threading;
 
 import com.sessionfive.core.AbstractShape;
+import com.sessionfive.core.ShapePosition;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureCoords;
 import com.sun.opengl.util.texture.TextureData;
@@ -55,9 +56,10 @@ public class ImageShape extends AbstractShape {
 		// each pixel in the texture by the current alpha value
 		gl.glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-		float x = getAbsoluteX();
-		float y = getAbsoluteY();
-		float z = getAbsoluteZ();
+		ShapePosition absolutePosition = getAbsolutePosition();
+		float x = absolutePosition.getX();
+		float y = absolutePosition.getY();
+		float z = absolutePosition.getZ();
 		float w = getWidth();
 		float h = getHeight();
 
@@ -65,9 +67,9 @@ public class ImageShape extends AbstractShape {
 		gl.glTranslatef(x + (w/2),
                 y + (h/2),
                 0);
-        gl.glRotatef(getRotationAngleX(), 1f, 0f, 0f);
-        gl.glRotatef(getRotationAngleY(), 0f, 1f, 0f);
-        gl.glRotatef(getRotationAngleZ(), 0f, 0f, 1f);
+        gl.glRotatef(getRotation().getRotationAngleX(), 1f, 0f, 0f);
+        gl.glRotatef(getRotation().getRotationAngleY(), 0f, 1f, 0f);
+        gl.glRotatef(getRotation().getRotationAngleZ(), 0f, 0f, 1f);
 		gl.glTranslatef(-(x + (w/2)),
                 -(y + (h/2)),
                 0);
