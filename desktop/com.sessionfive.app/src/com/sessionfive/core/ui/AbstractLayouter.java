@@ -1,6 +1,7 @@
 package com.sessionfive.core.ui;
 
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapeSize;
 
 public abstract class AbstractLayouter implements Layouter {
 
@@ -17,10 +18,10 @@ public abstract class AbstractLayouter implements Layouter {
 	}
 
 	public void resizeToDefault(Shape shape) {
-		float sizeRatio = shape.getHeight() / shape.getWidth();
+		float sizeRatio = shape.getSize().getHeight() / shape.getSize().getWidth();
 		float newWidth = 45f;
 		float newHeight = newWidth * sizeRatio;
-		shape.setSize(newWidth, newHeight, 0);
+		shape.setSize(new ShapeSize(newWidth, newHeight, 0));
 	}
 
 }

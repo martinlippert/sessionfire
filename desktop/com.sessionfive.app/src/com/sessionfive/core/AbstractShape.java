@@ -14,10 +14,7 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 
 	private ShapePosition position;
 	private ShapeRotation rotation;
-
-	private float width;
-	private float height;
-	private float depth;
+	private ShapeSize size;
 
 	private boolean reflectionEnabled;
 	private float focusScale;
@@ -35,8 +32,9 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 		this.shapes = new CopyOnWriteArrayList<Shape>();
 		this.owner = null;
 
-		this.position = ShapePosition.EMPTY;
-		this.rotation = new ShapeRotation(0, 0, 0);
+		this.position = ShapePosition.ZERO;
+		this.rotation = ShapeRotation.ZERO;
+		this.size = ShapeSize.ZERO;
 	}
 
 	@Override
@@ -53,22 +51,12 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	public ShapePosition getAbsolutePosition() {
 		return this.getPosition().add(
 				this.getOwner() != null ? this.getOwner().getAbsolutePosition()
-						: ShapePosition.EMPTY);
+						: ShapePosition.ZERO);
 	}
 
 	@Override
-	public float getWidth() {
-		return width;
-	}
-
-	@Override
-	public float getHeight() {
-		return height;
-	}
-
-	@Override
-	public float getDepth() {
-		return depth;
+	public ShapeSize getSize() {
+		return size;
 	}
 
 	@Override
@@ -80,11 +68,9 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	}
 
 	@Override
-	public void setSize(float width, float height, float depth) {
-		if (this.width != width || this.height != height || this.depth != depth) {
-			this.width = width;
-			this.height = height;
-			this.depth = depth;
+	public void setSize(ShapeSize size) {
+		if (!this.size.equals(size)) {
+			this.size = size;
 			fireShapeChangedEvent();
 		}
 	}
@@ -128,8 +114,8 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 		float shapeY = absolutePosition.getY();
 		float shapeZ = absolutePosition.getZ();
 
-		float shapeWidth = this.getWidth();
-		float shapeHeight = this.getHeight();
+		float shapeWidth = this.getSize().getWidth();
+		float shapeHeight = this.getSize().getHeight();
 
 		float rotationAngleX = this.getRotation().getRotationAngleX();
 		float rotationAngleY = this.getRotation().getRotationAngleY();

@@ -42,7 +42,7 @@ public class CircleLayouter extends AbstractLayouter {
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
 			if (shape.getClass() == AbstractShape.class) {
-				shape.setPosition(ShapePosition.EMPTY);
+				shape.setPosition(ShapePosition.ZERO);
 			}
 			else {
 				float x = (float) (centerx + radius * Math.cos(2 * Math.PI * i / size)) * space;

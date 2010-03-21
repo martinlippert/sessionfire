@@ -7,6 +7,7 @@ import javax.media.opengl.GLAutoDrawable;
 
 import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.ShapePosition;
+import com.sessionfive.core.ShapeSize;
 import com.sun.opengl.util.j2d.TextRenderer;
 
 public class TextShape extends AbstractShape {
@@ -29,8 +30,8 @@ public class TextShape extends AbstractShape {
 		float x = absolutePosition.getX();
 		float y = absolutePosition.getY();
 		float z = absolutePosition.getZ();
-		float w = getWidth();
-		float h = getHeight();
+		float w = getSize().getWidth();
+		float h = getSize().getHeight();
 		
 		GL gl = drawable.getGL();
 		
@@ -78,7 +79,7 @@ public class TextShape extends AbstractShape {
 	protected void recalculateSize() {
 		float width = (float) renderer.getBounds(text).getWidth() * 0.05f;
 		float height = (float) renderer.getBounds(text).getHeight() * 0.05f;
-		setSize(width, height, 0f);
+		setSize(new ShapeSize(width, height, 0f));
 	}
 
 }

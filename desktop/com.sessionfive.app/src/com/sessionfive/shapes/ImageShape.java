@@ -19,6 +19,7 @@ import javax.media.opengl.Threading;
 
 import com.sessionfive.core.AbstractShape;
 import com.sessionfive.core.ShapePosition;
+import com.sessionfive.core.ShapeSize;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureCoords;
 import com.sun.opengl.util.texture.TextureData;
@@ -60,8 +61,8 @@ public class ImageShape extends AbstractShape {
 		float x = absolutePosition.getX();
 		float y = absolutePosition.getY();
 		float z = absolutePosition.getZ();
-		float w = getWidth();
-		float h = getHeight();
+		float w = getSize().getWidth();
+		float h = getSize().getHeight();
 
         gl.glPushMatrix();
 		gl.glTranslatef(x + (w/2),
@@ -145,10 +146,10 @@ public class ImageShape extends AbstractShape {
 				t.setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				
 				float imageRatio = (float)t.getImageHeight() / (float)t.getImageWidth();
-				float width = getWidth();
+				float width = getSize().getWidth();
 				float newHeight = width * imageRatio;
-				float depth = getDepth();
-				setSize(width, newHeight, depth);
+				float depth = getSize().getDepth();
+				setSize(new ShapeSize(width, newHeight, depth));
 			} catch (GLException e) {
 				e.printStackTrace();
 			}

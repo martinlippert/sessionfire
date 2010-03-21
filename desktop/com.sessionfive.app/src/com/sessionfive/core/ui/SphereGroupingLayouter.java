@@ -9,6 +9,7 @@ import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapePosition;
+import com.sessionfive.core.ShapeSize;
 
 public class SphereGroupingLayouter extends AbstractLayouter {
 
@@ -54,13 +55,13 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 		List<Shape> childs = group.getShapes();
 		if (childs.size() > 0) {
 			int startIndex = 0;
-			float width = group.getWidth();
-			float height = group.getHeight();
+			float width = group.getSize().getWidth();
+			float height = group.getSize().getHeight();
 
 			if (group.getClass() == AbstractShape.class) {
-				childs.get(0).setPosition(ShapePosition.EMPTY);
-				width = childs.get(0).getWidth();
-				height = childs.get(0).getHeight();
+				childs.get(0).setPosition(ShapePosition.ZERO);
+				width = childs.get(0).getSize().getWidth();
+				height = childs.get(0).getSize().getHeight();
 				startIndex = 1;
 			}
 			
@@ -79,9 +80,9 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 				float y = (float) (centery + radius * Math.sin(2 * Math.PI * i / noOfChildsToLayout)) * space;
 				z += 0.01f;
 				
-				float childWidth = child.getWidth();
-				float childHeight = child.getHeight();
-				float childDepth = child.getDepth();
+				float childWidth = child.getSize().getWidth();
+				float childHeight = child.getSize().getHeight();
+				float childDepth = child.getSize().getDepth();
 
 				float childFactor = childHeight / childWidth;
 				
@@ -92,7 +93,7 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 				y -= childHeight / 2;
 				
 				child.setPosition(new ShapePosition(x , y, z));
-				child.setSize(childWidth, childHeight, childDepth);
+				child.setSize(new ShapeSize(childWidth, childHeight, childDepth));
 			}
 		}
 	}

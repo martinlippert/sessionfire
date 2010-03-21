@@ -3,7 +3,6 @@ package com.sessionfive.core;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
-
 public class Camera {
 
 	private Point location;

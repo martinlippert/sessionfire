@@ -11,8 +11,8 @@ public class AbstractShapeTest extends TestCase {
 		AbstractShape shape = new AbstractShape();
 
 		assertNull(shape.getOwner());
-		assertEquals(ShapePosition.EMPTY, shape.getPosition());
-		assertEquals(ShapePosition.EMPTY, shape.getAbsolutePosition());
+		assertEquals(ShapePosition.ZERO, shape.getPosition());
+		assertEquals(ShapePosition.ZERO, shape.getAbsolutePosition());
 	}
 
 	public void testPositionWithoutOwnerAtSpecificPosition() {

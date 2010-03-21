@@ -13,6 +13,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapePosition;
+import com.sessionfive.core.ShapeSize;
 
 public class PositionSizeView extends AbstractView {
 
@@ -159,7 +160,7 @@ public class PositionSizeView extends AbstractView {
 		Shape[] shapes = getSelectedShapes();
 		if (shapes.length > 0
 				&& (getWidth() != width || getHeight() != height || getDepth() != depth)) {
-			shapes[0].setSize(width, height, depth);
+			shapes[0].setSize(new ShapeSize(width, height, depth));
 		}
 
 		setSelfChanging(false);
@@ -178,15 +179,15 @@ public class PositionSizeView extends AbstractView {
 	}
 
 	private float getWidth() {
-		return getSelectedShapes()[0].getWidth();
+		return getSelectedShapes()[0].getSize().getWidth();
 	}
 
 	private float getHeight() {
-		return getSelectedShapes()[0].getHeight();
+		return getSelectedShapes()[0].getSize().getHeight();
 	}
 
 	private float getDepth() {
-		return getSelectedShapes()[0].getDepth();
+		return getSelectedShapes()[0].getSize().getDepth();
 	}
 
 }

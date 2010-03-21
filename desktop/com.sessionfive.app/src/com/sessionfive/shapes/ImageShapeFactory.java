@@ -4,12 +4,13 @@ import java.io.File;
 
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapeFactory;
+import com.sessionfive.core.ShapeSize;
 
 public class ImageShapeFactory implements ShapeFactory {
 
 	public Shape createShape(File resource) {
 		ImageShape imageShape = new ImageShape(resource);
-		imageShape.setSize(45f, 0f, 0f);
+		imageShape.setSize(new ShapeSize(45f, 0f, 0f));
 		return imageShape;
 	}
 

@@ -11,16 +11,13 @@ public interface Shape {
 	
 	public ShapePosition getPosition();
 	public ShapeRotation getRotation();
+	public ShapeSize getSize();
 	
 	public ShapePosition getAbsolutePosition();
 
-	public float getWidth();
-	public float getHeight();
-	public float getDepth();
-
 	public void setPosition(ShapePosition position);
 	public void setRotation(ShapeRotation rotation);
-	public void setSize(float width, float height, float depth);
+	public void setSize(ShapeSize size);
 	
 	public boolean isReflectionEnabled();
 	public void setReflectionEnabled(boolean reflectionEnabled);

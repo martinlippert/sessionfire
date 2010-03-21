@@ -6,7 +6,7 @@ public class ShapePosition {
 	private final float y;
 	private final float z;
 
-	public static ShapePosition EMPTY = new ShapePosition(0, 0, 0);
+	public static ShapePosition ZERO = new ShapePosition(0, 0, 0);
 
 	public ShapePosition(float x, float y, float z) {
 		super();

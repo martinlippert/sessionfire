@@ -43,7 +43,7 @@ public class TileLayouter extends AbstractLayouter {
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
 			if (shape.getClass() == AbstractShape.class) {
-				shape.setPosition(ShapePosition.EMPTY);
+				shape.setPosition(ShapePosition.ZERO);
 			}
 			else {
 				shape.setPosition(new ShapePosition(x, y, z));
