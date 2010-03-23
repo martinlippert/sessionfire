@@ -38,6 +38,7 @@ import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.ui.CentralControlPalette;
 import com.sessionfive.core.ui.CentralControlPaletteUI;
+import com.sessionfive.core.ui.ExplodingGroupListener;
 import com.sun.opengl.util.Screenshot;
 
 public class SessionFiveApplication implements IApplication {
@@ -209,6 +210,7 @@ public class SessionFiveApplication implements IApplication {
 
 		frame.setVisible(true);
 		animationController.init(presentation, display);
+		animationController.addFocusListener(new ExplodingGroupListener());
 
 		centralControlPalette = new CentralControlPalette(presentation, animationController);
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,

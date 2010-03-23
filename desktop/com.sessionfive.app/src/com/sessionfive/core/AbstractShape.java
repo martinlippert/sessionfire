@@ -8,13 +8,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
-import com.sessionfive.core.ui.ExplodeGroupAction;
-
 public class AbstractShape implements Shape, ShapeChangedListener {
 
 	private ShapePosition position;
 	private ShapeRotation rotation;
 	private ShapeSize size;
+
+	private ShapePosition focussedPosition;
+	private ShapeRotation focussedRotation;
+	private ShapeSize focussedSize;
 
 	private boolean reflectionEnabled;
 	private float focusScale;
@@ -22,7 +24,6 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	private List<Shape> shapes;
 	private Shape owner;
 	private List<ShapeChangedListener> changeListeners;
-	private ExplodeGroupAction zoomAction;
 
 	public AbstractShape() {
 		super();
@@ -82,6 +83,44 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 			fireShapeChangedEvent();
 		}
 	}
+	
+	@Override
+	public ShapePosition getFocussedPosition() {
+		return this.focussedPosition != null ? this.focussedPosition
+				: this.position;
+	}
+	
+	@Override
+	public void setFocussedPosition(ShapePosition position) {
+		this.focussedPosition = position;
+	}
+	
+	@Override
+	public ShapePosition getAbsoluteFocussedPosition() {
+		return this.getFocussedPosition().add(
+				this.getOwner() != null ? this.getOwner().getAbsoluteFocussedPosition()
+						: ShapePosition.ZERO);
+	}
+
+	@Override
+	public ShapeRotation getFocussedRotation() {
+		return this.focussedRotation != null ? this.focussedRotation : this.rotation;
+	}
+
+	@Override
+	public void setFocussedRotation(ShapeRotation rotation) {
+		this.focussedRotation = rotation;
+	}
+	
+	@Override
+	public ShapeSize getFocussedSize() {
+		return this.focussedSize != null ? this.focussedSize : this.size;
+	}
+
+	@Override
+	public void setFocussedSize(ShapeSize size) {
+		focussedSize = size;
+	}
 
 	@Override
 	public boolean isReflectionEnabled() {
@@ -109,17 +148,17 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 
 	@Override
 	public Camera getFocussedCamera() {
-		ShapePosition absolutePosition = getAbsolutePosition();
+		ShapePosition absolutePosition = getAbsoluteFocussedPosition();
 		float shapeX = absolutePosition.getX();
 		float shapeY = absolutePosition.getY();
 		float shapeZ = absolutePosition.getZ();
 
-		float shapeWidth = this.getSize().getWidth();
-		float shapeHeight = this.getSize().getHeight();
+		float shapeWidth = this.getFocussedSize().getWidth();
+		float shapeHeight = this.getFocussedSize().getHeight();
 
-		float rotationAngleX = this.getRotation().getRotationAngleX();
-		float rotationAngleY = this.getRotation().getRotationAngleY();
-		float rotationAngleZ = -this.getRotation().getRotationAngleZ();
+		float rotationAngleX = this.getFocussedRotation().getRotationAngleX();
+		float rotationAngleY = this.getFocussedRotation().getRotationAngleY();
+		float rotationAngleZ = -this.getFocussedRotation().getRotationAngleZ();
 
 		double rotationRadianX = Math.toRadians(rotationAngleX);
 		double rotationRadianY = Math.toRadians(rotationAngleY);
@@ -238,16 +277,6 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 		shape.setOwner(null);
 		shape.removeShapeChangedListener(this);
 		fireShapeChangedEvent();
-	}
-
-	@Override
-	public ExplodeGroupAction getZoomAction() {
-		return this.zoomAction;
-	}
-
-	@Override
-	public void setZoomAction(ExplodeGroupAction explodeGroupAction) {
-		this.zoomAction = explodeGroupAction;
 	}
 
 	@Override

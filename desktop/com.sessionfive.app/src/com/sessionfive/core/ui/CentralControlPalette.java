@@ -91,7 +91,7 @@ public class CentralControlPalette {
 	public Layouter[] getLayouter() {
 		return new Layouter[] { new LineLayouter(), new TileLayouter(),
 				new CircleLayouter(), new LineGroupingLayouter(),
-				new SphereGroupingLayouter() };
+				new SphereGroupingLayouter(), new ExplodingLineGroupingLayouter() };
 	}
 
 	public AnimationStyle[] getAnimationStyles() {

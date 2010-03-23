@@ -1,12 +1,19 @@
 package com.sessionfive.animation;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
 
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapeFocusListener;
 
 public class AnimationController {
 
@@ -16,6 +23,12 @@ public class AnimationController {
 	private Presentation presentation;
 	private AnimationStep currentAnimationStep;
 
+	private Set<ShapeFocusListener> focusListeners;
+	
+	public AnimationController() {
+		this.focusListeners = new HashSet<ShapeFocusListener>();
+	}
+	
 	public void init(Presentation presentation, Display display) {
 		this.presentation = presentation;
 		this.display = display;
@@ -58,9 +71,13 @@ public class AnimationController {
 		if (canZoomIn() && currentAnimationStep.isAutoZoomEnabled()) {
 			zoomIn();
 		} else {
+			Shape lastFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
+			
 			if (currentAnimationStep == null) {
 				currentAnimationStep = presentation.getFirstAnimationStep();
 			} else {
+				lastFocussedShape = currentAnimationStep.getFocussedShape();
+
 				while (!currentAnimationStep.hasNext()
 						&& currentAnimationStep.hasParent()) {
 					currentAnimationStep = currentAnimationStep.getParent();
@@ -71,9 +88,10 @@ public class AnimationController {
 				}
 			}
 
+			Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
 			Animator animator = currentAnimationStep
 					.getForwardAnimation(display);
-			startFocusAnimator(animator);
+			startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
 		}
 	}
 
@@ -110,7 +128,8 @@ public class AnimationController {
 			animator = presentation.getDefaultAnimation().createBackwardAnimator(
 					cameraStart, cameraEnd, display, focussedShape);
 		}
-		startFocusAnimator(animator);
+		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
+		startFocusAnimator(focussedShape, nextFocussedShape, animator);
 	}
 
 	public void zoomIn() {
@@ -118,9 +137,11 @@ public class AnimationController {
 			return;
 		}
 
+		Shape lastFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
 		currentAnimationStep = currentAnimationStep.getChild();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startFocusAnimator(animator);
+		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
+		startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
 	}
 
 	public void zoomOut() {
@@ -128,9 +149,11 @@ public class AnimationController {
 			return;
 		}
 
+		Shape lastFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
 		currentAnimationStep = currentAnimationStep.getParent();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startFocusAnimator(animator);
+		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
+		startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
 	}
 
 	public Shape getLastFocussedShape() {
@@ -169,7 +192,7 @@ public class AnimationController {
 		}
 
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startFocusAnimator(animator);
+		startFocusAnimator(null, null, animator);
 	}
 
 	public void readjustSmoothlyTo(Shape focussedShape) {
@@ -200,7 +223,7 @@ public class AnimationController {
 			if (currentAnimationStep != null) {
 				Animator animator = currentAnimationStep
 						.getForwardAnimation(display);
-				startFocusAnimator(animator);
+				startFocusAnimator(null, null, animator);
 			}
 		}
 	}
@@ -220,18 +243,100 @@ public class AnimationController {
 		Camera cameraEnd = presentation.getStartCamera();
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
 				cameraStart, cameraEnd, display, null);
-		startFocusAnimator(animator);
+		startFocusAnimator(null, null, animator);
 	}
 
-	protected void startFocusAnimator(Animator animator) {
+	protected void startFocusAnimator(final Shape lastFocussed, final Shape nextFocussed, final Animator animator) {
+		List<TimingTarget> cancelTargets = null;
 		if (currentAnimator != null && currentAnimator.isRunning()) {
-			currentAnimator.stop();
+			currentAnimator.cancel();
+			if (lastFocussed != null) {
+				cancelTargets = fireCancelFocussingShape(lastFocussed);
+			}
 		}
 
 		currentAnimator = animator;
 		if (currentAnimator != null) {
+			addTimingTargets(currentAnimator, cancelTargets);
+			if (nextFocussed != null) {
+				List<TimingTarget> timings = fireStartsFocussingShape(nextFocussed);
+				addTimingTargets(currentAnimator, timings);
+			}
+			
+			currentAnimator.addTarget(new TimingTarget() {
+				@Override
+				public void timingEvent(float fraction) {
+				}
+				
+				@Override
+				public void repeat() {
+				}
+				
+				@Override
+				public void end() {
+					fireFinishedFocussingShape(nextFocussed);
+				}
+				
+				@Override
+				public void begin() {
+				}
+			});
 			currentAnimator.start();
 		}
+	}
+	
+	private void addTimingTargets(Animator animator, List<TimingTarget> targets) {
+		if (targets != null && animator != null) {
+			for (TimingTarget timingTarget : targets) {
+				currentAnimator.addTarget(timingTarget);
+			}
+		}
+	}
+	
+	public void addFocusListener(ShapeFocusListener action) {
+		focusListeners.add(action);
+	}
+
+	public void removeFocusListener(ShapeFocusListener action) {
+		focusListeners.remove(action);
+	}
+	
+	protected List<TimingTarget> fireStartsFocussingShape(Shape shape) {
+		List<TimingTarget> result = null;
+		for (ShapeFocusListener listener : this.focusListeners) {
+			TimingTarget timingTarget = listener.startsFocussing(shape);
+			result = acculumateTimingTarget(result, timingTarget);
+		}
+		return result;
+	}
+	
+	protected List<TimingTarget> fireCancelFocussingShape(Shape shape) {
+		List<TimingTarget> result = null;
+		for (ShapeFocusListener listener : this.focusListeners) {
+			TimingTarget timingTarget = listener.cancelFocussing(shape);
+			result = acculumateTimingTarget(result, timingTarget);
+		}
+		return result;
+	}
+	
+	protected List<TimingTarget> fireFinishedFocussingShape(Shape shape) {
+		List<TimingTarget> result = null;
+		for (ShapeFocusListener listener : this.focusListeners) {
+			TimingTarget timingTarget = listener.finishedFocussing(shape);
+			result = acculumateTimingTarget(result, timingTarget);
+		}
+		return result;
+	}
+	
+	private List<TimingTarget> acculumateTimingTarget(
+			List<TimingTarget> result, TimingTarget timingTarget) {
+		if (timingTarget != null) {
+			if (result == null) {
+				result = new ArrayList<TimingTarget>();
+			}
+			result.add(timingTarget);
+		}
+		return result;
 	}
 
 	/*

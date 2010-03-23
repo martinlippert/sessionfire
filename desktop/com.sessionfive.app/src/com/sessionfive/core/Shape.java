@@ -5,20 +5,26 @@ import java.util.List;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 
-import com.sessionfive.core.ui.ExplodeGroupAction;
-
 public interface Shape {
 	
 	public ShapePosition getPosition();
+	public ShapePosition getAbsolutePosition();
 	public ShapeRotation getRotation();
 	public ShapeSize getSize();
 	
-	public ShapePosition getAbsolutePosition();
-
 	public void setPosition(ShapePosition position);
 	public void setRotation(ShapeRotation rotation);
 	public void setSize(ShapeSize size);
 	
+	public ShapePosition getFocussedPosition();
+	public ShapePosition getAbsoluteFocussedPosition();
+	public ShapeRotation getFocussedRotation();
+	public ShapeSize getFocussedSize();
+	
+	public void setFocussedPosition(ShapePosition position);
+	public void setFocussedRotation(ShapeRotation rotation);
+	public void setFocussedSize(ShapeSize size);
+
 	public boolean isReflectionEnabled();
 	public void setReflectionEnabled(boolean reflectionEnabled);
 	
@@ -37,9 +43,6 @@ public interface Shape {
 	public Shape getOwner();
 	public void setOwner(Shape owner);
 	
-	public void setZoomAction(ExplodeGroupAction explodeGroupAction);
-	public ExplodeGroupAction getZoomAction();
-
 	public void addShapeChangedListener(ShapeChangedListener listener);
 	public void removeShapeChangedListener(ShapeChangedListener listener);
 	

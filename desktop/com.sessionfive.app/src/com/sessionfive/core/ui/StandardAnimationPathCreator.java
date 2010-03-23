@@ -47,7 +47,6 @@ public class StandardAnimationPathCreator {
 				AnimationStep subStep = new AnimationStep(child);
 				subStep.setStyle(style);
 				subStep.setAutoZoomEnabled(autoZoomIn);
-				subStep.setGroupParent(shape);
 
 				step.addChild(subStep);
 			}

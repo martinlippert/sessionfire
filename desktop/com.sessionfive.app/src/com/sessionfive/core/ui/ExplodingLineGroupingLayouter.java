@@ -21,10 +21,12 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 
 	@Override
 	public void layout(Presentation presentation) {
-		final Camera newStartCamera = new Camera(-80f, 30f, 90f, -20f, 30.1f, 0f, 0f, 1f, 0f);
+		final Camera newStartCamera = new Camera(-80f, 30f, 90f, -20f, 30.1f,
+				0f, 0f, 1f, 0f);
 		presentation.setDefaultStartCamera(newStartCamera);
 
 		float space = presentation.getSpace() * 2f;
+		float childSpace = space;
 		float x = -space;
 		float z = 0f;
 
@@ -33,30 +35,37 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
 			shape.setPosition(new ShapePosition(x, 10, z));
+			shape.setFocussedPosition(null);
 			resizeToDefault(shape);
-			
+
 			float childZ = z - 0.1f;
+			float childY = 0;
 			float angleZ = 0;
 			List<Shape> childs = shape.getShapes();
 			Iterator<Shape> childIter = childs.iterator();
-			
-			if (childIter.hasNext()) {
-				shape.setZoomAction(new ExplodeGroupAction(shape));
-			}
-			
+
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
 				child.setPosition(new ShapePosition(0, 0, childZ));
-				resizeToDefault(child);
 				child.setRotation(new ShapeRotation(0, 0, angleZ));
+				resizeToDefault(child);
 
+				child.setFocussedRotation(new ShapeRotation(0, 0, 0));
+				child.setFocussedPosition(new ShapePosition(0,
+						childY, childZ));
+
+				childY -= childSpace;
 				childZ -= 0.1f;
 				angleZ += 5;
 			}
-			
+
+			if (childs.size() > 0) {
+				childSpace *= -1;
+			}
+
 			x += space;
 			z += 0.01f;
 		}
 	}
-	
+
 }
