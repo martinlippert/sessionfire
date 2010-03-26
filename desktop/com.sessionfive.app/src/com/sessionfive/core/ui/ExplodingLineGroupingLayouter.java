@@ -53,6 +53,9 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 				child.setFocussedRotation(new ShapeRotation(0, 0, 0));
 				child.setFocussedPosition(new ShapePosition(0,
 						childY, childZ));
+				
+				child.setCollapsedPosition(new ShapePosition(0, 0, childZ));
+				child.setCollapsedRotation(new ShapeRotation(0, 0, angleZ));
 
 				childY -= childSpace;
 				childZ -= 0.1f;

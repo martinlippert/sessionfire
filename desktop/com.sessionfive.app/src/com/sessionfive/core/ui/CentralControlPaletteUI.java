@@ -483,7 +483,7 @@ public class CentralControlPaletteUI {
 	public void updateControls() {
 		inChange = true;
 		layoutChoice.setSelectedItem(presentation.getDefaultLayouter());
-		animationChoice.setSelectedItem(presentation.getDefaultAnimation());
+		animationChoice.setSelectedItem(presentation.getDefaultAnimationStyle());
 
 		if (!layerText.getText().equals(presentation.getLayerText())) {
 			layerText.setText(presentation.getLayerText());

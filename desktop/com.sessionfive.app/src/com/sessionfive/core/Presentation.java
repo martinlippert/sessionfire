@@ -28,7 +28,7 @@ public class Presentation implements ShapeChangedListener {
 	private String path;
 
 	private Layouter defaultLayouter;
-	private AnimationStyle defaultAnimation;
+	private AnimationStyle defaultStyle;
 	private AnimationPathLayouter defaultPath;
 	private boolean defaultReflectionEnabled;
 	private float defaultFocusScale;
@@ -48,7 +48,7 @@ public class Presentation implements ShapeChangedListener {
 		changeListeners = new LinkedList<PresentationChangedListener>();
 		titleShape = new TitleShape();
 		defaultLayouter = new LineLayouter();
-		defaultAnimation = new ZoomOutZoomInAnimationStyle();
+		defaultStyle = new ZoomOutZoomInAnimationStyle();
 		defaultPath = new LinearAnimationPathLayouter();
 		defaultReflectionEnabled = true;
 		path = "";
@@ -215,13 +215,13 @@ public class Presentation implements ShapeChangedListener {
 		}
 	}
 
-	public AnimationStyle getDefaultAnimation() {
-		return defaultAnimation;
+	public AnimationStyle getDefaultAnimationStyle() {
+		return defaultStyle;
 	}
 
-	public void setDefaultAnimation(AnimationStyle defaultAnimation) {
-		if (!this.defaultAnimation.equals(defaultAnimation)) {
-			this.defaultAnimation = defaultAnimation;
+	public void setDefaultAnimationStyle(AnimationStyle defaultStyle) {
+		if (!this.defaultStyle.equals(defaultStyle)) {
+			this.defaultStyle = defaultStyle;
 			firePresentationChanged();
 		}
 	}

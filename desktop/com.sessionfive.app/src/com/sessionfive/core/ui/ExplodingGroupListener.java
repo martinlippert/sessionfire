@@ -18,7 +18,8 @@ import com.sessionfive.core.ShapeSize;
 public class ExplodingGroupListener implements ShapeFocusListener {
 
 	@Override
-	public TimingTarget cancelFocussing(Shape shape) {
+	public TimingTarget canceledFocussing(Shape shape) {
+		System.out.println("focussing canceled!!! " + shape + " - " + this);
 		return null;
 	}
 
@@ -71,6 +72,53 @@ public class ExplodingGroupListener implements ShapeFocusListener {
 		return ps;
 	}
 	
+	@Override
+	public TimingTarget groupOfShapeLeft(Shape shape) {
+		System.out.println("group of shape left!!! " + shape);
+
+		List<Shape> shapes = new ArrayList<Shape>();
+		List<ShapePosition> startPositions = new ArrayList<ShapePosition>();
+		List<ShapePosition> endPositions = new ArrayList<ShapePosition>();
+		List<ShapeRotation> startRotations = new ArrayList<ShapeRotation>();
+		List<ShapeRotation> endRotations = new ArrayList<ShapeRotation>();
+		List<ShapeSize> startSizes = new ArrayList<ShapeSize>();
+		List<ShapeSize> endSizes = new ArrayList<ShapeSize>();
+		
+		Shape parent = shape.getOwner();
+		if (parent != null) {
+			for (Shape child : parent.getShapes()) {
+				shapes.add(child);
+				startPositions.add(child.getPosition());
+				endPositions.add(child.getCollapsedPosition());
+				startRotations.add(child.getRotation());
+				endRotations.add(child.getCollapsedRotation());
+				startSizes.add(child.getSize());
+				endSizes.add(child.getCollapsedSize());
+			}
+		}
+		
+		ExplodingGroup start = new ExplodingGroup(shapes, startPositions, startRotations, startSizes);
+		ExplodingGroup end = new ExplodingGroup(shapes, endPositions, endRotations, endSizes);
+		
+		KeyValues<ExplodingGroup> values = KeyValues.create(
+				new ExplodingGroupEvaluator(), start, end);
+		KeyTimes times = new KeyTimes(0f, 1f);
+		KeyFrames frames = new KeyFrames(values, times);
+		PropertySetter ps = new PropertySetter(this, "explodingGroup", frames);
+		
+		return ps;
+	}
+
+	@Override
+	public TimingTarget shapeLeft(Shape shape) {
+		System.out.println("shape left!!! " + shape);
+		return null;
+	}
+
+	/**
+	 * This method is used as callback for the reflection calls from
+	 * the property setter of the animation
+	 */
 	public void setExplodingGroup(ExplodingGroup group) {
 		List<Shape> shapes = group.getShapes();
 		List<ShapePosition> positions = group.getPositions();

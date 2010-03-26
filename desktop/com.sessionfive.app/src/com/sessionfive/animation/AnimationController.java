@@ -72,6 +72,7 @@ public class AnimationController {
 			zoomIn();
 		} else {
 			Shape lastFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
+			List<Shape> groupsOfShapesLeft = new ArrayList<Shape>();
 			
 			if (currentAnimationStep == null) {
 				currentAnimationStep = presentation.getFirstAnimationStep();
@@ -80,6 +81,7 @@ public class AnimationController {
 
 				while (!currentAnimationStep.hasNext()
 						&& currentAnimationStep.hasParent()) {
+					groupsOfShapesLeft.add(currentAnimationStep.getFocussedShape());
 					currentAnimationStep = currentAnimationStep.getParent();
 				}
 
@@ -91,7 +93,7 @@ public class AnimationController {
 			Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
 			Animator animator = currentAnimationStep
 					.getForwardAnimation(display);
-			startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
+			startFocusAnimator(lastFocussedShape, nextFocussedShape, groupsOfShapesLeft, animator);
 		}
 	}
 
@@ -101,6 +103,7 @@ public class AnimationController {
 		}
 		
 		Shape focussedShape = getLastFocussedShape();
+		List<Shape> groupsOfShapesLeft = new ArrayList<Shape>();
 
 		if (currentAnimationStep.hasPrevious()) {
 			currentAnimationStep = currentAnimationStep.getPrevious();
@@ -114,6 +117,7 @@ public class AnimationController {
 				}
 			}
 		} else if (currentAnimationStep.hasParent()) {
+			groupsOfShapesLeft.add(currentAnimationStep.getFocussedShape());
 			currentAnimationStep = currentAnimationStep.getParent();
 		} else {
 			currentAnimationStep = null;
@@ -125,11 +129,11 @@ public class AnimationController {
 		} else {
 			Camera cameraStart = display.getCamera();
 			Camera cameraEnd = presentation.getStartCamera();
-			animator = presentation.getDefaultAnimation().createBackwardAnimator(
+			animator = presentation.getDefaultAnimationStyle().createBackwardAnimator(
 					cameraStart, cameraEnd, display, focussedShape);
 		}
 		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
-		startFocusAnimator(focussedShape, nextFocussedShape, animator);
+		startFocusAnimator(focussedShape, nextFocussedShape, groupsOfShapesLeft, animator);
 	}
 
 	public void zoomIn() {
@@ -141,7 +145,7 @@ public class AnimationController {
 		currentAnimationStep = currentAnimationStep.getChild();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
-		startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
+		startFocusAnimator(lastFocussedShape, nextFocussedShape, null, animator);
 	}
 
 	public void zoomOut() {
@@ -153,7 +157,11 @@ public class AnimationController {
 		currentAnimationStep = currentAnimationStep.getParent();
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
 		Shape nextFocussedShape = currentAnimationStep != null ? currentAnimationStep.getFocussedShape() : null;
-		startFocusAnimator(lastFocussedShape, nextFocussedShape, animator);
+
+		List<Shape> groupsOfShapesLeft = new ArrayList<Shape>();
+		groupsOfShapesLeft.add(lastFocussedShape);
+
+		startFocusAnimator(lastFocussedShape, nextFocussedShape, groupsOfShapesLeft, animator);
 	}
 
 	public Shape getLastFocussedShape() {
@@ -192,7 +200,7 @@ public class AnimationController {
 		}
 
 		Animator animator = currentAnimationStep.getForwardAnimation(display);
-		startFocusAnimator(null, null, animator);
+		startFocusAnimator(null, null, null, animator);
 	}
 
 	public void readjustSmoothlyTo(Shape focussedShape) {
@@ -223,7 +231,7 @@ public class AnimationController {
 			if (currentAnimationStep != null) {
 				Animator animator = currentAnimationStep
 						.getForwardAnimation(display);
-				startFocusAnimator(null, null, animator);
+				startFocusAnimator(null, null, null, animator);
 			}
 		}
 	}
@@ -243,21 +251,46 @@ public class AnimationController {
 		Camera cameraEnd = presentation.getStartCamera();
 		Animator animator = new MoveToAnimationStyle().createBackwardAnimator(
 				cameraStart, cameraEnd, display, null);
-		startFocusAnimator(null, null, animator);
+		startFocusAnimator(null, null, null, animator);
+	}
+	
+	public boolean isAnimationRunning() {
+		return currentAnimator != null && currentAnimator.isRunning();
 	}
 
-	protected void startFocusAnimator(final Shape lastFocussed, final Shape nextFocussed, final Animator animator) {
+	protected void startFocusAnimator(final Shape lastFocussed, final Shape nextFocussed, List<Shape> groupsLeft, final Animator animator) {
 		List<TimingTarget> cancelTargets = null;
+		List<TimingTarget> shapeLeftTargets = null;
+		List<TimingTarget> groupLeftTargets = null;
+
 		if (currentAnimator != null && currentAnimator.isRunning()) {
 			currentAnimator.cancel();
 			if (lastFocussed != null) {
-				cancelTargets = fireCancelFocussingShape(lastFocussed);
+				cancelTargets = fireCanceledFocussingShape(lastFocussed);
+			}
+		}
+		else if (lastFocussed != null) {
+			shapeLeftTargets = fireShapeLeft(lastFocussed);
+			if (groupsLeft != null) {
+				for (Shape shape : groupsLeft) {
+					List<TimingTarget> groupLeftTarget = fireGroupLeft(shape);
+					if (groupLeftTarget != null && groupLeftTarget.size() > 0) {
+						if (groupLeftTargets == null) {
+							groupLeftTargets = new ArrayList<TimingTarget>();
+						}
+						groupLeftTargets.addAll(groupLeftTarget);
+					}
+				}
 			}
 		}
 
 		currentAnimator = animator;
 		if (currentAnimator != null) {
+			
 			addTimingTargets(currentAnimator, cancelTargets);
+			addTimingTargets(currentAnimator, shapeLeftTargets);
+			addTimingTargets(currentAnimator, groupLeftTargets);
+			
 			if (nextFocussed != null) {
 				List<TimingTarget> timings = fireStartsFocussingShape(nextFocussed);
 				addTimingTargets(currentAnimator, timings);
@@ -267,29 +300,20 @@ public class AnimationController {
 				@Override
 				public void timingEvent(float fraction) {
 				}
-				
 				@Override
 				public void repeat() {
 				}
-				
 				@Override
 				public void end() {
-					fireFinishedFocussingShape(nextFocussed);
+					if (nextFocussed != null) {
+						fireFinishedFocussingShape(nextFocussed);
+					}
 				}
-				
 				@Override
 				public void begin() {
 				}
 			});
 			currentAnimator.start();
-		}
-	}
-	
-	private void addTimingTargets(Animator animator, List<TimingTarget> targets) {
-		if (targets != null && animator != null) {
-			for (TimingTarget timingTarget : targets) {
-				currentAnimator.addTarget(timingTarget);
-			}
 		}
 	}
 	
@@ -301,7 +325,15 @@ public class AnimationController {
 		focusListeners.remove(action);
 	}
 	
-	protected List<TimingTarget> fireStartsFocussingShape(Shape shape) {
+	private void addTimingTargets(Animator animator, List<TimingTarget> targets) {
+		if (targets != null && animator != null) {
+			for (TimingTarget timingTarget : targets) {
+				currentAnimator.addTarget(timingTarget);
+			}
+		}
+	}
+	
+	private List<TimingTarget> fireStartsFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
 			TimingTarget timingTarget = listener.startsFocussing(shape);
@@ -310,19 +342,37 @@ public class AnimationController {
 		return result;
 	}
 	
-	protected List<TimingTarget> fireCancelFocussingShape(Shape shape) {
+	private List<TimingTarget> fireCanceledFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.cancelFocussing(shape);
+			TimingTarget timingTarget = listener.canceledFocussing(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
 	}
 	
-	protected List<TimingTarget> fireFinishedFocussingShape(Shape shape) {
+	private List<TimingTarget> fireFinishedFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
 			TimingTarget timingTarget = listener.finishedFocussing(shape);
+			result = acculumateTimingTarget(result, timingTarget);
+		}
+		return result;
+	}
+	
+	private List<TimingTarget> fireShapeLeft(Shape shape) {
+		List<TimingTarget> result = null;
+		for (ShapeFocusListener listener : this.focusListeners) {
+			TimingTarget timingTarget = listener.shapeLeft(shape);
+			result = acculumateTimingTarget(result, timingTarget);
+		}
+		return result;
+	}
+	
+	private List<TimingTarget> fireGroupLeft(Shape shape) {
+		List<TimingTarget> result = null;
+		for (ShapeFocusListener listener : this.focusListeners) {
+			TimingTarget timingTarget = listener.groupOfShapeLeft(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;

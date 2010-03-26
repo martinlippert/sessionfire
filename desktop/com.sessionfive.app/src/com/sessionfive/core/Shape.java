@@ -25,6 +25,14 @@ public interface Shape {
 	public void setFocussedRotation(ShapeRotation rotation);
 	public void setFocussedSize(ShapeSize size);
 
+	public ShapePosition getCollapsedPosition();
+	public ShapeRotation getCollapsedRotation();
+	public ShapeSize getCollapsedSize();
+	
+	public void setCollapsedPosition(ShapePosition position);
+	public void setCollapsedRotation(ShapeRotation rotation);
+	public void setCollapsedSize(ShapeSize size);
+
 	public boolean isReflectionEnabled();
 	public void setReflectionEnabled(boolean reflectionEnabled);
 	

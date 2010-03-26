@@ -187,7 +187,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		Properties result = new Properties();
 
 		result.setProperty("layout", presentation.getDefaultLayouter().getName());
-		result.setProperty("animation", presentation.getDefaultAnimation().getName());
+		result.setProperty("animation", presentation.getDefaultAnimationStyle().getName());
 		result.setProperty("animationPath", presentation.getDefaultAnimationPathLayouter().getName());
 		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor()
 				.getRGB()));

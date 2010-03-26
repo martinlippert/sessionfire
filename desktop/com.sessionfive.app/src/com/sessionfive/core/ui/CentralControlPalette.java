@@ -60,7 +60,7 @@ public class CentralControlPalette {
 	}
 
 	public void changeAnimationStyle(AnimationStyle animationStyle) {
-		presentation.setDefaultAnimation(animationStyle);
+		presentation.setDefaultAnimationStyle(animationStyle);
 		
 		AnimationStep animationStep = presentation.getFirstAnimationStep();
 		setAnimationStyleRecursively(animationStep, animationStyle);

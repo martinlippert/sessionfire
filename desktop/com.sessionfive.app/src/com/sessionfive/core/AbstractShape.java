@@ -18,6 +18,10 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	private ShapeRotation focussedRotation;
 	private ShapeSize focussedSize;
 
+	private ShapePosition collapsedPosition;
+	private ShapeRotation collapsedRotation;
+	private ShapeSize collapsedSize;
+
 	private boolean reflectionEnabled;
 	private float focusScale;
 
@@ -120,6 +124,36 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	@Override
 	public void setFocussedSize(ShapeSize size) {
 		focussedSize = size;
+	}
+	
+	@Override
+	public ShapePosition getCollapsedPosition() {
+		return this.collapsedPosition != null ? this.collapsedPosition: this.position;
+	}
+
+	@Override
+	public ShapeRotation getCollapsedRotation() {
+		return this.collapsedRotation != null ? this.collapsedRotation : this.rotation;
+	}
+
+	@Override
+	public ShapeSize getCollapsedSize() {
+		return this.collapsedSize != null ? this.collapsedSize : this.size;
+	}
+
+	@Override
+	public void setCollapsedPosition(ShapePosition position) {
+		this.collapsedPosition = position;
+	}
+
+	@Override
+	public void setCollapsedRotation(ShapeRotation rotation) {
+		this.collapsedRotation = rotation;
+	}
+
+	@Override
+	public void setCollapsedSize(ShapeSize size) {
+		this.collapsedSize = size;
 	}
 
 	@Override

@@ -67,7 +67,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 
 		Properties settings = loadPresentationSettings(presentation);
 
-		AnimationStyle animationStyle = presentation.getDefaultAnimation();
+		AnimationStyle animationStyle = presentation.getDefaultAnimationStyle();
 		Layouter layouter = presentation.getDefaultLayouter();
 		AnimationPathLayouter pathLayouter = presentation.getDefaultAnimationPathLayouter();
 
@@ -198,7 +198,7 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				AnimationStyle animationStyle = getAnimationStyle(
 						animationSetting, allAnimationStyles);
 				if (animationStyle != null) {
-					presentation.setDefaultAnimation(animationStyle);
+					presentation.setDefaultAnimationStyle(animationStyle);
 				}
 
 				String animationPathSetting = settings
