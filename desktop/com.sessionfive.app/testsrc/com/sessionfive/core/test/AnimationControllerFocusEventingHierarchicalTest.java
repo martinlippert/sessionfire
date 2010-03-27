@@ -76,6 +76,27 @@ public class AnimationControllerFocusEventingHierarchicalTest extends TestCase {
 		listener.assertGroupOfShapeLeft(child12);
 	}
 		
+	public void testFocusGroupLeftAtTheEndSpeedy() throws Exception {
+		createHierarchicalStructure(false);
+
+		controller.forward();
+		controller.zoomIn();
+		listener.waitForAnimationToFinish(controller);
+
+		listener.reset();
+		controller.forward();
+		controller.forward();
+		listener.waitForAnimationToFinish(controller);
+		
+		assertSame(child21, controller.getLastFocussedShape());
+
+		listener.assertStarts(child12, child21);
+		listener.assertFinished(child21);
+		listener.assertCanceled(child12);
+		listener.assertShapeLeft(child11);
+		listener.assertGroupOfShapeLeft(child12);
+	}
+		
 	public void testFocusGroupLeftManuallyZoomingOut() throws Exception {
 		createHierarchicalStructure(false);
 
@@ -133,7 +154,7 @@ public class AnimationControllerFocusEventingHierarchicalTest extends TestCase {
 		top2.addShape(child21);
 		top3.addShape(child31);
 		
-		DefaultTestAnimationStyle style = new DefaultTestAnimationStyle();
+		DefaultTestAnimationStyle style = new DefaultTestAnimationStyle(10);
 
 		AnimationStep topStep1 = new AnimationStep(top1);
 		AnimationStep topStep2 = new AnimationStep(child21);

@@ -20,31 +20,31 @@ class MockedShapeFocusListener extends Assert implements ShapeFocusListener {
 	private List<Shape> groupOfShapeLeft = new ArrayList<Shape>();
 	
 	@Override
-	public TimingTarget canceledFocussing(Shape shape) {
+	public TimingTarget[] canceledFocussing(Shape shape) {
 		canceled.add(shape);
 		return null;
 	}
 
 	@Override
-	public TimingTarget finishedFocussing(Shape shape) {
+	public TimingTarget[] finishedFocussing(Shape shape) {
 		finishedFocus.add(shape);
 		return null;
 	}
 
 	@Override
-	public TimingTarget groupOfShapeLeft(Shape shape) {
+	public TimingTarget[] groupOfShapeLeft(Shape shape) {
 		groupOfShapeLeft.add(shape);
 		return null;
 	}
 
 	@Override
-	public TimingTarget shapeLeft(Shape shape) {
+	public TimingTarget[] shapeLeft(Shape shape) {
 		shapeLeft.add(shape);
 		return null;
 	}
 
 	@Override
-	public TimingTarget startsFocussing(Shape shape) {
+	public TimingTarget[] startsFocussing(Shape shape) {
 		startsFocus.add(shape);
 		return null;
 	}

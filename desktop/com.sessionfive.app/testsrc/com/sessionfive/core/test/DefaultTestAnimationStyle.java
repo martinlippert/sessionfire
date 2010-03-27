@@ -8,17 +8,27 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.Shape;
 
 public class DefaultTestAnimationStyle implements AnimationStyle {
+	
+	private int millis;
+
+	public DefaultTestAnimationStyle() {
+		this(1);
+	}
+	
+	public DefaultTestAnimationStyle(int millis) {
+		this.millis = millis;
+	}
 
 	@Override
 	public Animator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
-		return new Animator(1);
+		return new Animator(millis);
 	}
 
 	@Override
 	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
-		return new Animator(1);
+		return new Animator(millis);
 	}
 
 	@Override

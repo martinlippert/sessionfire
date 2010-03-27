@@ -271,15 +271,16 @@ public class AnimationController {
 		}
 		else if (lastFocussed != null) {
 			shapeLeftTargets = fireShapeLeft(lastFocussed);
-			if (groupsLeft != null) {
-				for (Shape shape : groupsLeft) {
-					List<TimingTarget> groupLeftTarget = fireGroupLeft(shape);
-					if (groupLeftTarget != null && groupLeftTarget.size() > 0) {
-						if (groupLeftTargets == null) {
-							groupLeftTargets = new ArrayList<TimingTarget>();
-						}
-						groupLeftTargets.addAll(groupLeftTarget);
+		}
+		
+		if (groupsLeft != null) {
+			for (Shape shape : groupsLeft) {
+				List<TimingTarget> groupLeftTarget = fireGroupLeft(shape);
+				if (groupLeftTarget != null && groupLeftTarget.size() > 0) {
+					if (groupLeftTargets == null) {
+						groupLeftTargets = new ArrayList<TimingTarget>();
 					}
+					groupLeftTargets.addAll(groupLeftTarget);
 				}
 			}
 		}
@@ -336,7 +337,7 @@ public class AnimationController {
 	private List<TimingTarget> fireStartsFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.startsFocussing(shape);
+			TimingTarget[] timingTarget = listener.startsFocussing(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
@@ -345,7 +346,7 @@ public class AnimationController {
 	private List<TimingTarget> fireCanceledFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.canceledFocussing(shape);
+			TimingTarget[] timingTarget = listener.canceledFocussing(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
@@ -354,7 +355,7 @@ public class AnimationController {
 	private List<TimingTarget> fireFinishedFocussingShape(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.finishedFocussing(shape);
+			TimingTarget[] timingTarget = listener.finishedFocussing(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
@@ -363,7 +364,7 @@ public class AnimationController {
 	private List<TimingTarget> fireShapeLeft(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.shapeLeft(shape);
+			TimingTarget[] timingTarget = listener.shapeLeft(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
@@ -372,19 +373,22 @@ public class AnimationController {
 	private List<TimingTarget> fireGroupLeft(Shape shape) {
 		List<TimingTarget> result = null;
 		for (ShapeFocusListener listener : this.focusListeners) {
-			TimingTarget timingTarget = listener.groupOfShapeLeft(shape);
+			TimingTarget[] timingTarget = listener.groupOfShapeLeft(shape);
 			result = acculumateTimingTarget(result, timingTarget);
 		}
 		return result;
 	}
 	
 	private List<TimingTarget> acculumateTimingTarget(
-			List<TimingTarget> result, TimingTarget timingTarget) {
-		if (timingTarget != null) {
+			List<TimingTarget> result, TimingTarget[] timingTargets) {
+		if (timingTargets != null && timingTargets.length > 0) {
 			if (result == null) {
 				result = new ArrayList<TimingTarget>();
 			}
-			result.add(timingTarget);
+			
+			for (TimingTarget target : timingTargets) {
+				result.add(target);
+			}
 		}
 		return result;
 	}

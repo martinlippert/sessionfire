@@ -1,6 +1,5 @@
 package com.sessionfive.core.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jdesktop.animation.timing.TimingTarget;
@@ -18,119 +17,109 @@ import com.sessionfive.core.ShapeSize;
 public class ExplodingGroupListener implements ShapeFocusListener {
 
 	@Override
-	public TimingTarget canceledFocussing(Shape shape) {
-		System.out.println("focussing canceled!!! " + shape + " - " + this);
+	public TimingTarget[] canceledFocussing(Shape shape) {
 		return null;
 	}
 
 	@Override
-	public TimingTarget finishedFocussing(Shape shape) {
-		System.out.println("focussing finished!!! " + shape + " - " + this);
+	public TimingTarget[] finishedFocussing(Shape shape) {
 		return null;
 	}
 
 	@Override
-	public TimingTarget startsFocussing(Shape shape) {
-		System.out.println("focussing started!!! " + shape);
-
+	public TimingTarget[] startsFocussing(Shape shape) {
 		ShapePosition position = shape.getPosition();
 		ShapePosition focussedPosition = shape.getFocussedPosition();
 		if (position.equals(focussedPosition)) {
 			return null;
 		}
-		
-		List<Shape> shapes = new ArrayList<Shape>();
-		List<ShapePosition> startPositions = new ArrayList<ShapePosition>();
-		List<ShapePosition> endPositions = new ArrayList<ShapePosition>();
-		List<ShapeRotation> startRotations = new ArrayList<ShapeRotation>();
-		List<ShapeRotation> endRotations = new ArrayList<ShapeRotation>();
-		List<ShapeSize> startSizes = new ArrayList<ShapeSize>();
-		List<ShapeSize> endSizes = new ArrayList<ShapeSize>();
-		
+
+		TimingTarget[] result = null;
+
 		Shape parent = shape.getOwner();
 		if (parent != null) {
-			for (Shape child : parent.getShapes()) {
-				shapes.add(child);
-				startPositions.add(child.getPosition());
-				endPositions.add(child.getFocussedPosition());
-				startRotations.add(child.getRotation());
-				endRotations.add(child.getFocussedRotation());
-				startSizes.add(child.getSize());
-				endSizes.add(child.getFocussedSize());
+			List<Shape> childs = parent.getShapes();
+			result = new TimingTarget[childs.size()];
+			int i = 0;
+			for (Shape child : childs) {
+
+				PropertySetter psPosition = createPositionTimingTarget(child,
+						child.getPosition(), child.getFocussedPosition());
+				PropertySetter psRotation = createRotationTarget(child, child
+						.getRotation(), child.getFocussedRotation());
+				PropertySetter psSize = createSizeTarget(child,
+						child.getSize(), child.getFocussedSize());
+
+				ShapeTimingTarget shapeTarget = new ShapeTimingTarget(child,
+						new TimingTarget[] { psPosition, psRotation, psSize });
+				result[i++] = shapeTarget;
 			}
 		}
-		
-		ExplodingGroup start = new ExplodingGroup(shapes, startPositions, startRotations, startSizes);
-		ExplodingGroup end = new ExplodingGroup(shapes, endPositions, endRotations, endSizes);
-		
-		KeyValues<ExplodingGroup> values = KeyValues.create(
-				new ExplodingGroupEvaluator(), start, end);
-		KeyTimes times = new KeyTimes(0f, 1f);
-		KeyFrames frames = new KeyFrames(values, times);
-		PropertySetter ps = new PropertySetter(this, "explodingGroup", frames);
-		
-		return ps;
+
+		return result;
 	}
 	
 	@Override
-	public TimingTarget groupOfShapeLeft(Shape shape) {
-		System.out.println("group of shape left!!! " + shape);
-
-		List<Shape> shapes = new ArrayList<Shape>();
-		List<ShapePosition> startPositions = new ArrayList<ShapePosition>();
-		List<ShapePosition> endPositions = new ArrayList<ShapePosition>();
-		List<ShapeRotation> startRotations = new ArrayList<ShapeRotation>();
-		List<ShapeRotation> endRotations = new ArrayList<ShapeRotation>();
-		List<ShapeSize> startSizes = new ArrayList<ShapeSize>();
-		List<ShapeSize> endSizes = new ArrayList<ShapeSize>();
-		
+	public TimingTarget[] groupOfShapeLeft(Shape shape) {
+		TimingTarget[] result = null;
 		Shape parent = shape.getOwner();
 		if (parent != null) {
-			for (Shape child : parent.getShapes()) {
-				shapes.add(child);
-				startPositions.add(child.getPosition());
-				endPositions.add(child.getCollapsedPosition());
-				startRotations.add(child.getRotation());
-				endRotations.add(child.getCollapsedRotation());
-				startSizes.add(child.getSize());
-				endSizes.add(child.getCollapsedSize());
+			List<Shape> childs = parent.getShapes();
+			result = new TimingTarget[childs.size()];
+			int i = 0;
+			for (Shape child : childs) {
+
+				PropertySetter psPosition = createPositionTimingTarget(child,
+						child.getPosition(), child.getCollapsedPosition());
+				PropertySetter psRotation = createRotationTarget(child, child
+						.getRotation(), child.getCollapsedRotation());
+				PropertySetter psSize = createSizeTarget(child,
+						child.getSize(), child.getCollapsedSize());
+
+				ShapeTimingTarget shapeTarget = new ShapeTimingTarget(child,
+						new TimingTarget[] { psPosition, psRotation, psSize });
+				result[i++] = shapeTarget;
 			}
 		}
-		
-		ExplodingGroup start = new ExplodingGroup(shapes, startPositions, startRotations, startSizes);
-		ExplodingGroup end = new ExplodingGroup(shapes, endPositions, endRotations, endSizes);
-		
-		KeyValues<ExplodingGroup> values = KeyValues.create(
-				new ExplodingGroupEvaluator(), start, end);
-		KeyTimes times = new KeyTimes(0f, 1f);
-		KeyFrames frames = new KeyFrames(values, times);
-		PropertySetter ps = new PropertySetter(this, "explodingGroup", frames);
-		
-		return ps;
+
+		return result;
 	}
 
 	@Override
-	public TimingTarget shapeLeft(Shape shape) {
-		System.out.println("shape left!!! " + shape);
+	public TimingTarget[] shapeLeft(Shape shape) {
 		return null;
 	}
 
-	/**
-	 * This method is used as callback for the reflection calls from
-	 * the property setter of the animation
-	 */
-	public void setExplodingGroup(ExplodingGroup group) {
-		List<Shape> shapes = group.getShapes();
-		List<ShapePosition> positions = group.getPositions();
-		List<ShapeRotation> rotations = group.getRotations();
-		List<ShapeSize> sizes = group.getSizes();
-		
-		for(int i = 0; i < shapes.size(); i++) {
-			Shape shape = shapes.get(i);
-			shape.setPosition(positions.get(i));
-			shape.setRotation(rotations.get(i));
-			shape.setSize(sizes.get(i));
-		}
+	private PropertySetter createPositionTimingTarget(Shape child,
+			ShapePosition start, ShapePosition end) {
+		KeyValues<ShapePosition> valuesPosition = KeyValues.create(
+				new ShapePositionEvaluator(), start, end);
+		KeyTimes timesPosition = new KeyTimes(0f, 1f);
+		KeyFrames framesPosition = new KeyFrames(valuesPosition, timesPosition);
+		PropertySetter psPosition = new PropertySetter(child, "position",
+				framesPosition);
+		return psPosition;
 	}
 
+	private PropertySetter createRotationTarget(Shape child,
+			ShapeRotation start, ShapeRotation end) {
+		KeyValues<ShapeRotation> valuesRotation = KeyValues.create(
+				new ShapeRotationEvaluator(), start, end);
+		KeyTimes timesRotation = new KeyTimes(0f, 1f);
+		KeyFrames framesRotation = new KeyFrames(valuesRotation, timesRotation);
+		PropertySetter psRotation = new PropertySetter(child, "rotation",
+				framesRotation);
+		return psRotation;
+	}
+	
+	private PropertySetter createSizeTarget(Shape child, ShapeSize start,
+			ShapeSize end) {
+		KeyValues<ShapeSize> valuesSize = KeyValues.create(
+				new ShapeSizeEvaluator(), start, end);
+		KeyTimes timesSize = new KeyTimes(0f, 1f);
+		KeyFrames framesSize = new KeyFrames(valuesSize, timesSize);
+		PropertySetter psSize = new PropertySetter(child, "size", framesSize);
+		return psSize;
+	}
+	
 }
