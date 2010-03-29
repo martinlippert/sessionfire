@@ -2,6 +2,7 @@ package com.sessionfive.core.ui;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
@@ -13,6 +14,7 @@ import com.sessionfive.core.ShapeRotation;
 public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 
 	private static final String NAME = "Exploding Line Grouping";
+	private final Random random = new Random();
 
 	@Override
 	public String getName() {
@@ -59,7 +61,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 
 				childY -= childSpace;
 				childZ -= 0.1f;
-				angleZ += 5;
+				angleZ = (random.nextInt() % 30);
 			}
 
 			if (childs.size() > 0) {
