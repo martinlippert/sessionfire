@@ -9,6 +9,7 @@ import org.jdesktop.animation.timing.interpolation.PropertySetter;
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.CameraAnimator;
 import com.sessionfive.core.Shape;
 
 public class GoToAnimationStyle implements AnimationStyle {
@@ -16,7 +17,7 @@ public class GoToAnimationStyle implements AnimationStyle {
 	public static final String NAME = "Go To";
 
 	@Override
-	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
+	public CameraAnimator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
 		KeyValues<Camera> values = KeyValues.create(
 				new CameraMoveEvaluator(), cameraStart, cameraEnd);
@@ -27,11 +28,11 @@ public class GoToAnimationStyle implements AnimationStyle {
 		Animator animator = new Animator(1, ps);
 		animator.setStartDelay(0);
 
-		return animator;
+		return new CameraAnimator(animator, ps);
 	}
 
 	@Override
-	public Animator createBackwardAnimator(Camera cameraStart,
+	public CameraAnimator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
 		KeyValues<Camera> values = KeyValues.create(
 				new CameraMoveEvaluator(), cameraStart, cameraEnd);
@@ -42,7 +43,7 @@ public class GoToAnimationStyle implements AnimationStyle {
 		Animator animator = new Animator(1, ps);
 		animator.setStartDelay(0);
 
-		return animator;
+		return new CameraAnimator(animator, ps);
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.sessionfive.core;
 
-import org.jdesktop.animation.timing.Animator;
-
 import com.sessionfive.app.Display;
 
 public class AnimationStep {
@@ -47,17 +45,17 @@ public class AnimationStep {
 		this.autoZoomEnabled = autoZoomEnabled;
 	}
 
-	public Animator getForwardAnimation(Display display) {
+	public CameraAnimator getForwardAnimation(Display display) {
 		if (style != null) {
 			Camera cameraStart = display.getCamera();
 			Camera cameraEnd = focussedShape.getFocussedCamera();
-			Animator forwardAnimator = style.createForwardAnimator(cameraStart, cameraEnd, display, focussedShape);
+			CameraAnimator forwardAnimator = style.createForwardAnimator(cameraStart, cameraEnd, display, focussedShape);
 			return forwardAnimator;
 		}
 		return null;
 	}
 
-	public Animator getBackwardAnimation(Display display) {
+	public CameraAnimator getBackwardAnimation(Display display) {
 		if (this.style == null)
 			return null;
 		

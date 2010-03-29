@@ -5,6 +5,7 @@ import org.jdesktop.animation.timing.Animator;
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.CameraAnimator;
 import com.sessionfive.core.Shape;
 
 public class DefaultTestAnimationStyle implements AnimationStyle {
@@ -20,15 +21,15 @@ public class DefaultTestAnimationStyle implements AnimationStyle {
 	}
 
 	@Override
-	public Animator createBackwardAnimator(Camera cameraStart,
+	public CameraAnimator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
-		return new Animator(millis);
+		return new CameraAnimator(new Animator(millis), null);
 	}
 
 	@Override
-	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
+	public CameraAnimator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
-		return new Animator(millis);
+		return new CameraAnimator(new Animator(millis), null);
 	}
 
 	@Override

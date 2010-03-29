@@ -39,6 +39,13 @@ public class LineLayouter extends AbstractLayouter {
 				x += space;
 				z += 0.01f;
 			}
+			
+			shape.setFocussedPosition(null);
+			shape.setCollapsedPosition(null);
+			shape.setFocussedSize(null);
+			shape.setCollapsedSize(null);
+			shape.setFocussedRotation(null);
+			shape.setCollapsedRotation(null);
 		}
 	}
 

@@ -11,7 +11,7 @@ import com.sessionfive.animation.AnimationController;
 import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapeFocusListener;
 
-class MockedShapeFocusListener extends Assert implements ShapeFocusListener {
+public class MockedShapeFocusListener extends Assert implements ShapeFocusListener {
 	
 	private List<Shape> canceled = new ArrayList<Shape>();
 	private List<Shape> startsFocus = new ArrayList<Shape>();

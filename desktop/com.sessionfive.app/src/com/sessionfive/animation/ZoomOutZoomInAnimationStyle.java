@@ -9,6 +9,7 @@ import org.jdesktop.animation.timing.interpolation.PropertySetter;
 import com.sessionfive.app.Display;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.Camera;
+import com.sessionfive.core.CameraAnimator;
 import com.sessionfive.core.Shape;
 
 public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
@@ -16,7 +17,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 	public static final String NAME = "Zoom Out - Zoom In";
 
 	@Override
-	public Animator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
+	public CameraAnimator createForwardAnimator(Camera cameraStart, Camera cameraEnd,
 			Display display, Shape endShape) {
 		float shapeX = endShape.getAbsolutePosition().getX();
 
@@ -41,11 +42,11 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 		animator.setAcceleration(0.4f);
 		animator.setDeceleration(0.4f);
 
-		return animator;
+		return new CameraAnimator(animator, ps);
 	}
 
 	@Override
-	public Animator createBackwardAnimator(Camera cameraStart,
+	public CameraAnimator createBackwardAnimator(Camera cameraStart,
 			Camera cameraEnd, Display display, Shape endShape) {
 		float shapeX = endShape.getAbsolutePosition().getX();
 
@@ -70,7 +71,7 @@ public class ZoomOutZoomInAnimationStyle implements AnimationStyle {
 		animator.setAcceleration(0.4f);
 		animator.setDeceleration(0.4f);
 
-		return animator;
+		return new CameraAnimator(animator, ps);
 	}
 
 	@Override
