@@ -47,6 +47,13 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 			shape.setPosition(new ShapePosition(x, y, z));
 			i++;
 			
+			shape.setFocussedPosition(null);
+			shape.setCollapsedPosition(null);
+			shape.setFocussedSize(null);
+			shape.setCollapsedSize(null);
+			shape.setFocussedRotation(null);
+			shape.setCollapsedRotation(null);
+			
 			layoutChilds(shape);
 		}
 	}
@@ -94,6 +101,13 @@ public class SphereGroupingLayouter extends AbstractLayouter {
 				
 				child.setPosition(new ShapePosition(x , y, z));
 				child.setSize(new ShapeSize(childWidth, childHeight, childDepth));
+				
+				child.setFocussedPosition(null);
+				child.setCollapsedPosition(null);
+				child.setFocussedSize(null);
+				child.setCollapsedSize(null);
+				child.setFocussedRotation(null);
+				child.setCollapsedRotation(null);
 			}
 		}
 	}

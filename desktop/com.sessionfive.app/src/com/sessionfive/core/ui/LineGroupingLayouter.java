@@ -45,6 +45,13 @@ public class LineGroupingLayouter extends AbstractLayouter {
 				child.setPosition(new ShapePosition(0, childY, childZ));
 				resizeToDefault(child);
 
+				child.setFocussedPosition(null);
+				child.setCollapsedPosition(null);
+				child.setFocussedSize(null);
+				child.setCollapsedSize(null);
+				child.setFocussedRotation(null);
+				child.setCollapsedRotation(null);
+
 				childY -= childSpace;
 				childZ += 0.01f;
 			}
@@ -52,6 +59,13 @@ public class LineGroupingLayouter extends AbstractLayouter {
 			if (childs.size() > 0) {
 				childSpace *= -1;
 			}
+			
+			shape.setFocussedPosition(null);
+			shape.setCollapsedPosition(null);
+			shape.setFocussedSize(null);
+			shape.setCollapsedSize(null);
+			shape.setFocussedRotation(null);
+			shape.setCollapsedRotation(null);
 			
 			x += space;
 			z += 0.01f;
