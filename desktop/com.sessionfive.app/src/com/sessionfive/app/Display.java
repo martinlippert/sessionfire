@@ -83,7 +83,7 @@ public class Display implements GLEventListener {
 
 	public void init(GLAutoDrawable drawable) {
 		GL gl = drawable.getGL();
-		gl.setSwapInterval(0);
+		gl.setSwapInterval(1);
 		gl.glEnable(GL_DEPTH_TEST);
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
