@@ -43,7 +43,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 			List<Shape> childs = shape.getShapes();
 			if (childs.size() > 1) {
 				Shape child1 = childs.get(0);
-				child1.setFocusScale(shape.getFocusScale() + 0.4f);
+				child1.setFocusScale(presentation.getDefaultFocusScale() + 0.4f);
 				
 				if (!additionalGroupSpaceAlreadyAdded) {
 					x += additionalGroupSpace;
