@@ -22,13 +22,10 @@ public class NavigationKeyListener implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("typed:  " + e.getKeyCode());
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		System.out.println("released:  " + e.getKeyCode());
-
 		if (pressed && !pressedProcessed) {
 			keyPressed(e, 1);
 		}
@@ -38,8 +35,6 @@ public class NavigationKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("pressed:  " + e.getKeyCode());
-		
 		if (pressed && !pressedProcessed) {
 			keyPressed(e, 2);
 			pressedProcessed = true;
