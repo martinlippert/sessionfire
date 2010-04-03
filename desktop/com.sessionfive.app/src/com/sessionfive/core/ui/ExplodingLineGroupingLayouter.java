@@ -41,13 +41,22 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 			Shape shape = iter.next();
 
 			List<Shape> childs = shape.getShapes();
-			if (childs.size() > 0 && !additionalGroupSpaceAlreadyAdded) {
-				x += additionalGroupSpace;
+			if (childs.size() > 1) {
+				Shape child1 = childs.get(0);
+				child1.setFocusScale(shape.getFocusScale() + 0.4f);
+				
+				if (!additionalGroupSpaceAlreadyAdded) {
+					x += additionalGroupSpace;
+				}
 			}
 
 			shape.setPosition(new ShapePosition(x, 10, z));
 			shape.setFocussedPosition(null);
 			resizeToDefault(shape);
+			
+			if (childs.size() > 1) {
+				
+			}
 
 			float childZ = z - 0.1f;
 			float childY = 0;
@@ -55,7 +64,6 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 			float color = 1;
 			
 			Iterator<Shape> childIter = childs.iterator();
-
 			while (childIter.hasNext()) {
 				Shape child = childIter.next();
 				child.setPosition(new ShapePosition(0, 0, childZ));
@@ -80,7 +88,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 				color = Math.max(0.1f, color - 0.05f);
 			}
 
-			if (childs.size() > 0) {
+			if (childs.size() > 1) {
 				childSpace *= -1;
 				x += additionalGroupSpace;
 				additionalGroupSpaceAlreadyAdded = true;
