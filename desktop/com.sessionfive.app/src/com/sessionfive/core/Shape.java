@@ -39,6 +39,12 @@ public interface Shape {
 	public float getFocusScale();
 	public void setFocusScale(float focusScale);
 	
+	public ShapeColor getColor();
+	public void setColor(ShapeColor color);
+	
+	public ShapeColor getCollapsedColor();
+	public void setCollapsedColor(ShapeColor color);
+	
 	public void initialize(GLContext context) throws Exception;
 	public void release(GLContext context) throws Exception;
 	

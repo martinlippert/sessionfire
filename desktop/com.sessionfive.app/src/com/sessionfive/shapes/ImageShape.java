@@ -18,6 +18,7 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.Threading;
 
 import com.sessionfive.core.AbstractShape;
+import com.sessionfive.core.ShapeColor;
 import com.sessionfive.core.ShapePosition;
 import com.sessionfive.core.ShapeSize;
 import com.sun.opengl.util.texture.Texture;
@@ -80,8 +81,8 @@ public class ImageShape extends AbstractShape {
 		gl.glBegin(GL.GL_QUADS);
 
         // Render image right-side up
-		float a = 1f;
-		gl.glColor4f(a, a, a, a);
+		ShapeColor color = getColor();
+		gl.glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 		gl.glTexCoord2f(tx1, ty1);
 		gl.glVertex3f(x, y + h, z);
 		gl.glTexCoord2f(tx2, ty1);
@@ -95,8 +96,7 @@ public class ImageShape extends AbstractShape {
 
 		if (isReflectionEnabled()) {
 			// Render "reflected" image
-			a = 1f;
-			gl.glColor4f(a * 0.4f, a * 0.4f, a * 0.4f, a * 0.4f);
+			gl.glColor4f(color.getR() * 0.4f, color.getG() * 0.4f, color.getB() * 0.4f, color.getA() * 0.4f);
 			gl.glTexCoord2f(tx1, ty2);
 			gl.glVertex3f(x, y + h, z);
 			gl.glTexCoord2f(tx2, ty2);

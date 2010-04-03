@@ -9,6 +9,7 @@ import org.jdesktop.animation.timing.interpolation.KeyValues;
 import org.jdesktop.animation.timing.interpolation.PropertySetter;
 
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapeColor;
 import com.sessionfive.core.ShapeFocusListener;
 import com.sessionfive.core.ShapePosition;
 import com.sessionfive.core.ShapeRotation;
@@ -34,12 +35,12 @@ public class ExplodingGroupListener implements ShapeFocusListener {
 			return null;
 		}
 
-		TimingTarget[] result = null;
+		TimingTarget[] timingTargets = null;
 
 		Shape parent = shape.getOwner();
 		if (parent != null) {
 			List<Shape> childs = parent.getShapes();
-			result = new TimingTarget[childs.size()];
+			timingTargets = new TimingTarget[childs.size()];
 			int i = 0;
 			for (Shape child : childs) {
 
@@ -49,14 +50,16 @@ public class ExplodingGroupListener implements ShapeFocusListener {
 						.getRotation(), child.getFocussedRotation());
 				PropertySetter psSize = createSizeTarget(child,
 						child.getSize(), child.getFocussedSize());
+				PropertySetter psColor = createColorTarget(child,
+						child.getColor(), ShapeColor.BLACK);
 
 				ShapeTimingTarget shapeTarget = new ShapeTimingTarget(child,
-						new TimingTarget[] { psPosition, psRotation, psSize });
-				result[i++] = shapeTarget;
+						new TimingTarget[] { psPosition, psRotation, psSize, psColor });
+				timingTargets[i++] = shapeTarget;
 			}
 		}
-
-		return result;
+		
+		return timingTargets;
 	}
 	
 	@Override
@@ -75,9 +78,11 @@ public class ExplodingGroupListener implements ShapeFocusListener {
 						.getRotation(), child.getCollapsedRotation());
 				PropertySetter psSize = createSizeTarget(child,
 						child.getSize(), child.getCollapsedSize());
+				PropertySetter psColor = createColorTarget(child,
+						child.getColor(), child.getCollapsedColor());
 
 				ShapeTimingTarget shapeTarget = new ShapeTimingTarget(child,
-						new TimingTarget[] { psPosition, psRotation, psSize });
+						new TimingTarget[] { psPosition, psRotation, psSize, psColor });
 				result[i++] = shapeTarget;
 			}
 		}
@@ -120,6 +125,16 @@ public class ExplodingGroupListener implements ShapeFocusListener {
 		KeyFrames framesSize = new KeyFrames(valuesSize, timesSize);
 		PropertySetter psSize = new PropertySetter(child, "size", framesSize);
 		return psSize;
+	}
+	
+	private PropertySetter createColorTarget(Shape child, ShapeColor start,
+			ShapeColor end) {
+		KeyValues<ShapeColor> valuesColor = KeyValues.create(
+				new ShapeColorEvaluator(), start, end);
+		KeyTimes timesColor = new KeyTimes(0f, 1f);
+		KeyFrames framesColor = new KeyFrames(valuesColor, timesColor);
+		PropertySetter psColor = new PropertySetter(child, "color", framesColor);
+		return psColor;
 	}
 	
 }

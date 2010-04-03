@@ -8,6 +8,7 @@ import com.sessionfive.core.Camera;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
 import com.sessionfive.core.Shape;
+import com.sessionfive.core.ShapeColor;
 import com.sessionfive.core.ShapePosition;
 import com.sessionfive.core.ShapeRotation;
 
@@ -28,6 +29,8 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 		presentation.setDefaultStartCamera(newStartCamera);
 
 		float space = presentation.getSpace() * 2f;
+		float additionalGroupSpace = 5;
+		boolean additionalGroupSpaceAlreadyAdded = false;
 		float childSpace = space;
 		float x = -space;
 		float z = 0f;
@@ -36,14 +39,21 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 		Iterator<Shape> iter = shapes.iterator();
 		while (iter.hasNext()) {
 			Shape shape = iter.next();
+
+			List<Shape> childs = shape.getShapes();
+			if (childs.size() > 0 && !additionalGroupSpaceAlreadyAdded) {
+				x += additionalGroupSpace;
+			}
+
 			shape.setPosition(new ShapePosition(x, 10, z));
 			shape.setFocussedPosition(null);
 			resizeToDefault(shape);
 
 			float childZ = z - 0.1f;
 			float childY = 0;
-			float angleZ = 0;
-			List<Shape> childs = shape.getShapes();
+			float angleZ = random.nextInt() % 5;
+			float color = 1;
+			
 			Iterator<Shape> childIter = childs.iterator();
 
 			while (childIter.hasNext()) {
@@ -51,6 +61,10 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 				child.setPosition(new ShapePosition(0, 0, childZ));
 				child.setRotation(new ShapeRotation(0, 0, angleZ));
 				resizeToDefault(child);
+
+				ShapeColor collapsedColor = new ShapeColor(color, color, color, 1f);
+				child.setColor(collapsedColor);
+				child.setCollapsedColor(collapsedColor);
 
 				child.setFocussedRotation(new ShapeRotation(0, 0, 0));
 				child.setFocussedPosition(new ShapePosition(0,
@@ -61,11 +75,18 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 
 				childY -= childSpace;
 				childZ -= 0.1f;
-				angleZ = (random.nextInt() % 30);
+				angleZ = (random.nextInt() % 15);
+				color = Math.min(color, 0.9f);
+				color = Math.max(0.1f, color - 0.05f);
 			}
 
 			if (childs.size() > 0) {
 				childSpace *= -1;
+				x += additionalGroupSpace;
+				additionalGroupSpaceAlreadyAdded = true;
+			}
+			else {
+				additionalGroupSpaceAlreadyAdded = false;
 			}
 
 			x += space;

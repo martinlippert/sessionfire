@@ -61,12 +61,7 @@ public class TileLayouter extends AbstractLayouter {
 				}
 			}
 			
-			shape.setFocussedPosition(null);
-			shape.setCollapsedPosition(null);
-			shape.setFocussedSize(null);
-			shape.setCollapsedSize(null);
-			shape.setFocussedRotation(null);
-			shape.setCollapsedRotation(null);
+			reset(shape);
 		}
 	}
 

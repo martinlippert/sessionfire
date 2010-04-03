@@ -21,6 +21,9 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 	private ShapePosition collapsedPosition;
 	private ShapeRotation collapsedRotation;
 	private ShapeSize collapsedSize;
+	
+	private ShapeColor color;
+	private ShapeColor collapsedColor;
 
 	private boolean reflectionEnabled;
 	private float focusScale;
@@ -40,6 +43,8 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 		this.position = ShapePosition.ZERO;
 		this.rotation = ShapeRotation.ZERO;
 		this.size = ShapeSize.ZERO;
+		this.color = ShapeColor.BLACK;
+		this.collapsedColor = ShapeColor.BLACK;
 	}
 
 	@Override
@@ -333,6 +338,32 @@ public class AbstractShape implements Shape, ShapeChangedListener {
 		Iterator<ShapeChangedListener> listeners = changeListeners.iterator();
 		while (listeners.hasNext()) {
 			listeners.next().shapeChanged(event);
+		}
+	}
+
+	@Override
+	public ShapeColor getColor() {
+		return this.color;
+	}
+
+	@Override
+	public void setColor(ShapeColor color) {
+		if (!this.color.equals(color)) {
+			this.color = color;
+			fireShapeChangedEvent();
+		}
+	}
+
+	@Override
+	public ShapeColor getCollapsedColor() {
+		return this.collapsedColor;
+	}
+
+	@Override
+	public void setCollapsedColor(ShapeColor color) {
+		if (!this.collapsedColor.equals(color)) {
+			this.collapsedColor = color;
+			fireShapeChangedEvent();
 		}
 	}
 

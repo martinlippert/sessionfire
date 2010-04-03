@@ -53,12 +53,7 @@ public class CircleLayouter extends AbstractLayouter {
 				i++;
 			}
 			
-			shape.setFocussedPosition(null);
-			shape.setCollapsedPosition(null);
-			shape.setFocussedSize(null);
-			shape.setCollapsedSize(null);
-			shape.setFocussedRotation(null);
-			shape.setCollapsedRotation(null);
+			reset(shape);
 		}
 	}
 
