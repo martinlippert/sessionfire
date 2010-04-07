@@ -26,6 +26,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -80,6 +81,11 @@ public class CentralControlPaletteUI {
 	private DefaultComboBoxModel animationStyleModel;
 	private DefaultComboBoxModel animationPathLayouterModel;
 	private DefaultComboBoxModel layoutModel;
+	private JCheckBox expertSettingsBox;
+	private boolean expertSettingsVisible;
+	private JPanel rotationViewPanel;
+	private JLabel spaceRotationLabel;
+	private JLabel focusScaleLabel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
 			Presentation presentation, SelectionService selectionService,
@@ -88,11 +94,13 @@ public class CentralControlPaletteUI {
 		this.presentation = presentation;
 		this.selectionService = selectionService;
 		this.canvas = canvas;
+		this.expertSettingsVisible = false;
 
 		Window windowAncestor = SwingUtilities.getWindowAncestor(canvas);
 		window = new TranslucentPalette("Sessionfire - Central Control", false,
 				windowAncestor);
 		initComponents();
+		
 		window.pack();
 		window.setLocation(100, 100);
 		initExtensions();
@@ -112,12 +120,20 @@ public class CentralControlPaletteUI {
 					}
 				});
 
+		setExpertSettingsVisible(this.expertSettingsVisible);
 		updateControls();
 	}
 
 	public void show() {
 		window.showPalette();
+		
+		positionExtensionPalettes();
+		for (TranslucentPalette palette : extensionPalettes) {
+			palette.showPalette();
+		}
+	}
 
+	protected void positionExtensionPalettes() {
 		TranslucentPalette previousWindow = window;
 		for (TranslucentPalette palette : extensionPalettes) {
 			palette.setLocation(previousWindow.getLocationOnScreen().x,
@@ -125,7 +141,6 @@ public class CentralControlPaletteUI {
 							+ previousWindow.getSize().height + 5);
 			palette.setSize(previousWindow.getSize().width,
 					palette.getSize().height);
-			palette.showPalette();
 			previousWindow = palette;
 		}
 	}
@@ -140,7 +155,7 @@ public class CentralControlPaletteUI {
 
 		FormLayout layout = new FormLayout(
 				"10dlu, fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref, 6dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
@@ -275,13 +290,39 @@ public class CentralControlPaletteUI {
 				setLayerText();
 			}
 		});
+		
+		reflectionEnabledBox = HudWidgetFactory.createHudCheckBox("Reflection");
+		reflectionEnabledBox.setSelected(true);
+		reflectionEnabledBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!inChange) {
+					centralControlPalette
+					.setReflectionEnabled(reflectionEnabledBox
+							.isSelected());
+				}
+			}
+		});
+		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 19, 2));
 
-		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
+		expertSettingsBox = HudWidgetFactory.createHudCheckBox("");
+		expertSettingsBox.setSelected(expertSettingsVisible );
+		expertSettingsBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleExpertSettings();
+			}
+		});
+		subContentPane.add(expertSettingsBox, cc.xyw(1, 21, 2));
 
 		RotationView rotationView = new RotationView(selectionService);
-		subContentPane.add(rotationView.createUI(), cc.xyw(1, 19, 2));
-		subContentPane.add(HudWidgetFactory.createHudLabel("||"), cc.xy(1, 21));
-		subContentPane.add(spaceRotationSlider, cc.xy(2, 21));
+		rotationViewPanel = rotationView.createUI();
+		subContentPane.add(rotationViewPanel, cc.xyw(1, 23, 2));
+		
+		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
+		spaceRotationLabel = HudWidgetFactory.createHudLabel("||");
+		subContentPane.add(spaceRotationLabel, cc.xy(1, 25));
+		subContentPane.add(spaceRotationSlider, cc.xy(2, 25));
 
 		spaceRotationSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -302,20 +343,6 @@ public class CentralControlPaletteUI {
 			}
 		});
 
-		reflectionEnabledBox = HudWidgetFactory.createHudCheckBox("Reflection");
-		reflectionEnabledBox.setSelected(true);
-		reflectionEnabledBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!inChange) {
-					centralControlPalette
-							.setReflectionEnabled(reflectionEnabledBox
-									.isSelected());
-				}
-			}
-		});
-		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 23, 2));
-
 		focusScaleSlider = new JSlider(1, 200, 100);
 		focusScaleSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -335,11 +362,12 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(HudWidgetFactory.createHudLabel("<>"), cc.xy(1, 25));
-		subContentPane.add(focusScaleSlider, cc.xy(2, 25));
+		focusScaleLabel = HudWidgetFactory.createHudLabel("<>");
+		subContentPane.add(focusScaleLabel, cc.xy(1, 27));
+		subContentPane.add(focusScaleSlider, cc.xy(2, 27));
 
 		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xyw(1, 27, 2));
+		subContentPane.add(helpButton, cc.xyw(1, 29, 2));
 
 		helpButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -359,11 +387,29 @@ public class CentralControlPaletteUI {
 						hidehelp();
 						mevent.consume();
 					}
-
 				}
 			}
 		}, AWTEvent.MOUSE_EVENT_MASK);
 
+	}
+
+	protected void toggleExpertSettings() {
+		this.expertSettingsVisible = !this.expertSettingsVisible;
+		setExpertSettingsVisible(expertSettingsVisible);
+		positionExtensionPalettes();
+	}
+
+	protected void setExpertSettingsVisible(boolean visible) {
+		this.rotationViewPanel.setVisible(visible);
+		this.spaceRotationSlider.setVisible(visible);
+		this.spaceRotationLabel.setVisible(visible);
+		this.focusScaleSlider.setVisible(visible);
+		this.focusScaleLabel.setVisible(visible);
+		
+		String expertSettingsText = visible ? "Hide advanced settings" : "Show advanced settings";
+		this.expertSettingsBox.setText(expertSettingsText);
+		
+		this.window.pack();
 	}
 
 	protected void setLayerText() {
@@ -426,26 +472,30 @@ public class CentralControlPaletteUI {
 				"and press ESC or F11 to switch back"));
 		helpWindows.add(new HelpWindow(savePresentationButton,
 				HelpWindowPosition.CENTER_NO_ARROW,
-				"Saves your presentation settings"));
+				" Saves your presentation settings "));
 		helpWindows.add(new HelpWindow(animationChoice,
-				HelpWindowPosition.BELOW,
+				HelpWindowPosition.ABOVE,
 				"Use these controls to select an animation",
 				"and a layout of your shapes"));
+		helpWindows.add(new HelpWindow(animationPathChoice,
+				HelpWindowPosition.BELOW,
+				"Choose the path you would like to walk",
+				"through your shapes"));
 		helpWindows.add(new HelpWindow(layerText,
-				HelpWindowPosition.CENTER_NO_ARROW, "Change the layer text"));
-		// helpWindows.add(new HelpWindow(yRotationSlider,
-		// HelpWindowPosition.ABOVE, "Use these sliders to control",
-		// "the X,Y and Z rotation of your shapes"));
+				HelpWindowPosition.CENTER_NO_ARROW, " Change the layer text "));
+		helpWindows.add(new HelpWindow(rotationViewPanel,
+				HelpWindowPosition.BELOW, "Use these sliders to control",
+		"the X,Y and Z rotation of your shapes"));
 		helpWindows.add(new HelpWindow(spaceRotationSlider,
 				HelpWindowPosition.ABOVE,
 				"Change the spacing between your shapes",
 				"Double click returns to the default"));
 		helpWindows.add(new HelpWindow(focusScaleSlider,
-				HelpWindowPosition.ABOVE,
+				HelpWindowPosition.CENTER_NO_ARROW,
 				"Change the scaling of focussed shapes",
 				"Double click returns to the default"));
 		helpWindows.add(new HelpWindow(helpButton,
-				HelpWindowPosition.CENTER_NO_ARROW,
+				HelpWindowPosition.BELOW,
 				"Navigation while presenting:",
 				"Next shape: Right-Arrow, Down-Arrow, Page-Down",
 				"Previous shape: Left-Arrow, Up-Arrow, Page-Up",
@@ -489,9 +539,6 @@ public class CentralControlPaletteUI {
 			layerText.setText(presentation.getLayerText());
 		}
 
-		// xRotationSlider.setValue((int) presentation.getDefaultRotationX());
-		// yRotationSlider.setValue((int) presentation.getDefaultRotationY());
-		// zRotationSlider.setValue((int) presentation.getDefaultRotationZ());
 		spaceRotationSlider.setValue((int) presentation.getSpace());
 		reflectionEnabledBox.setSelected(presentation
 				.isDefaultReflectionEnabled());

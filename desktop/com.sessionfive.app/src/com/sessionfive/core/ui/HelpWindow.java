@@ -48,24 +48,25 @@ public class HelpWindow extends JWindow {
 		}
 
 		pack();
-		int width = position.withArrow() ? getWidth() + 5 : getWidth() + 8;
-		setSize(width, getHeight() + 10);
-
-		Point pt = markedWidget.getLocationOnScreen();
-		Dimension widgetSize = markedWidget.getSize();
-		pt.x += widgetSize.width + 2;
-		if (pos == HelpWindowPosition.ABOVE) {
-			pt.y += widgetSize.height - 36;
-		} else {
-			pt.y += widgetSize.height - 20;
+		
+		if (markedWidget.isShowing()) {
+			int width = position.withArrow() ? getWidth() + 5 : getWidth() + 8;
+			setSize(width, getHeight() + 10);
+	
+			Point pt = markedWidget.getLocationOnScreen();
+			Dimension widgetSize = markedWidget.getSize();
+			pt.x += widgetSize.width + 2;
+			if (pos == HelpWindowPosition.ABOVE) {
+				pt.y += widgetSize.height - 36;
+			}
+			// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			// if (pt.x + getWidth() > dim.width) {
+			// pt.x = dim.width - getWidth();
+			// }
+			setLocation(pt);
+	
+			showHoverWindow();
 		}
-		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		// if (pt.x + getWidth() > dim.width) {
-		// pt.x = dim.width - getWidth();
-		// }
-		setLocation(pt);
-
-		showHoverWindow();
 	}
 
 	private JPanel getContentPanel() {
@@ -192,6 +193,10 @@ public class HelpWindow extends JWindow {
 
 		if (this.fadeInTimer != null && this.fadeInTimer.isRunning()) {
 			this.fadeInTimer.stop();
+		}
+		
+		if (!isVisible()) {
+			return;
 		}
 
 		if (this.toFade) {
