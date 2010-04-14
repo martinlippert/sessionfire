@@ -29,9 +29,10 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 		presentation.setDefaultStartCamera(newStartCamera);
 
 		float space = presentation.getSpace() * 2f;
+		float childSpace = presentation.getSpace() * 1.5f;
+
 		float additionalGroupSpace = 5;
 		boolean additionalGroupSpaceAlreadyAdded = false;
-		float childSpace = space;
 		float x = -space;
 		float z = 0f;
 
