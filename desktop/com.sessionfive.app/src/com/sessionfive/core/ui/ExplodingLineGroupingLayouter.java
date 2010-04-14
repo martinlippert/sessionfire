@@ -59,7 +59,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 				
 			}
 
-			float childZ = z - 0.1f;
+			float childZ = z - 1f;
 			float childY = 0;
 			float angleZ = random.nextInt() % 5;
 			float color = 1;
@@ -83,7 +83,7 @@ public class ExplodingLineGroupingLayouter extends AbstractLayouter {
 				child.setCollapsedRotation(new ShapeRotation(0, 0, angleZ));
 
 				childY -= childSpace;
-				childZ -= 0.1f;
+				childZ -= 1f;
 				angleZ = (random.nextInt() % 15);
 				color = Math.min(color, 0.9f);
 				color = Math.max(0.1f, color - 0.05f);
