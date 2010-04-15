@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.dnd.DropTarget;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,7 @@ import javax.swing.event.DocumentListener;
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sessionfive.app.DropListener;
 import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.LayerType;
@@ -100,6 +102,9 @@ public class CentralControlPaletteUI {
 		window = new TranslucentPalette("Sessionfire - Central Control", false,
 				windowAncestor);
 		initComponents();
+		
+		DropListener dropListener = new DropListener(centralControlPalette, canvas);
+		new DropTarget(windowAncestor, dropListener);
 		
 		window.pack();
 		window.setLocation(100, 100);

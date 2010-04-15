@@ -1,6 +1,7 @@
 package com.sessionfive.core.ui;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.Iterator;
 
 import javax.media.opengl.GLCanvas;
@@ -33,6 +34,14 @@ public class CentralControlPalette {
 		PresentationLoader loader = new PresentationLoader();
 		loader.loadPresentation(presentation, canvas, getLayouter(),
 				getAnimationStyles(), getAnimationPathLayouter());
+
+		canvas.requestFocus();
+	}
+
+	public void loadPresentation(File[] files, GLCanvas canvas) {
+		PresentationLoader loader = new PresentationLoader();
+		loader.loadPresentation(presentation, canvas, getLayouter(),
+				getAnimationStyles(), getAnimationPathLayouter(), files);
 
 		canvas.requestFocus();
 	}

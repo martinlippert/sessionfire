@@ -114,7 +114,6 @@ public class SessionFiveApplication implements IApplication {
 		caps.setNumSamples(4);
 
 		canvas = new GLCanvas(caps);
-
 		presentation = new Presentation();
 		display = new Display(presentation);
 		animationController = new AnimationController();

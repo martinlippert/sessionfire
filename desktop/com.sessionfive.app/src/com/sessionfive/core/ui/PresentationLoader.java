@@ -42,14 +42,19 @@ public class PresentationLoader implements PropertyChangeListener {
 
 		if (showDialog == JFileChooser.APPROVE_OPTION) {
 			File[] files = getFiles(chooser);
+			loadPresentation(presentation, canvas, layouter, animationStyles, animationPathLayouter, files);
+		}
+	}
+	
+	public void loadPresentation(Presentation presentation, GLCanvas canvas,
+			Layouter[] layouter, AnimationStyle[] animationStyles,
+			AnimationPathLayouter[] animationPathLayouter, File[] files) {
+		HierarchicFileStructureNode fileStructure = new HierarchicFileStructureNode(null);
+		addFilesToStructure(files, fileStructure);
 
-			HierarchicFileStructureNode fileStructure = new HierarchicFileStructureNode(null);
-			addFilesToStructure(files, fileStructure);
-
-			if (fileStructure.getElementCount() > 0) {
-				presentation.setPath(getPresentationPath(chooser));
-				readFiles(presentation, fileStructure, canvas, layouter, animationStyles, animationPathLayouter);
-			}
+		if (fileStructure.getElementCount() > 0) {
+			presentation.setPath(getPresentationPath(files));
+			readFiles(presentation, fileStructure, canvas, layouter, animationStyles, animationPathLayouter);
 		}
 	}
 
@@ -96,13 +101,13 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private String getPresentationPath(JFileChooser chooser) {
-		File[] selectedFiles = chooser.getSelectedFiles();
-		if (selectedFiles != null) {
+	private String getPresentationPath(File[] selectedFiles) {
+		if (selectedFiles != null && selectedFiles.length > 0) {
 			if (selectedFiles.length == 1 && selectedFiles[0].isDirectory()) {
 				return selectedFiles[0].getAbsolutePath();
 			} else {
-				return chooser.getCurrentDirectory().getAbsolutePath();
+				File parentFile = selectedFiles[0].getParentFile();
+				return parentFile != null ? parentFile.getAbsolutePath() : "";
 			}
 		} else {
 			return "";
