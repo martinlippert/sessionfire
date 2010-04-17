@@ -31,8 +31,9 @@ public class PresentationLoader implements PropertyChangeListener {
 	public PresentationLoader() {
 	}
 
-	public void loadPresentation(Presentation presentation, GLCanvas canvas, Layouter[] layouter,
-			AnimationStyle[] animationStyles, AnimationPathLayouter[] animationPathLayouter) {
+	public void loadPresentation(Presentation presentation, GLCanvas canvas,
+			Layouter[] layouter, AnimationStyle[] animationStyles,
+			AnimationPathLayouter[] animationPathLayouter) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setMultiSelectionEnabled(true);
@@ -41,30 +42,33 @@ public class PresentationLoader implements PropertyChangeListener {
 		int showDialog = chooser.showDialog(canvas, "Choose Presentation");
 
 		if (showDialog == JFileChooser.APPROVE_OPTION) {
-			File[] files = getFiles(chooser);
-			loadPresentation(presentation, canvas, layouter, animationStyles, animationPathLayouter, files);
+			loadPresentation(presentation, canvas, layouter, animationStyles,
+					animationPathLayouter, chooser.getSelectedFiles());
 		}
 	}
-	
+
 	public void loadPresentation(Presentation presentation, GLCanvas canvas,
 			Layouter[] layouter, AnimationStyle[] animationStyles,
-			AnimationPathLayouter[] animationPathLayouter, File[] files) {
-		HierarchicFileStructureNode fileStructure = new HierarchicFileStructureNode(null);
-		addFilesToStructure(files, fileStructure);
+			AnimationPathLayouter[] animationPathLayouter, File[] selectedFiles) {
+		File[] filesToRead = getFiles(selectedFiles);
+		HierarchicFileStructureNode fileStructure = new HierarchicFileStructureNode(
+				null);
+		addFilesToStructure(filesToRead, fileStructure);
 
 		if (fileStructure.getElementCount() > 0) {
-			presentation.setPath(getPresentationPath(files));
-			readFiles(presentation, fileStructure, canvas, layouter, animationStyles, animationPathLayouter);
+			presentation.setPath(getPresentationPath(selectedFiles));
+			readFiles(presentation, fileStructure, canvas, layouter,
+					animationStyles, animationPathLayouter);
 		}
 	}
 
 	private void addFilesToStructure(File[] files,
 			HierarchicFileStructureNode fileStructure) {
-		
+
 		files = sortImageFiles(files);
 		fileStructure.setChilds(files);
-		
-		for(int i = 0; i < fileStructure.getChildCount(); i++) {
+
+		for (int i = 0; i < fileStructure.getChildCount(); i++) {
 			HierarchicFileStructureNode child = fileStructure.getChild(i);
 			if (child.getFile().exists() && child.getFile().isDirectory()) {
 				File[] newChilds = child.getFile().listFiles();
@@ -88,8 +92,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		return files;
 	}
 
-	private File[] getFiles(JFileChooser chooser) {
-		File[] selectedFiles = chooser.getSelectedFiles();
+	private File[] getFiles(File[] selectedFiles) {
 		if (selectedFiles != null) {
 			if (selectedFiles.length == 1 && selectedFiles[0].isDirectory()) {
 				return selectedFiles[0].listFiles();
@@ -134,15 +137,18 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private void readFiles(Presentation presentation, HierarchicFileStructureNode fileStructure, GLCanvas canvas,
-			Layouter[] layouter, AnimationStyle[] animationStyles, AnimationPathLayouter[] animationPathLayouter) {
+	private void readFiles(Presentation presentation,
+			HierarchicFileStructureNode fileStructure, GLCanvas canvas,
+			Layouter[] layouter, AnimationStyle[] animationStyles,
+			AnimationPathLayouter[] animationPathLayouter) {
 		ShapeExtensionCreator creator = new ShapeExtensionCreatorImpl();
 
-		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation", "", 0, 100);
+		progressMonitor = new ProgressMonitor(canvas, "Loading Presentation",
+				"", 0, 100);
 		progressMonitor.setProgress(0);
-		
-		task = new PresentationLoaderTask(fileStructure, creator, presentation, canvas, layouter,
-				animationStyles, animationPathLayouter);
+
+		task = new PresentationLoaderTask(fileStructure, creator, presentation,
+				canvas, layouter, animationStyles, animationPathLayouter);
 		task.addPropertyChangeListener(this);
 		task.execute();
 	}
@@ -161,7 +167,8 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	public void savePresentation(final Presentation presentation, final GLCanvas canvas) {
+	public void savePresentation(final Presentation presentation,
+			final GLCanvas canvas) {
 		List<Shape> shapes = presentation.getAllShapes();
 		if (shapes.size() > 0) {
 			File dir = new File(presentation.getPath());
@@ -169,14 +176,16 @@ public class PresentationLoader implements PropertyChangeListener {
 				File presentationFile = new File(dir, "sessionfire.settings");
 				try {
 					Properties presentationSettings = createSettingsMap(presentation);
-					FileOutputStream fos = new FileOutputStream(presentationFile);
+					FileOutputStream fos = new FileOutputStream(
+							presentationFile);
 					presentationSettings.store(fos, "sessionfire-settings");
 					fos.flush();
 					fos.close();
 
 					JOptionPane.showMessageDialog(canvas,
 							"Presentation settings saved successfully to:\n"
-									+ presentationFile.getAbsolutePath(), "Presentation saved...",
+									+ presentationFile.getAbsolutePath(),
+							"Presentation saved...",
 							JOptionPane.INFORMATION_MESSAGE);
 
 				} catch (FileNotFoundException e) {
@@ -191,17 +200,22 @@ public class PresentationLoader implements PropertyChangeListener {
 	private Properties createSettingsMap(Presentation presentation) {
 		Properties result = new Properties();
 
-		result.setProperty("layout", presentation.getDefaultLayouter().getName());
-		result.setProperty("animation", presentation.getDefaultAnimationStyle().getName());
-		result.setProperty("animationPath", presentation.getDefaultAnimationPathLayouter().getName());
-		result.setProperty("backgroundColor", Integer.toString(presentation.getBackgroundColor()
-				.getRGB()));
-		
+		result.setProperty("layout", presentation.getDefaultLayouter()
+				.getName());
+		result.setProperty("animation", presentation.getDefaultAnimationStyle()
+				.getName());
+		result.setProperty("animationPath", presentation
+				.getDefaultAnimationPathLayouter().getName());
+		result.setProperty("backgroundColor", Integer.toString(presentation
+				.getBackgroundColor().getRGB()));
+
 		result.setProperty("layerText", presentation.getLayerText());
-		result.setProperty("spaceBetween", Float.toString(presentation.getSpace()));
-		result.setProperty("reflection", Boolean
-				.toString(presentation.isDefaultReflectionEnabled()));
-		result.setProperty("focusscale", Float.toString(presentation.getDefaultFocusScale()));
+		result.setProperty("spaceBetween", Float.toString(presentation
+				.getSpace()));
+		result.setProperty("reflection", Boolean.toString(presentation
+				.isDefaultReflectionEnabled()));
+		result.setProperty("focusscale", Float.toString(presentation
+				.getDefaultFocusScale()));
 
 		Camera startCamera = presentation.getStartCamera();
 		Point loc = startCamera.getLocation();
@@ -213,10 +227,14 @@ public class PresentationLoader implements PropertyChangeListener {
 		result.setProperty("startCameraTargetY", Float.toString(tar.getY()));
 		result.setProperty("startCameraTargetZ", Float.toString(tar.getZ()));
 
-		Shape firstShape = presentation.getShapes(LayerType.CAMERA_ANIMATED).get(0);
-		result.setProperty("rotationX", Float.toString(firstShape.getRotation().getRotationAngleX()));
-		result.setProperty("rotationY", Float.toString(firstShape.getRotation().getRotationAngleY()));
-		result.setProperty("rotationZ", Float.toString(firstShape.getRotation().getRotationAngleZ()));
+		Shape firstShape = presentation.getShapes(LayerType.CAMERA_ANIMATED)
+				.get(0);
+		result.setProperty("rotationX", Float.toString(firstShape.getRotation()
+				.getRotationAngleX()));
+		result.setProperty("rotationY", Float.toString(firstShape.getRotation()
+				.getRotationAngleY()));
+		result.setProperty("rotationZ", Float.toString(firstShape.getRotation()
+				.getRotationAngleZ()));
 
 		return result;
 	}
