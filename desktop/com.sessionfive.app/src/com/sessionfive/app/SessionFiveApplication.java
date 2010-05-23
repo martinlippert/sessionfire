@@ -210,6 +210,7 @@ public class SessionFiveApplication implements IApplication {
 		frame.setVisible(true);
 		animationController.init(presentation, display);
 		animationController.addFocusListener(new ExplodingGroupListener());
+		animationController.addFocusListener(new RedrawPerformanceListener(display));
 
 		centralControlPalette = new CentralControlPalette(presentation, animationController);
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
@@ -243,7 +244,7 @@ public class SessionFiveApplication implements IApplication {
 					fullScreenFrame.requestFocus();
 				}
 			});
-
+			
 			GraphicsDevice screenDevice = GraphicsEnvironment.getLocalGraphicsEnvironment()
 					.getDefaultScreenDevice();
 			screenDevice.setFullScreenWindow(fullScreenFrame);

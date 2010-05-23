@@ -31,10 +31,14 @@ public class Display implements GLEventListener {
 	private FutureTask<byte[]> futureTask;
 	private List<DisplayChangedListener> changeListeners;
 
+	private long ticks;
+
 	public Display(Presentation presentation) {
 		this.presentation = presentation;
 		this.camera = presentation.getStartCamera();
 		this.changeListeners = new LinkedList<DisplayChangedListener>();
+		
+		this.ticks = 0;
 	}
 
 	public Camera getCamera() {
@@ -79,6 +83,8 @@ public class Display implements GLEventListener {
 			futureTask.run();
 			futureTask = null;
 		}
+
+		ticks++;
 	}
 
 	public void init(GLAutoDrawable drawable) {
@@ -136,6 +142,10 @@ public class Display implements GLEventListener {
 		while (listeners.hasNext()) {
 			listeners.next().displayChanged(event);
 		}
+	}
+
+	public long getTicks() {
+		return ticks;
 	}
 
 }
