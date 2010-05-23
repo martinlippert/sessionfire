@@ -1,8 +1,11 @@
 package com.sessionfive.core;
 
+import java.awt.Color;
+
 public class ShapeColor {
 	
 	public static final ShapeColor BLACK = new ShapeColor(1f, 1f, 1f, 1f);
+	public static final ShapeColor WHITE = new ShapeColor(0f, 0f, 0f, 1f);
 	
 	private final float r;
 	private final float g;
@@ -54,6 +57,14 @@ public class ShapeColor {
 			return false;
 		ShapeColor other = (ShapeColor) obj;
 		return this.r == other.r && this.b == other.b && this.g == other.g && this.a == other.a;
+	}
+
+	public Color asAWTColor() {
+		return new Color(r, g, b, a);
+	}
+	
+	public static ShapeColor fromAWTColor(Color color) {
+		return new ShapeColor(color.getRed() / 255, color.getGreen() / 255, color.getBlue() / 255, color.getAlpha() / 255);
 	}
 
 }
