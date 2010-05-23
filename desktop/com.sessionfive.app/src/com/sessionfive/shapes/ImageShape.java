@@ -8,7 +8,7 @@ import static javax.media.opengl.GL.GL_TEXTURE_ENV_MODE;
 import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.media.opengl.GL;
@@ -29,10 +29,10 @@ import com.sun.opengl.util.texture.TextureIO;
 public class ImageShape extends AbstractShape {
 
 	private Texture t;
-	private final File file;
+	private byte[] imageBytes;
 	
-	public ImageShape(File file) {
-		this.file = file;
+	public ImageShape(byte[] imageData) {
+		this.imageBytes = imageData;
 	}
 
 	@Override
@@ -135,7 +135,13 @@ public class ImageShape extends AbstractShape {
 	}
 	
 	private TextureData initTextureData() throws IOException {
-		return TextureIO.newTextureData(this.file, true, null);
+		if (this.imageBytes != null) {
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(this.imageBytes);
+			return TextureIO.newTextureData(inputStream, true, null);
+		}
+		else {
+			return null;
+		}
 	}
 	
 	private void initTexture(final TextureData textureData) {
@@ -170,10 +176,6 @@ public class ImageShape extends AbstractShape {
 				}
 			});
 		}
-	}
-
-	public File getFile() {
-		return this.file;
 	}
 
 }

@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SESSION_FIVE
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
  javax.media.opengl;bundle-version="1.1.1",
- org.eclipse.swt
+ org.eclipse.swt,
+ org.apache.commons.io;bundle-version="1.4.0"
 Import-Package: com.explodingpixels.macwidgets,
  com.explodingpixels.widgets,
  com.jgoodies.forms.layout,
