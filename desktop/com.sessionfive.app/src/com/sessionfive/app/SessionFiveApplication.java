@@ -210,7 +210,7 @@ public class SessionFiveApplication implements IApplication {
 		frame.setVisible(true);
 		animationController.init(presentation, display);
 		animationController.addFocusListener(new ExplodingGroupListener());
-		animationController.addFocusListener(new RedrawPerformanceListener(display));
+//		animationController.addFocusListener(new RedrawPerformanceListener(display));
 
 		centralControlPalette = new CentralControlPalette(presentation, animationController);
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
