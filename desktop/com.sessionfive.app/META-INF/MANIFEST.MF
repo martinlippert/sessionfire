@@ -13,7 +13,9 @@ Import-Package: com.explodingpixels.macwidgets,
  com.jgoodies.forms.layout,
  javax.swing,
  org.jdesktop.animation.timing,
- org.jdesktop.animation.timing.interpolation
+ org.jdesktop.animation.timing.interpolation,
+ org.json.simple,
+ org.json.simple.parser
 Export-Package: com.sessionfive.animation,
  com.sessionfive.app,
  com.sessionfive.core,

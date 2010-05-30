@@ -49,6 +49,8 @@ public class CentralControlPalette {
 	public void savePresentation(GLCanvas canvas) {
 		PresentationLoader loader = new PresentationLoader();
 		loader.savePresentation(presentation, canvas);
+		
+//		new JSONOutput().store(presentation);
 	}
 
 	public void startPresentation() {

@@ -197,7 +197,7 @@ public class PresentationLoader implements PropertyChangeListener {
 		}
 	}
 
-	private Properties createSettingsMap(Presentation presentation) {
+	public Properties createSettingsMap(Presentation presentation) {
 		Properties result = new Properties();
 
 		result.setProperty("layout", presentation.getDefaultLayouter()

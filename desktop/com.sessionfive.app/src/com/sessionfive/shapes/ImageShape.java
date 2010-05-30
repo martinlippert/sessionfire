@@ -34,6 +34,10 @@ public class ImageShape extends AbstractShape {
 	public ImageShape(byte[] imageData) {
 		this.imageBytes = imageData;
 	}
+	
+	public byte[] getImageBytes() {
+		return imageBytes;
+	}
 
 	@Override
 	protected void basicDisplay(GLAutoDrawable drawable) {
