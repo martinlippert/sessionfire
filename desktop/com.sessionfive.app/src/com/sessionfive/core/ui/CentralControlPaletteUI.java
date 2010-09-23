@@ -139,14 +139,17 @@ public class CentralControlPaletteUI {
 	}
 
 	protected void positionExtensionPalettes() {
-		TranslucentPalette previousWindow = window;
+		int x = window.getLocationOnScreen().x;
+		int y = window.getLocationOnScreen().y;
+		int width = window.getSize().width;
+		int height = window.getSize().height;
+		
 		for (TranslucentPalette palette : extensionPalettes) {
-			palette.setLocation(previousWindow.getLocationOnScreen().x,
-					previousWindow.getLocationOnScreen().y
-							+ previousWindow.getSize().height + 5);
-			palette.setSize(previousWindow.getSize().width,
-					palette.getSize().height);
-			previousWindow = palette;
+			y = y + height + 5;
+			height = palette.getSize().height;
+
+			palette.setLocation(x, y);
+			palette.setSize(width, height);
 		}
 	}
 

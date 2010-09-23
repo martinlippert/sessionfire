@@ -15,7 +15,7 @@ public class ImageShapeFactory implements ShapeFactory {
 		if (resource != null) {
 			try {
 				byte[] bytes = FileUtils.readFileToByteArray(resource);
-				ImageShape imageShape = new ImageShape(bytes);
+				ImageShape imageShape = new ImageShape(bytes, getImageType(resource));
 				imageShape.setSize(new ShapeSize(45f, 0f, 0f));
 				return imageShape;
 			} catch (IOException e) {
@@ -28,6 +28,17 @@ public class ImageShapeFactory implements ShapeFactory {
 	public boolean matches(File resource) {
 		String name = resource.getName().toLowerCase();
 		return name.endsWith(".jpg") || name.endsWith(".gif") || name.endsWith(".png");
+	}
+	
+	protected String getImageType(File resource) {
+		String name = resource.getName();
+		int lastIndexOf = name.lastIndexOf('.');
+		if (lastIndexOf < 0 || lastIndexOf >= name.length() - 1) {
+			return name;
+		}
+		else {
+			return name.substring(lastIndexOf);
+		}
 	}
 
 }

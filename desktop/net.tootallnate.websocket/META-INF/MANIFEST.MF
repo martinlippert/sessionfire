@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Websockets for Java
+Bundle-SymbolicName: net.tootallnate.websocket
+Bundle-Version: 0.2.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.tootallnate.websocket
+Bundle-ClassPath: websockets.jar

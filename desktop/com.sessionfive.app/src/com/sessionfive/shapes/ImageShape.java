@@ -30,13 +30,19 @@ public class ImageShape extends AbstractShape {
 
 	private Texture t;
 	private byte[] imageBytes;
+	private String imageType;
 	
-	public ImageShape(byte[] imageData) {
+	public ImageShape(byte[] imageData, String imageType) {
 		this.imageBytes = imageData;
+		this.imageType = imageType;
 	}
 	
 	public byte[] getImageBytes() {
 		return imageBytes;
+	}
+	
+	public String getImageType() {
+		return imageType;
 	}
 
 	@Override

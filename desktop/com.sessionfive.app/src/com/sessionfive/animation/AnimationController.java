@@ -37,6 +37,10 @@ public class AnimationController {
 
 		this.currentAnimationStep = null;
 	}
+	
+	public Presentation getPresentation() {
+		return presentation;
+	}
 
 	public boolean canGoForward() {
 		if (currentAnimationStep == null) {
