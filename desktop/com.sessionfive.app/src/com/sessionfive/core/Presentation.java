@@ -36,6 +36,9 @@ public class Presentation implements ShapeChangedListener {
 	private List<PresentationChangedListener> changeListeners;
 	private float space;
 	private Camera defaultStartCamera;
+	
+	private String name;
+	private String id;
 
 	public Presentation() {
 		firstAnimationStep = null;
@@ -55,6 +58,9 @@ public class Presentation implements ShapeChangedListener {
 
 		defaultFocusScale = DEFAULT_FOCUS_SCALE;
 		space = DEFAULT_SPACE;
+		
+		name = "";
+		id = "";
 
 		addShape(titleShape, LayerType.FIXED_POSTION);
 	}
@@ -286,6 +292,22 @@ public class Presentation implements ShapeChangedListener {
 	public Iterator<Shape> shapeIterator(boolean skipAbstractShapes) {
 		return skipAbstractShapes ? new SkippingShapeIterator(this)
 				: new ShapeIterator(this);
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 }

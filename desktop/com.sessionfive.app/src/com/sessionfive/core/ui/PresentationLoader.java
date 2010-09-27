@@ -235,6 +235,9 @@ public class PresentationLoader implements PropertyChangeListener {
 				.getRotationAngleY()));
 		result.setProperty("rotationZ", Float.toString(firstShape.getRotation()
 				.getRotationAngleZ()));
+		
+		result.setProperty("name", presentation.getName());
+		result.setProperty("id", presentation.getId());
 
 		return result;
 	}

@@ -261,6 +261,12 @@ public class PresentationLoaderTask extends SwingWorker<Void, Void> {
 				} else {
 					presentation.resetStartCamera();
 				}
+				
+				String name = settings.getProperty("name");
+				presentation.setName(name != null ? name : "");
+				
+				String id = settings.getProperty("id");
+				presentation.setId(id != null ? id : "");
 
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
