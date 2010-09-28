@@ -1,0 +1,21 @@
+
+    <header>
+        <h1>Online Presentation</h1>
+    </header>
+    
+    <section>
+            <p id="next_prev">
+                <span id="prev">&laquo; Prev</span>
+                <span id="next">Next &raquo;</span>             
+            </p>
+        <div id="container">            
+            <div id="images">
+            
+            <% for (i = 0; i < noshapes; i += 1) { %>
+            	<img src="presentation/<%= i %>" width="450px" height="281px"/>
+            <% } %>
+            
+            </div>
+        </div>
+    </section>      
+    

@@ -1,0 +1,35 @@
+#images {
+	-webkit-transition: all 0.6s ease-in-out;
+	-moz-transition: all 0.6s ease-in-out;
+	-o-transition: all 0.6s ease-in-out;
+	-transition: all 0.6s ease-in-out;
+}
+
+#next_prev {
+	text-align: center;
+}
+
+#next_prev span {
+	padding-right: 2em;
+	cursor: pointer;
+}
+
+#container {
+	width: 450px;
+	height: 481px;
+	overflow: hidden;
+	position: relative;
+	margin: 0 auto;
+}
+
+#images {
+	position: absolute;
+	left: 0px;
+	width: 200px;
+}
+
+#images img {
+	padding: 0;
+	margin: 0;
+	float: left;
+}
