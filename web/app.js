@@ -22,7 +22,13 @@ app.set('views', __dirname + '/views');
 
 
 var home = function(req, res) {
-    res.send('Hello World');
+    presentationProvider.findAllOverview(function(error, result) {
+        res.render('overview', {
+            locals: {
+        		presentations: result
+            }
+        });
+    });
 }
 
 var upload = function(req, res) {

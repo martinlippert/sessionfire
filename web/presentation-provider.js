@@ -31,6 +31,16 @@ PresentationProvider.prototype.findIndexById = function(id) {
 	return index;
 };
 
+PresentationProvider.prototype.findAllOverview = function(callback) {
+	var result = [];
+	for (var i = 0; i < this.stored.length; i++) {
+		result[i] = {};
+		result[i].name = this.stored[i].name;
+		result[i].id = this.stored[i].id;
+	}
+	callback(null, result);
+}
+
 PresentationProvider.prototype.save = function(data, callback) {
     var index = this.findIndexById(data.id);
     if(!data.id || data.id == 'null' || data.id == 'undefined') {
@@ -40,5 +50,5 @@ PresentationProvider.prototype.save = function(data, callback) {
     
     sys.print('Saved! Now we have ' + this.stored.length + ' presentations stored.\n');
     var error = null;
-    callback(error, JSON.stringify({'id': 'meine id', 'action': 'meine action'}));
+    callback(error, {'id': data.id, 'url': 'localhost:3000/' + data.id});
 };

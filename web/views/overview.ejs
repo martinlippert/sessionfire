@@ -1,0 +1,16 @@
+
+    <header>
+        <h1>Sessionfire Live - Dashboard</h1>
+    </header>
+    
+    <section>
+            <div id="presentations">
+            
+            <% for (i = 0; i < presentations.length; i++) { %>
+            	<h2><a href="<%= presentations[i].id %>"><%= presentations[i].name %></a></h2>
+            	<img src="<%= presentations[i].id %>/0" width="200px" height="150px"/>
+            <% } %>
+            
+            </div>
+    </section>      
+    
