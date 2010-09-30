@@ -1,14 +1,12 @@
 
-/**
- * Module dependencies.
- */
 var connect = require('/Users/mlippert/Entwicklung/express/support/connect/lib/connect');
 var ejs = require('/Users/mlippert/Entwicklung/express/support/ejs');
 var express = require('/Users/mlippert/Entwicklung/express/lib/express');
 var io = require('/Users/mlippert/Entwicklung/socket.io-node');
 var Buffer = require('buffer').Buffer;
 
-var body;
+var PresentationProvider = require('./presentation-provider').PresentationProvider;
+var presentationProvider = new PresentationProvider();
 
 var app = express.createServer(
 		connect.logger(),
@@ -23,38 +21,40 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 
-var func = function(req, res) {
+var home = function(req, res) {
     res.send('Hello World');
 }
 
 var upload = function(req, res) {
-	body = req.body;
-	res.send(JSON.stringify({'id': 'meine id', 'action': 'meine action'}),
-			                { 'Content-Type': 'application/json' });
+    presentationProvider.save(req.body, function(error, result) {
+        res.send(JSON.stringify(result), { 'Content-Type': 'application/json' }, 200);            
+    });
 }
 
 var getimage = function(req, res) {
-	var id = req.params.id;
-	var image = body.shapes[id].image;
-	
-	res.contentType(body.shapes[id].imagetype);
-    var bufferedImage = new Buffer(image, "base64");
-	res.send(bufferedImage);
+    presentationProvider.findById(req.params.id, function(error, result) {
+    	var image = result.shapes[req.params.image].image;
+    	var bufferedImage = new Buffer(image, "base64");
+    	res.contentType(result.shapes[req.params.image].imagetype);
+    	res.send(bufferedImage);
+    });
 }
 
-app.get('/', func);
-app.put('/upload', upload);
-app.get('/presentation/:id', getimage);
-
-
-app.get('/presentation', function(req, res){
-    res.render('presentation', {
-        locals: {
-            noshapes: body.shapes.length
-        }
+var presentation = function(req, res) {
+    presentationProvider.findById(req.params.id, function(error, result) {
+        res.render('presentation', {
+            locals: {
+        		presentation: req.params.id,
+                noshapes: result.shapes.length
+            }
+        });
     });
-});
+}
 
+app.get('/', home);
+app.put('/upload', upload);
+app.get('/:id/:image', getimage);
+app.get('/:id', presentation);
 
 app.listen(3000);
 console.log('Express server started on port %s', app.address().port);
