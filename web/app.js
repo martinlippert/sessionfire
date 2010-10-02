@@ -22,7 +22,7 @@ app.set('views', __dirname + '/views');
 
 
 var home = function(req, res) {
-    presentationProvider.findAllOverview(function(error, result) {
+    presentationProvider.findLatest(function(error, result) {
         res.render('overview', {
             locals: {
         		presentations: result

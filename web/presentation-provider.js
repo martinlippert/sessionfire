@@ -31,12 +31,18 @@ PresentationProvider.prototype.findIndexById = function(id) {
 	return index;
 };
 
-PresentationProvider.prototype.findAllOverview = function(callback) {
+PresentationProvider.prototype.findLatest = function(callback) {
 	var result = [];
-	for (var i = 0; i < this.stored.length; i++) {
-		result[i] = {};
-		result[i].name = this.stored[i].name;
-		result[i].id = this.stored[i].id;
+	var index = 0;
+	var start = 0;
+	if (this.stored.length > 10) {
+		start = this.stored.length - 10;
+	}
+	for (var i = this.stored.length - 1; i >= start; i--) {
+		result[index] = {};
+		result[index].name = this.stored[i].name;
+		result[index].id = this.stored[i].id;
+		index++;
 	}
 	callback(null, result);
 }
