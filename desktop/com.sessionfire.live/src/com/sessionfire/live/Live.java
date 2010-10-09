@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.sessionfive.app.SessionFiveApplication;
+import com.sessionfive.core.Presentation;
 
 public class Live {
 
@@ -49,11 +50,12 @@ public class Live {
 		return client != null;
 	}
 
-	public void syncShapeFocus(int shapeNo) {
+	public void syncShapeFocus(int shapeNo, Presentation presentation) {
 		if (isConnected()) {
 			try {
 				client.send("{\"action\":\"focusChanged\", \"shapeNo\":"
-						+ shapeNo + "}");
+						+ shapeNo + ", \"presentation\":\""
+						+ presentation.getId() + "\"}");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -95,9 +97,17 @@ public class Live {
 										.get("action"))) {
 									int shapeNo = ((Long) parsedMessage
 											.get("shapeNo")).intValue();
-									SessionFiveApplication.getInstance()
-											.getAnimationController()
-											.goToKeyframeNo(shapeNo);
+									String presentationID = (String) parsedMessage
+											.get("presentation");
+
+									String id = SessionFiveApplication
+											.getInstance().getPresentation()
+											.getId();
+									if (id != null && id.equals(presentationID)) {
+										SessionFiveApplication.getInstance()
+												.getAnimationController()
+												.goToKeyframeNo(shapeNo);
+									}
 								}
 							} catch (Exception e) {
 								e.printStackTrace();

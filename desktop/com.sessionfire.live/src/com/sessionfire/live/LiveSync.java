@@ -29,7 +29,7 @@ public class LiveSync implements ShapeFocusListener {
 			List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 			for (int i = 0; i < shapes.size(); i++) {
 				if (shape == shapes.get(i)) {
-					live.syncShapeFocus(i);
+					live.syncShapeFocus(i, presentation);
 				}
 			}
 		}

@@ -2,6 +2,12 @@ $(document).ready(
 		function() {
 
 			currentTranslateX = 0;
+			
+			var path = document.location.pathname;
+			if (path.length > 1) {
+				presentationID = path.substring(1);
+			}
+			
 			$("#images").css("-webkit-transform",
 					"translateX(" + currentTranslateX + "px)");
 			$("#images").css("-moz-transform",
@@ -86,7 +92,8 @@ next = function() {
 
 		socket.send(JSON.stringify( {
 			action : 'focusChanged',
-			shapeNo : selectedShapeNo
+			shapeNo : selectedShapeNo,
+			presentation: presentationID
 		}));
 	}
 };
@@ -118,7 +125,8 @@ prev = function() {
 
 		socket.send(JSON.stringify( {
 			action : 'focusChanged',
-			shapeNo : selectedShapeNo
+			shapeNo : selectedShapeNo,
+			presentation : presentationID
 		}));
 	}
 };

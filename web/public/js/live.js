@@ -7,7 +7,7 @@ if (socket.connect()) {
 		window.console.log('message arrived' + message);
 		message = JSON.parse(message);
 
-		if (message['action'] == 'focusChanged') {
+		if (message['action'] == 'focusChanged' && message['presentation'] == presentationID) {
 			var shapeNo = message['shapeNo'];
 
 			var width = $("#images img").width();
