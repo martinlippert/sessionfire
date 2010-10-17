@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
    <extension
          point="com.sessionfive.app.view">
       <view
             viewclass="com.sessionfire.timer.TimerView"
-            name="Timer">
+            name="Sessionfire - Timer">
       </view>
    </extension>
+
    <extension
          point="com.sessionfive.app.keylistener">
       <keylistener

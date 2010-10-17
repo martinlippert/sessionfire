@@ -60,7 +60,6 @@ public class SessionFiveApplication implements IApplication {
 	private Presentation presentation;
 
 	private static SessionFiveApplication application;
-	private static String generalStatus = "";
 
 	private CentralControlPalette centralControlPalette;
 	private CentralControlPaletteUI centralControlPaletteUI;
@@ -216,7 +215,6 @@ public class SessionFiveApplication implements IApplication {
 		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
 				selectionService, canvas);
 		centralControlPaletteUI.show();
-		centralControlPaletteUI.setStatus(generalStatus);
 
 		return EXIT_OK;
 	}
@@ -264,14 +262,6 @@ public class SessionFiveApplication implements IApplication {
 	}
 
 	public void stop() {
-	}
-
-	public static void setStatus(String status) {
-		generalStatus = status;
-		SessionFiveApplication instance = getInstance();
-		if (instance != null) {
-			instance.centralControlPaletteUI.setStatus(status);
-		}
 	}
 
 	public GLContext getGLContext() {

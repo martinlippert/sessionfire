@@ -4,7 +4,7 @@
    <extension
          point="com.sessionfive.app.view">
       <view
-            name="Live"
+            name="Sessionfire - Live"
             viewclass="com.sessionfire.live.LiveView">
       </view>
    </extension>

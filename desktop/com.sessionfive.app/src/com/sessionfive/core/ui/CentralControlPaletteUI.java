@@ -61,6 +61,7 @@ public class CentralControlPaletteUI {
 	private JButton savePresentationButton;
 	private JButton startPresentationButton;
 	private JButton helpButton;
+	private JComboBox styleChoice;
 	private JComboBox layoutChoice;
 	private JComboBox animationChoice;
 	private JComboBox animationPathChoice;
@@ -80,6 +81,7 @@ public class CentralControlPaletteUI {
 	private boolean inChange;
 
 	private Collection<HelpWindow> helpWindows;
+	private DefaultComboBoxModel generalStyleModel;
 	private DefaultComboBoxModel animationStyleModel;
 	private DefaultComboBoxModel animationPathLayouterModel;
 	private DefaultComboBoxModel layoutModel;
@@ -88,6 +90,8 @@ public class CentralControlPaletteUI {
 	private JPanel rotationViewPanel;
 	private JLabel spaceRotationLabel;
 	private JLabel focusScaleLabel;
+	private JButton backgroundChooser;
+	private JPanel expertPanel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
 			Presentation presentation, SelectionService selectionService,
@@ -107,7 +111,7 @@ public class CentralControlPaletteUI {
 		new DropTarget(windowAncestor, dropListener);
 		
 		window.pack();
-		window.setLocation(100, 100);
+		window.setLocation(100, 80);
 		initExtensions();
 
 		helpWindows = new HashSet<HelpWindow>();
@@ -153,24 +157,20 @@ public class CentralControlPaletteUI {
 		}
 	}
 
-	public void setStatus(String status) {
-		window.setStatus(status);
-	}
-
 	private void initComponents() {
 		JComponent contentPane = (JComponent) window.getEmbeddedContentPane();
 		contentPane.setLayout(new BorderLayout());
 
 		FormLayout layout = new FormLayout(
 				"10dlu, fill:pref:grow", // columns
-				"pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 0dlu, pref, 0dlu, pref, 6dlu, pref"); // rows
+				"pref, 3dlu, pref, 6dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 6dlu, pref, 1dlu, pref, 6dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
 		subContentPane = new JPanel(layout);
 		subContentPane.setOpaque(false);
 		subContentPane.setDoubleBuffered(false);
 
-		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+		subContentPane.setBorder(new EmptyBorder(15, 15, 0, 15));
 		contentPane.add(subContentPane, BorderLayout.NORTH);
 
 		choosePresentationButton = HudWidgetFactory
@@ -202,26 +202,22 @@ public class CentralControlPaletteUI {
 			}
 		});
 		subContentPane.add(startPresentationButton, cc.xyw(1, 5, 2));
-
-		layoutModel = new DefaultComboBoxModel();
-		Layouter[] allLayouter = centralControlPalette.getLayouter();
-		for (Layouter layouter : allLayouter) {
-			layoutModel.addElement(layouter);
+		
+		generalStyleModel = new DefaultComboBoxModel();
+		Style[] styles = centralControlPalette.getStyles();
+		for (Style style : styles) {
+			generalStyleModel.addElement(style);
 		}
-		layoutChoice = HudWidgetFactory.createHudComboBox(layoutModel);
-		layoutChoice.addActionListener(new ActionListener() {
+		styleChoice = HudWidgetFactory.createHudComboBox(generalStyleModel);
+		styleChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Object selectedLayouter = layoutChoice.getSelectedItem();
-				Object selectedAnimation = animationChoice.getSelectedItem();
-				if (selectedLayouter != null && selectedAnimation != null
-						&& !inChange) {
-					centralControlPalette.changeLayout(
-							(Layouter) selectedLayouter,
-							(AnimationStyle) selectedAnimation);
+				Object selectedStyle = styleChoice.getSelectedItem();
+				if (selectedStyle != null && !inChange) {
+					centralControlPalette.setStyle((Style) selectedStyle);
 				}
 			}
 		});
-		subContentPane.add(layoutChoice, cc.xyw(1, 9, 2));
+		subContentPane.add(styleChoice, cc.xyw(1, 7, 2));
 
 		animationStyleModel = new DefaultComboBoxModel();
 		AnimationStyle[] animationStyles = centralControlPalette
@@ -250,7 +246,95 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(animationChoice, cc.xyw(1, 11, 2));
+		subContentPane.add(animationChoice, cc.xyw(1, 9, 2));
+
+		layerText = HudWidgetFactory.createHudTextField("");
+		layerText.getDocument().addDocumentListener(new DocumentListener() {
+			public void removeUpdate(DocumentEvent e) {
+				setLayerText();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				setLayerText();
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				setLayerText();
+			}
+		});
+		subContentPane.add(layerText, cc.xyw(1, 11, 2));
+		
+		expertSettingsBox = HudWidgetFactory.createHudCheckBox("");
+		expertSettingsBox.setSelected(expertSettingsVisible );
+		expertSettingsBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleExpertSettings();
+			}
+		});
+		subContentPane.add(expertSettingsBox, cc.xyw(1, 13, 2));
+		
+		expertPanel = new JPanel();
+		initExpertSettingsComponents(expertPanel);
+		subContentPane.add(expertPanel, cc.xyw(1, 15, 2));
+
+		helpButton = HudWidgetFactory.createHudButton("?");
+		subContentPane.add(helpButton, cc.xyw(1, 17, 2));
+
+		helpButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!helpshown) {
+					showhelp();
+				}
+			}
+		});
+
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				if (event instanceof MouseEvent) {
+					MouseEvent mevent = (MouseEvent) event;
+					if (mevent.getID() == MouseEvent.MOUSE_PRESSED && helpshown) {
+						hidehelp();
+						mevent.consume();
+					}
+				}
+			}
+		}, AWTEvent.MOUSE_EVENT_MASK);
+
+	}
+	
+	protected void initExpertSettingsComponents(JPanel panel) {
+		FormLayout layout = new FormLayout(
+				"10dlu, fill:pref:grow", // columns
+				"pref, 3dlu, pref, 6dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 1dlu, pref"); // rows
+
+		CellConstraints cc = new CellConstraints();
+		panel.setLayout(layout);
+		panel.setOpaque(false);
+		panel.setDoubleBuffered(false);
+		panel.setBorder(new EmptyBorder(6, 0, 0, 0));
+		
+		layoutModel = new DefaultComboBoxModel();
+		Layouter[] allLayouter = centralControlPalette.getLayouter();
+		for (Layouter layouter : allLayouter) {
+			layoutModel.addElement(layouter);
+		}
+		layoutChoice = HudWidgetFactory.createHudComboBox(layoutModel);
+		layoutChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object selectedLayouter = layoutChoice.getSelectedItem();
+				Object selectedAnimation = animationChoice.getSelectedItem();
+				if (selectedLayouter != null && selectedAnimation != null
+						&& !inChange) {
+					centralControlPalette.changeLayout(
+							(Layouter) selectedLayouter,
+							(AnimationStyle) selectedAnimation);
+				}
+			}
+		});
+		panel.add(layoutChoice, cc.xyw(1, 1, 2));
 
 		animationPathLayouterModel = new DefaultComboBoxModel();
 		AnimationPathLayouter[] allAnimationPathLayouter = centralControlPalette
@@ -271,34 +355,18 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(animationPathChoice, cc.xyw(1, 13, 2));
+		panel.add(animationPathChoice, cc.xyw(1, 3, 2));
 
-		JButton backgroundChooser = HudWidgetFactory
+		backgroundChooser = HudWidgetFactory
 				.createHudButton("Choose Background Color...");
 		backgroundChooser.setMaximumSize(new Dimension(10, 5));
-		subContentPane.add(backgroundChooser, cc.xyw(1, 15, 2));
 		backgroundChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseBackground();
 			}
 		});
+		panel.add(backgroundChooser, cc.xyw(1, 5, 2));
 
-		layerText = HudWidgetFactory.createHudTextField("");
-		subContentPane.add(layerText, cc.xyw(1, 17, 2));
-		layerText.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent e) {
-				setLayerText();
-			}
-
-			public void insertUpdate(DocumentEvent e) {
-				setLayerText();
-			}
-
-			public void changedUpdate(DocumentEvent e) {
-				setLayerText();
-			}
-		});
-		
 		reflectionEnabledBox = HudWidgetFactory.createHudCheckBox("Reflection");
 		reflectionEnabledBox.setSelected(true);
 		reflectionEnabledBox.addActionListener(new ActionListener() {
@@ -311,26 +379,16 @@ public class CentralControlPaletteUI {
 				}
 			}
 		});
-		subContentPane.add(reflectionEnabledBox, cc.xyw(1, 19, 2));
-
-		expertSettingsBox = HudWidgetFactory.createHudCheckBox("");
-		expertSettingsBox.setSelected(expertSettingsVisible );
-		expertSettingsBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleExpertSettings();
-			}
-		});
-		subContentPane.add(expertSettingsBox, cc.xyw(1, 21, 2));
+		panel.add(reflectionEnabledBox, cc.xyw(1, 7, 2));
 
 		RotationView rotationView = new RotationView(selectionService);
 		rotationViewPanel = rotationView.createUI();
-		subContentPane.add(rotationViewPanel, cc.xyw(1, 23, 2));
+		panel.add(rotationViewPanel, cc.xyw(1, 9, 2));
 		
 		spaceRotationSlider = new JSlider(1, 50, Presentation.DEFAULT_SPACE);
 		spaceRotationLabel = HudWidgetFactory.createHudLabel("||");
-		subContentPane.add(spaceRotationLabel, cc.xy(1, 25));
-		subContentPane.add(spaceRotationSlider, cc.xy(2, 25));
+		panel.add(spaceRotationLabel, cc.xy(1, 11));
+		panel.add(spaceRotationSlider, cc.xy(2, 11));
 
 		spaceRotationSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -371,34 +429,8 @@ public class CentralControlPaletteUI {
 			}
 		});
 		focusScaleLabel = HudWidgetFactory.createHudLabel("<>");
-		subContentPane.add(focusScaleLabel, cc.xy(1, 27));
-		subContentPane.add(focusScaleSlider, cc.xy(2, 27));
-
-		helpButton = HudWidgetFactory.createHudButton("?");
-		subContentPane.add(helpButton, cc.xyw(1, 29, 2));
-
-		helpButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (!helpshown) {
-					showhelp();
-				}
-			}
-		});
-
-		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-			@Override
-			public void eventDispatched(AWTEvent event) {
-				if (event instanceof MouseEvent) {
-					MouseEvent mevent = (MouseEvent) event;
-					if (mevent.getID() == MouseEvent.MOUSE_PRESSED && helpshown) {
-						hidehelp();
-						mevent.consume();
-					}
-				}
-			}
-		}, AWTEvent.MOUSE_EVENT_MASK);
-
+		panel.add(focusScaleLabel, cc.xy(1, 13));
+		panel.add(focusScaleSlider, cc.xy(2, 13));
 	}
 
 	protected void toggleExpertSettings() {
@@ -408,11 +440,7 @@ public class CentralControlPaletteUI {
 	}
 
 	protected void setExpertSettingsVisible(boolean visible) {
-		this.rotationViewPanel.setVisible(visible);
-		this.spaceRotationSlider.setVisible(visible);
-		this.spaceRotationLabel.setVisible(visible);
-		this.focusScaleSlider.setVisible(visible);
-		this.focusScaleLabel.setVisible(visible);
+		this.expertPanel.setVisible(visible);
 		
 		String expertSettingsText = visible ? "Hide advanced settings" : "Show advanced settings";
 		this.expertSettingsBox.setText(expertSettingsText);

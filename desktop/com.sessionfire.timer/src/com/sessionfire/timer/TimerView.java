@@ -36,7 +36,7 @@ public class TimerView extends JPanel implements View, ShowsHelp, TimerListener 
 	private JLabel runningTime;
 
 	public TimerView() {
-		FormLayout layout = new FormLayout("fill:pref:grow, 3dlu, fill:pref:grow, 6dlu, pref", // columns
+		FormLayout layout = new FormLayout("fill:pref:grow, 3dlu, fill:pref:grow, 6dlu, fill:pref:grow", // columns
 				"pref, 3dlu, pref"); // rows
 
 		CellConstraints cc = new CellConstraints();
@@ -44,7 +44,7 @@ public class TimerView extends JPanel implements View, ShowsHelp, TimerListener 
 		subContentPane.setOpaque(false);
 		subContentPane.setDoubleBuffered(false);
 
-		subContentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+		subContentPane.setBorder(new EmptyBorder(15, 15, 0, 15));
 		add(subContentPane, BorderLayout.CENTER);
 
 		setOpaque(false);

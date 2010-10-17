@@ -55,7 +55,7 @@ public class LiveView implements View, ShowsHelp {
 		JPanel contentPane = new JPanel(layout);
 		contentPane.setOpaque(false);
 		contentPane.setDoubleBuffered(false);
-		contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+		contentPane.setBorder(new EmptyBorder(15, 15, 0, 15));
 
 		JButton uploadButton = HudWidgetFactory.createHudButton("Upload");
 		contentPane.add(uploadButton, cc.xyw(1, 1, 2));

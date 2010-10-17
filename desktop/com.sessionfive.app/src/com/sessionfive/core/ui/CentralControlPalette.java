@@ -142,6 +142,13 @@ public class CentralControlPalette {
 		}
 		animationController.readjustDirectly();
 	}
+	
+	public Style[] getStyles() {
+		return new Style[0];
+	}
+
+	public void setStyle(Style selectedStyle) {
+	}
 
 	public PanelExtension[] getExtensionPanels() {
 		return new PanelExtensionLoader().loadExtensions(animationController,
