@@ -211,9 +211,8 @@ public class SessionFiveApplication implements IApplication {
 		animationController.addFocusListener(new ExplodingGroupListener());
 //		animationController.addFocusListener(new RedrawPerformanceListener(display));
 
-		centralControlPalette = new CentralControlPalette(presentation, animationController);
-		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation,
-				selectionService, canvas);
+		centralControlPalette = new CentralControlPalette(presentation, animationController, selectionService);
+		centralControlPaletteUI = new CentralControlPaletteUI(centralControlPalette, presentation, canvas);
 		centralControlPaletteUI.show();
 
 		return EXIT_OK;

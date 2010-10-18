@@ -42,7 +42,6 @@ import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sessionfive.app.DropListener;
-import com.sessionfive.app.SelectionService;
 import com.sessionfive.core.AnimationStyle;
 import com.sessionfive.core.LayerType;
 import com.sessionfive.core.Presentation;
@@ -54,7 +53,6 @@ public class CentralControlPaletteUI {
 
 	private final CentralControlPalette centralControlPalette;
 	private final Presentation presentation;
-	private final SelectionService selectionService;
 
 	private TranslucentPalette window;
 	private JButton choosePresentationButton;
@@ -94,11 +92,9 @@ public class CentralControlPaletteUI {
 	private JPanel expertPanel;
 
 	public CentralControlPaletteUI(CentralControlPalette centralControlPalette,
-			Presentation presentation, SelectionService selectionService,
-			GLCanvas canvas) {
+			Presentation presentation, GLCanvas canvas) {
 		this.centralControlPalette = centralControlPalette;
 		this.presentation = presentation;
-		this.selectionService = selectionService;
 		this.canvas = canvas;
 		this.expertSettingsVisible = false;
 
@@ -208,6 +204,7 @@ public class CentralControlPaletteUI {
 		for (Style style : styles) {
 			generalStyleModel.addElement(style);
 		}
+		generalStyleModel.addElement(centralControlPalette.getCustomStyle());
 		styleChoice = HudWidgetFactory.createHudComboBox(generalStyleModel);
 		styleChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -328,9 +325,7 @@ public class CentralControlPaletteUI {
 				Object selectedAnimation = animationChoice.getSelectedItem();
 				if (selectedLayouter != null && selectedAnimation != null
 						&& !inChange) {
-					centralControlPalette.changeLayout(
-							(Layouter) selectedLayouter,
-							(AnimationStyle) selectedAnimation);
+					centralControlPalette.changeLayout((Layouter) selectedLayouter);
 				}
 			}
 		});
@@ -381,7 +376,7 @@ public class CentralControlPaletteUI {
 		});
 		panel.add(reflectionEnabledBox, cc.xyw(1, 7, 2));
 
-		RotationView rotationView = new RotationView(selectionService);
+		RotationView rotationView = centralControlPalette.getRotationView();
 		rotationViewPanel = rotationView.createUI();
 		panel.add(rotationViewPanel, cc.xyw(1, 9, 2));
 		
@@ -583,6 +578,8 @@ public class CentralControlPaletteUI {
 
 		List<Shape> shapes = presentation.getShapes(LayerType.CAMERA_ANIMATED);
 		savePresentationButton.setEnabled(shapes.size() > 0);
+		styleChoice.setSelectedItem(centralControlPalette.getMatchingStyle());
+		
 		inChange = false;
 	}
 

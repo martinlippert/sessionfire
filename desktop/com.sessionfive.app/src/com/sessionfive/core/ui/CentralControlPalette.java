@@ -10,6 +10,7 @@ import com.sessionfive.animation.AnimationController;
 import com.sessionfive.animation.GoToAnimationStyle;
 import com.sessionfive.animation.MoveToAnimationStyle;
 import com.sessionfive.animation.ZoomOutZoomInAnimationStyle;
+import com.sessionfive.app.SelectionService;
 import com.sessionfive.app.SessionFiveApplication;
 import com.sessionfive.core.AnimationStep;
 import com.sessionfive.core.AnimationStyle;
@@ -20,11 +21,13 @@ public class CentralControlPalette {
 
 	private final Presentation presentation;
 	private final AnimationController animationController;
+	private final RotationView rotationView;
 
 	public CentralControlPalette(Presentation presentation,
-			AnimationController animationController) {
+			AnimationController animationController, SelectionService selectionService) {
 		this.presentation = presentation;
 		this.animationController = animationController;
+		this.rotationView = new RotationView(selectionService);
 	}
 
 	public void show() {
@@ -59,7 +62,7 @@ public class CentralControlPalette {
 		}
 	}
 
-	public void changeLayout(Layouter layouter, AnimationStyle animationStyle) {
+	public void changeLayout(Layouter layouter) {
 		Shape focussedShape = animationController.getLastFocussedShape();
 
 		layouter.layout(presentation);
@@ -144,15 +147,43 @@ public class CentralControlPalette {
 	}
 	
 	public Style[] getStyles() {
-		return new Style[0];
+		Style standardLine = new StyleImpl("Standard Line Style", new LineLayouter(), 0, 0, 0);
+		Style timeLine = new StyleImpl("Timeline Style", new LineLayouter(), 0, 300, 0);
+		
+		return new Style[] {standardLine, timeLine};
+	}
+	
+	public Style getCustomStyle() {
+		return new StyleImpl("Custom Style - Use Expert Settings", null, 0, 0, 0);
 	}
 
-	public void setStyle(Style selectedStyle) {
+	public void setStyle(Style style) {
+		if (!style.equals(getCustomStyle())) {
+			this.changeLayout(style.getLayout());
+			this.rotationView.setRotation(style.getRotationX(), style.getRotationY(), style.getRotationZ());
+		}
 	}
 
 	public PanelExtension[] getExtensionPanels() {
 		return new PanelExtensionLoader().loadExtensions(animationController,
 				presentation);
+	}
+
+	public RotationView getRotationView() {
+		return rotationView;
+	}
+
+	public Style getMatchingStyle() {
+		Style found = getCustomStyle();
+		Style[] styles = getStyles();
+		for (int i = 0; i < styles.length; i++) {
+			if (styles[i].matches(presentation)) {
+				found = styles[i];
+				break;
+			}
+		}
+		
+		return found;
 	}
 
 }

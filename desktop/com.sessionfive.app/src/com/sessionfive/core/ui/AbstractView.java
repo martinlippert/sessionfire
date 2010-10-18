@@ -9,7 +9,6 @@ import com.sessionfive.core.Shape;
 import com.sessionfive.core.ShapeChangedEvent;
 import com.sessionfive.core.ShapeChangedListener;
 
-
 public abstract class AbstractView implements View, SelectionListener, ShapeChangedListener {
 	
 	private boolean selfChanging;
