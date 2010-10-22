@@ -19,8 +19,8 @@ public class LiveController {
 		presentation = SessionFiveApplication.getInstance().getPresentation();
 	}
 
-	public void upload() {
-		new LiveServer().upload(presentation);
+	public void upload(UploadResult uploadCallback) {
+		new LiveServer().upload(presentation, uploadCallback);
 	}
 
 	public void setLiveSync(boolean selected) {
@@ -33,6 +33,10 @@ public class LiveController {
 
 	public String getName() {
 		return presentation.getName();
+	}
+	
+	public String getID() {
+		return presentation.getId();
 	}
 
 	public void addPresentationChangedListener(

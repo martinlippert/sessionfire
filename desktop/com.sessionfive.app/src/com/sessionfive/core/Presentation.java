@@ -295,7 +295,10 @@ public class Presentation implements ShapeChangedListener {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (this.name == null || !this.name.equals(name)) {
+			this.name = name;
+			firePresentationChanged();
+		}
 	}
 
 	public String getName() {
@@ -303,7 +306,10 @@ public class Presentation implements ShapeChangedListener {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		if (this.id == null || !this.id.equals(id)) {
+			this.id = id;
+			firePresentationChanged();
+		}
 	}
 
 	public String getId() {

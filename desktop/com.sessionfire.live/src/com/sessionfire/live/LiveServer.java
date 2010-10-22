@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Executors;
+
+import javax.swing.SwingUtilities;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,53 +19,69 @@ import com.sessionfive.core.Presentation;
 
 public class LiveServer {
 
-	public void upload(Presentation presentation) {
-		System.out.println("Upload presentation");
+	public void upload(final Presentation presentation, final UploadResult uploadCallback) {
+		
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					URL url = new URL("http://localhost:3000/upload");
+					HttpURLConnection urlConn = (HttpURLConnection) url
+							.openConnection();
+					urlConn.setRequestMethod("PUT");
+					urlConn.setAllowUserInteraction(false); // no user interaction
+					urlConn.setDoOutput(true); // want to send
+					urlConn.setRequestProperty("Content-type",
+							"application/json; charset=UTF-8");
+					urlConn.setRequestProperty("accept", "application/json");
+					
+					OutputStream outputStream = urlConn.getOutputStream();
+					PrintWriter printout = new PrintWriter(outputStream);
 
-		try {
-			URL url = new URL("http://localhost:3000/upload");
-			HttpURLConnection urlConn = (HttpURLConnection) url
-					.openConnection();
-			urlConn.setRequestMethod("PUT");
-			urlConn.setAllowUserInteraction(false); // no user interaction
-			urlConn.setDoOutput(true); // want to send
-			urlConn.setRequestProperty("Content-type",
-					"application/json; charset=UTF-8");
-			urlConn.setRequestProperty("accept", "application/json");
-			OutputStream outputStream = urlConn.getOutputStream();
+					JSONConverter json = new JSONConverter();
+					json.writePresentation(presentation, printout);
+					printout.flush();
 
-			JSONConverter json = new JSONConverter();
+					int rspCode = urlConn.getResponseCode();
 
-			PrintWriter printout = new PrintWriter(outputStream);
-			json.writePresentation(presentation, printout);
-			printout.flush();
-
-			int rspCode = urlConn.getResponseCode();
-			System.out.println("Return Code: " + rspCode);
-
-			if (rspCode == 200) {
-				uploadSuccessful(urlConn.getInputStream(), presentation);
-			} else {
-				uploadFailed(urlConn.getErrorStream());
+					if (rspCode == 200) {
+						uploadSuccessful(urlConn.getInputStream(), presentation, uploadCallback);
+					} else {
+						uploadFailed(urlConn.getErrorStream(), uploadCallback);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					uploadFailed(null, uploadCallback);
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		};
+		
+		Executors.newSingleThreadExecutor().execute(runnable);
 	}
 
-	private void uploadFailed(InputStream errorStream) {
+	private void uploadFailed(final InputStream errorStream, final UploadResult uploadCallback) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				uploadCallback.uploadFailed();
+			}
+		});
 	}
 
-	private void uploadSuccessful(InputStream returnStream,
-			Presentation presentation) throws IOException, ParseException {
-		JSONObject result = (JSONObject) new JSONParser()
+	private void uploadSuccessful(final InputStream returnStream,
+			final Presentation presentation, final UploadResult uploadCallback) throws IOException, ParseException {
+		final JSONObject result = (JSONObject) new JSONParser()
 				.parse(new InputStreamReader(returnStream));
 		
-		String id = (String) result.get("id");
-		presentation.setId(id);
-		
-		System.out.println("presentation got id: " + id);
-		System.out.println("presentation got url: " + result.get("url"));
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				String id = (String) result.get("id");
+				presentation.setId(id);
+				
+				uploadCallback.uploadSuccessful((String)result.get("url"));
+			}
+		});
 	}
 
 }
